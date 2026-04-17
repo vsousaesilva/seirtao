@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>pAIdegua — Manual de Instalação e Uso · Inovajus / JFCE</title>
-<meta name="description" content="Manual oficial de instalação e uso da extensão pAIdegua — assistente com IA integrado ao PJe, desenvolvido pelo Inovajus / Justiça Federal no Ceará." />
+<title>SEIrtão — Manual de Instalação e Uso · Inovajus / JFCE</title>
+<meta name="description" content="Manual oficial de instalação e uso da extensão SEIrtão — assistente com IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5, desenvolvido pelo Inovajus / Justiça Federal no Ceará." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -627,7 +627,7 @@
         </svg>
       </span>
       <span>
-        <span class="brand__name">pAIdegua</span>
+        <span class="brand__name">SEIrtão</span>
         <span class="brand__tag" style="display:block">Inovajus · JFCE</span>
       </span>
     </a>
@@ -647,19 +647,20 @@
 <section class="hero" id="inicio">
   <div>
     <div class="eyebrow reveal" data-d="1">Manual v1.0 · Abril / 2026</div>
-    <h1 class="reveal" data-d="2">Escrever<br/>com a IA<br/><em>a seu lado.</em></h1>
+    <h1 class="reveal" data-d="2">Administrar<br/>com a IA<br/><em>a seu lado.</em></h1>
     <p class="hero__lede reveal" data-d="3">
-      O pAIdegua é um complemento instalado no seu navegador que traz um assistente
-      inteligente para dentro do PJe. Ele lê os autos, prepara resumos e minutas no
-      seu estilo, oculta dados sensíveis e mantém a decisão jurídica sempre nas suas
-      mãos — como determina a Resolução CNJ 615/2025.
+      O SEIrtão é um complemento instalado no seu navegador que traz um assistente
+      inteligente para dentro do SEI (Sistema Eletrônico de Informações) do TRF5.
+      Ele lê os processos administrativos, prepara resumos e minutas no seu estilo,
+      oculta dados sensíveis e mantém a decisão sempre nas suas mãos — como determina
+      a Resolução CNJ 615/2025.
     </p>
   </div>
 
   <aside class="hero__meta reveal" data-d="4">
     <dl>
       <dt>Ambiente</dt><dd>Chrome · Edge (v. 110+)</dd>
-      <dt>Acesso</dt><dd>pje1g.trf5.jus.br · pje2g.trf5.jus.br · pjett.trf5.jus.br</dd>
+      <dt>Acesso</dt><dd>sei.trf5.jus.br</dd>
       <dt>Serviços de IA</dt><dd>Anthropic · OpenAI · Google Gemini</dd>
       <dt>Privacidade</dt><dd>Código de acesso guardado só no seu computador</dd>
       <dt>Classificação</dt><dd>Baixo risco — Resolução CNJ 615/2025</dd>
@@ -701,32 +702,32 @@
       </div>
 
       <h3><span class="marker"></span>Navegadores suportados</h3>
-      <p>O pAIdegua é oferecido em duas versões:</p>
+      <p>O SEIrtão é distribuído como extensão Manifest V3 e funciona nos navegadores baseados em Chromium:</p>
       <ul>
-        <li><strong>pAIdegua para Chrome/Edge</strong> — versão oficial, indicada para uso diário nas unidades judiciárias.</li>
-        <li><strong>pAIdegua para Firefox</strong> — versão em desenvolvimento, disponibilizada separadamente para testes.</li>
+        <li><strong>Google Chrome</strong> — versão oficial, indicada para uso diário na JFCE.</li>
+        <li><strong>Microsoft Edge</strong> — totalmente compatível.</li>
       </ul>
-      <div class="callout callout--warn">
-        <h4>Recomendação</h4>
-        <p>Para a elaboração de minutas no dia a dia, utilize a versão para <strong>Google Chrome</strong> ou <strong>Microsoft Edge</strong>. A versão para Firefox ainda está em ajustes e não deve ser utilizada em produção.</p>
+      <div class="callout callout--info">
+        <h4>Por que apenas Chromium?</h4>
+        <p>O SEIrtão interage de perto com o editor de minutas do SEI (CKEditor 5 em janela popup), o que exige APIs específicas da plataforma de extensões Chromium (MV3). A versão para Firefox não é suportada nesta fase.</p>
       </div>
 
       <h3><span class="marker"></span>O que você precisa</h3>
       <ul>
-        <li>Navegador <strong>Google Chrome</strong> ou <strong>Microsoft Edge</strong>, em versão atualizada (ou <strong>Mozilla Firefox</strong> 115+ para a versão experimental).</li>
-        <li>Acesso normal ao <strong>PJe</strong>, com login e senha.</li>
+        <li>Navegador <strong>Google Chrome</strong> ou <strong>Microsoft Edge</strong>, em versão atualizada.</li>
+        <li>Acesso normal ao <strong>SEI do TRF5</strong> (<code>sei.trf5.jus.br</code>), com login e senha.</li>
         <li>Um código de acesso de um dos serviços de inteligência artificial: <strong>Anthropic (Claude)</strong>, <strong>OpenAI (ChatGPT)</strong> ou <strong>Google Gemini</strong>. A equipe do Inovajus pode orientar como obter.</li>
       </ul>
 
       <h3><span class="marker"></span>Passo a passo</h3>
       <ol>
-        <li>Receba o arquivo <strong>dist.zip</strong> do pAIdegua entregue pela equipe do Inovajus e salve em um local fácil de encontrar no seu computador.</li>
-        <li><strong>Extraia o arquivo antes de instalar.</strong> Clique com o botão direito sobre <strong>dist.zip</strong> e escolha <em>Extrair tudo</em> (Windows) ou utilize o descompactador de sua preferência. O resultado será uma pasta chamada <strong>dist</strong> com todos os arquivos da extensão. Guarde-a em um local permanente (ex.: <code>Documentos\pAIdegua\dist</code>), pois se ela for apagada ou movida a extensão deixará de funcionar.</li>
-        <li>Abra a página de extensões do navegador. No Chrome, digite <strong>chrome://extensions</strong> na barra de endereços. No Edge, digite <strong>edge://extensions</strong>. No Firefox (versão experimental), digite <strong>about:debugging#/runtime/this-firefox</strong>.</li>
+        <li>Receba o arquivo <strong>dist.zip</strong> do SEIrtão entregue pela equipe do Inovajus e salve em um local fácil de encontrar no seu computador.</li>
+        <li><strong>Extraia o arquivo antes de instalar.</strong> Clique com o botão direito sobre <strong>dist.zip</strong> e escolha <em>Extrair tudo</em> (Windows). O resultado será uma pasta chamada <strong>dist</strong> com todos os arquivos da extensão. Guarde-a em um local permanente (ex.: <code>Documentos\SEIrtão\dist</code>), pois se ela for apagada ou movida a extensão deixará de funcionar.</li>
+        <li>Abra a página de extensões do navegador. No Chrome, digite <strong>chrome://extensions</strong> na barra de endereços. No Edge, digite <strong>edge://extensions</strong>.</li>
         <li>Ative o <strong>Modo do desenvolvedor</strong> (interruptor no canto superior direito da página).</li>
         <li>Clique em <strong>Carregar sem compactação</strong> (Chrome) ou <strong>Carregar descompactada</strong> (Edge).</li>
         <li>Selecione a pasta <strong>dist</strong> extraída no passo 2 (não selecione o arquivo .zip).</li>
-        <li>Fixe o ícone na barra do navegador: clique no ícone de quebra-cabeça e depois no alfinete ao lado de <strong>pAIdegua</strong>.</li>
+        <li>Fixe o ícone na barra do navegador: clique no ícone de quebra-cabeça e depois no alfinete ao lado de <strong>SEIrtão</strong>.</li>
       </ol>
 
       <div class="callout callout--warn">
@@ -750,11 +751,11 @@
         </div>
       </div>
 
-      <p>Clique no ícone do pAIdegua na barra de ferramentas. O popup de configurações se abrirá com tudo o que você precisa definir antes do primeiro uso.</p>
+      <p>Clique no ícone do SEIrtão na barra de ferramentas. O popup de configurações se abrirá com tudo o que você precisa definir antes do primeiro uso.</p>
 
       <div class="callout callout--lgpd">
         <h4>LGPD · Aviso de privacidade</h4>
-        <p>Para preparar respostas e minutas, o pAIdegua envia o conteúdo dos documentos selecionados para o serviço de inteligência artificial escolhido — um serviço que funciona fora da estrutura da Justiça Federal. Antes de usar em processos com dados sensíveis, confirme a política de privacidade do serviço. No primeiro uso, marque a caixa de ciência para liberar o uso da ferramenta.</p>
+        <p>Para preparar respostas e minutas, o SEIrtão envia o conteúdo dos documentos selecionados para o serviço de inteligência artificial escolhido — um serviço que funciona fora da estrutura da Justiça Federal. Antes de usar em processos com dados sensíveis, confirme a política de privacidade do serviço. No primeiro uso, marque a caixa de ciência para liberar o uso da ferramenta.</p>
       </div>
 
       <h3><span class="marker"></span>Serviço de IA e código de acesso</h3>
@@ -769,12 +770,12 @@
         <div class="feat">
           <span class="feat__label">Digitalizados</span>
           <h4>Leitura de documentos escaneados</h4>
-          <p>Marque <strong>Rodar leitura automaticamente</strong> para que o pAIdegua transforme em texto os documentos que foram digitalizados como imagem. Essa leitura acontece no seu próprio computador, sem enviar imagens para fora. Você pode ajustar um limite de páginas.</p>
+          <p>Marque <strong>Rodar leitura automaticamente</strong> para que o SEIrtão transforme em texto os documentos do SEI que foram digitalizados como imagem. Essa leitura acontece no seu próprio computador, sem enviar imagens para fora. Você pode ajustar um limite de páginas.</p>
         </div>
         <div class="feat">
           <span class="feat__label">Modelos</span>
           <h4>Pasta com suas minutas-modelo</h4>
-          <p>Em <strong>Gerenciar modelos</strong>, escolha a pasta onde ficam suas minutas de referência. São aceitos arquivos comuns do Word, texto simples e PDF. Organize por subpastas para que a busca automática encontre o exemplo certo.</p>
+          <p>Em <strong>Gerenciar modelos</strong>, escolha a pasta onde ficam suas minutas administrativas de referência. São aceitos arquivos comuns do Word, texto simples e PDF. Organize por subpastas para que a busca automática encontre o exemplo certo.</p>
         </div>
       </div>
 
@@ -795,16 +796,16 @@
       </div>
 
       <ol>
-        <li>Acesse o PJe e abra um processo (tela de autos digitais).</li>
-        <li>O <strong>botão flutuante</strong> do pAIdegua aparecerá no canto da página.</li>
+        <li>Acesse o SEI (<code>sei.trf5.jus.br</code>) e abra um processo administrativo na árvore lateral.</li>
+        <li>O <strong>botão flutuante</strong> do SEIrtão aparecerá no canto da página.</li>
         <li>Clique no botão para abrir o <strong>painel lateral</strong>.</li>
       </ol>
 
-      <p>O painel mostra o nome da ferramenta, o serviço de IA em uso, o número do processo aberto e — em destaque — o <strong>grau reconhecido automaticamente</strong> (1º grau, 2º grau ou turma recursal). A lista de botões de minuta muda de acordo com o grau, para oferecer os atos adequados a cada instância.</p>
+      <p>O painel mostra o nome da ferramenta, o serviço de IA em uso, o número do processo SEI aberto e a lista de <strong>atos administrativos</strong> disponíveis para minuta. Todos os botões foram desenhados para a realidade dos processos administrativos da JFCE — sem distinção de grau ou instância, pois o SEI trata de administração interna.</p>
 
       <div class="callout callout--info">
-        <h4>Como o grau é reconhecido</h4>
-        <p>O pAIdegua identifica o grau pelo endereço do PJe em que você está: o endereço do 1º grau leva aos botões de sentença e despacho; o endereço do 2º grau/turma recursal leva aos botões de voto, decisão monocrática e despacho do relator. Esse ajuste é automático — você não precisa fazer nada.</p>
+        <h4>Reconhecimento automático do processo</h4>
+        <p>O SEIrtão identifica automaticamente o número do processo administrativo aberto no SEI, a partir da URL e da árvore lateral. Esse ajuste é automático — você não precisa fazer nada.</p>
       </div>
     </section>
 
@@ -819,13 +820,13 @@
       </div>
 
       <h3><span class="marker"></span>Carregar e ler os documentos</h3>
-      <p>Esse é sempre o primeiro passo. Clique em <strong>Carregar Documentos</strong> para que o pAIdegua liste todos os arquivos do processo, com caixas de seleção para você escolher quais quer usar. É possível marcar ou desmarcar tudo de uma vez. Depois, clique em <strong>Extrair conteúdo selecionados</strong> — o pAIdegua abre cada documento e prepara o texto, mostrando o progresso em tempo real (por exemplo: <em>"Extração concluída — 39 ok, 2 com erro"</em>).</p>
+      <p>Esse é sempre o primeiro passo. Clique em <strong>Carregar Documentos</strong> para que o SEIrtão liste todos os documentos do processo SEI, com caixas de seleção para você escolher quais quer usar. É possível marcar ou desmarcar tudo de uma vez. Depois, clique em <strong>Extrair conteúdo selecionados</strong> — o SEIrtão abre cada documento e prepara o texto, mostrando o progresso em tempo real (por exemplo: <em>"Extração concluída — 14 ok, 1 com erro"</em>).</p>
 
       <div class="feat-grid">
         <div class="feat">
           <span class="feat__label">Análise</span>
           <h4>Resumir</h4>
-          <p>Produz uma análise completa do processo: dados das partes, fatos em ordem cronológica, questão jurídica central, direito aplicável, argumentos e provas de cada lado, e uma conclusão.</p>
+          <p>Produz uma análise estruturada do processo administrativo: partes e interessados, cronologia dos atos, questão central, fundamentos normativos aplicáveis, argumentos e provas, e conclusão sobre o estado atual da tramitação.</p>
         </div>
         <div class="feat">
           <span class="feat__label">Áudio</span>
@@ -834,13 +835,13 @@
         </div>
         <div class="feat">
           <span class="feat__label">LGPD</span>
-          <h4>Anonimizar autos</h4>
+          <h4>Anonimizar documentos</h4>
           <p>Oculta dados sensíveis como CPF, CNPJ, CEP, telefones, e-mails, RG e informações bancárias, substituindo-os por marcadores neutros. Nomes de pessoas físicas também são tratados. Útil para compartilhar trechos do processo em reuniões, estudos e materiais de treinamento.</p>
         </div>
         <div class="feat">
           <span class="feat__label">Digitalizados</span>
           <h4>Ler documentos escaneados</h4>
-          <p>Aparece automaticamente quando existem documentos digitalizados no processo (aqueles que o PJe guardou como imagem). O pAIdegua transforma a imagem em texto dentro do seu próprio navegador, sem enviar as páginas para fora.</p>
+          <p>Aparece automaticamente quando existem documentos digitalizados no processo (aqueles que o SEI guardou como imagem). O SEIrtão transforma a imagem em texto dentro do seu próprio navegador, sem enviar as páginas para fora.</p>
         </div>
       </div>
     </section>
@@ -855,32 +856,25 @@
         </div>
       </div>
 
-      <p>Esta seção reúne botões que geram minutas usando suas próprias minutas-modelo como referência. Funciona melhor quando você apontou uma pasta de modelos nas configurações.</p>
+      <p>Esta seção reúne botões que geram minutas de atos administrativos usando suas próprias minutas-modelo como referência. Funciona melhor quando você apontou uma pasta de modelos nas configurações.</p>
 
-      <h3><span class="marker"></span>Botões para o 1º grau</h3>
+      <h3><span class="marker"></span>Catálogo de atos administrativos</h3>
       <div class="feat-grid">
-        <div class="feat"><span class="feat__label">1º grau</span><h4>Julgar procedente</h4><p>Prepara uma sentença dando razão ao autor. O pAIdegua procura na sua pasta o modelo mais parecido com o caso e reaproveita a estrutura, os fundamentos e o jeito de escrever, adaptando aos fatos concretos.</p></div>
-        <div class="feat"><span class="feat__label">1º grau</span><h4>Julgar improcedente</h4><p>Igual ao anterior, mas para sentenças em que o pedido não é acolhido.</p></div>
-        <div class="feat"><span class="feat__label">1º grau</span><h4>Decidir</h4><p>Prepara uma decisão sobre questão pendente, como pedidos de tutela de urgência ou liminar. O pAIdegua procura apenas modelos de decisão — não reaproveita sentenças como referência.</p></div>
-        <div class="feat"><span class="feat__label">1º grau</span><h4>Converter em diligência</h4><p>Prepara o despacho que converte o julgamento em diligência, pedindo providências complementares antes de sentenciar.</p></div>
-        <div class="feat"><span class="feat__label">1º grau</span><h4>Despachar</h4><p>Prepara despachos de andamento, com intimações, prazos e juntadas. Usa como referência apenas seus modelos de despacho.</p></div>
-      </div>
-
-      <h3><span class="marker"></span>Botões para o 2º grau e turma recursal</h3>
-      <div class="feat-grid">
-        <div class="feat"><span class="feat__label">2º grau</span><h4>Voto (mantém sentença)</h4><p>Prepara o voto que nega provimento ao recurso, confirmando a sentença da origem.</p></div>
-        <div class="feat"><span class="feat__label">2º grau</span><h4>Voto (reforma sentença)</h4><p>Prepara o voto que dá provimento ao recurso e reforma a sentença da origem.</p></div>
-        <div class="feat"><span class="feat__label">2º grau · Novo</span><h4>Decisão nega seguimento ao recurso</h4><p>Prepara decisão do relator que não conhece do recurso por falta de requisitos.</p></div>
-        <div class="feat"><span class="feat__label">2º grau</span><h4>Decisão</h4><p>Prepara decisão do relator sobre questão pendente, como pedidos de tutela antecipada, efeito suspensivo ou liminar em recurso.</p></div>
-        <div class="feat"><span class="feat__label">2º grau</span><h4>Converte em diligência com baixa</h4><p>Prepara o despacho que converte o julgamento em diligência e devolve os autos à origem para a providência necessária.</p></div>
-        <div class="feat"><span class="feat__label">2º grau</span><h4>Despacho</h4><p>Prepara despacho de andamento do relator.</p></div>
+        <div class="feat"><span class="feat__label">Despacho</span><h4>Despacho de encaminhamento</h4><p>Prepara despacho que encaminha o processo a outra unidade, com destino e justificativa sintética. Reaproveita a estrutura e o estilo dos seus modelos de despacho de encaminhamento.</p></div>
+        <div class="feat"><span class="feat__label">Despacho</span><h4>Despacho de instrução</h4><p>Prepara despacho que solicita providências instrutórias (diligências, documentos adicionais, manifestação de interessado), com indicação de prazos e fundamentos procedimentais.</p></div>
+        <div class="feat"><span class="feat__label">Técnico</span><h4>Informação técnica</h4><p>Prepara informação com análise fática e técnica do tema, sem caráter decisório. Útil para subsidiar a autoridade competente com dados, cálculos e contextualização normativa.</p></div>
+        <div class="feat"><span class="feat__label">Jurídico</span><h4>Parecer jurídico</h4><p>Prepara parecer com relatório, análise e conclusão jurídica fundamentada em legislação, jurisprudência e normativos internos, destinado a orientar decisão administrativa.</p></div>
+        <div class="feat"><span class="feat__label">Decisão</span><h4>Decisão administrativa</h4><p>Prepara decisão da autoridade competente, com relatório, fundamentação (fática e jurídica) e dispositivo, observando o devido processo administrativo.</p></div>
+        <div class="feat"><span class="feat__label">Ordinatório</span><h4>Ato ordinatório</h4><p>Prepara ato de mero expediente para impulsionar o processo (juntadas, intimações, aberturas de prazo), sem conteúdo decisório, conforme delegação regulamentar.</p></div>
+        <div class="feat"><span class="feat__label">Comunicação</span><h4>Memorando</h4><p>Prepara memorando interno dirigido a outra unidade da JFCE, com redação formal e objetiva sobre a matéria administrativa em questão.</p></div>
+        <div class="feat"><span class="feat__label">Comunicação</span><h4>Ofício</h4><p>Prepara ofício para comunicação externa com órgãos públicos ou particulares, seguindo as normas de redação oficial.</p></div>
       </div>
 
       <h4>Como a busca de modelos funciona</h4>
       <ul>
-        <li><strong>Pasta configurada e há modelo parecido:</strong> o pAIdegua escolhe o mais semelhante automaticamente e mostra o caminho do arquivo usado.</li>
-        <li><strong>Pasta configurada, mas sem modelo parecido:</strong> o pAIdegua pergunta se você quer gerar do zero ou cancelar.</li>
-        <li><strong>Pasta não configurada:</strong> o pAIdegua gera do zero, sem usar modelos.</li>
+        <li><strong>Pasta configurada e há modelo parecido:</strong> o SEIrtão escolhe o mais semelhante automaticamente e mostra o caminho do arquivo usado.</li>
+        <li><strong>Pasta configurada, mas sem modelo parecido:</strong> o SEIrtão pergunta se você quer gerar do zero ou cancelar.</li>
+        <li><strong>Pasta não configurada:</strong> o SEIrtão gera do zero, sem usar modelos.</li>
       </ul>
     </section>
 
@@ -894,18 +888,18 @@
         </div>
       </div>
 
-      <p>O botão <strong>Minutar</strong> funciona como um auxiliar de triagem. Ao clicar nele, o pAIdegua faz o seguinte:</p>
+      <p>O botão <strong>Minutar</strong> funciona como um auxiliar de triagem. Ao clicar nele, o SEIrtão faz o seguinte:</p>
 
       <ol>
-        <li>Analisa os atos mais recentes do processo e o andamento até aqui.</li>
-        <li>Consulta a IA para sugerir qual é o ato mais adequado àquele momento processual — por exemplo: julgar procedente, converter em diligência, decisão sobre tutela ou despacho de andamento.</li>
-        <li>Mostra no chat a <strong>sugestão com uma breve justificativa</strong>, acompanhada de dois botões: <strong>Gerar esta minuta</strong>, que produz o ato sugerido imediatamente, e <strong>Escolher outro ato</strong>, que abre uma lista com todas as opções disponíveis para aquele grau.</li>
+        <li>Analisa os documentos mais recentes do processo administrativo e o andamento até aqui.</li>
+        <li>Consulta a IA para sugerir qual é o ato mais adequado àquele momento — por exemplo: despacho de encaminhamento, informação técnica, parecer jurídico, decisão administrativa ou ato ordinatório.</li>
+        <li>Mostra no chat a <strong>sugestão com uma breve justificativa</strong>, acompanhada de dois botões: <strong>Gerar esta minuta</strong>, que produz o ato sugerido imediatamente, e <strong>Escolher outro ato</strong>, que abre a lista com os oito atos do catálogo.</li>
         <li>Se a sugestão não puder ser feita por algum motivo (por exemplo, código de acesso ausente ou resposta incompleta), a lista de opções é aberta direto — o botão continua funcionando normalmente.</li>
       </ol>
 
       <div class="callout callout--tip">
         <h4>Por que essa ajuda na escolha?</h4>
-        <p>Em processos complexos, escolher o botão certo pode demandar análise. A sugestão automática olha o que já foi feito nos autos e indica o próximo passo mais provável, poupando você da leitura completa para essa decisão inicial.</p>
+        <p>Em processos administrativos com muitos andamentos, escolher o ato correto pode demandar leitura extensa. A sugestão automática olha o que já foi feito nos autos e indica o próximo passo mais provável, poupando você da análise completa para essa decisão inicial.</p>
       </div>
     </section>
 
@@ -923,10 +917,15 @@
 
       <div class="feat-grid">
         <div class="feat"><span class="feat__label">Copiar</span><h4>Copiar</h4><p>Copia o texto da resposta para a área de transferência. Depois é só colar onde você quiser.</p></div>
-        <div class="feat"><span class="feat__label">PJe</span><h4>Inserir no PJe</h4><p>Coloca o texto diretamente no editor de minutas do PJe que você deixou aberto em outra aba — sem precisar copiar e colar manualmente.</p></div>
-        <div class="feat"><span class="feat__label">Word</span><h4>Baixar como Word</h4><p>Salva a minuta como um arquivo do Word no seu computador. O nome já vem pronto, com o número do processo e o tipo de ato.</p></div>
-        <div class="feat"><span class="feat__label">Ajustar</span><h4>Refinar minuta</h4><p>Pede ajustes na última minuta sem começar do zero. Exemplos: <em>"encurtar"</em>, <em>"mudar o tom"</em>, <em>"citar a Súmula 343 do STJ"</em>, <em>"reforçar o dispositivo"</em>. O modelo de referência continua o mesmo.</p></div>
+        <div class="feat"><span class="feat__label">SEI</span><h4>Inserir no SEI</h4><p>Guia o fluxo de quatro etapas dentro do SEI — Incluir Documento → Escolher Tipo → Cadastrar → Abrir Editor — e, ao final, injeta o texto diretamente no corpo da minuta no editor CKEditor 5 do SEI. Sem copiar e colar manualmente.</p></div>
+        <div class="feat"><span class="feat__label">Word</span><h4>Baixar como Word</h4><p>Salva a minuta como um arquivo do Word no seu computador. O nome já vem pronto, com o número do processo SEI e o tipo de ato.</p></div>
+        <div class="feat"><span class="feat__label">Ajustar</span><h4>Refinar minuta</h4><p>Pede ajustes na última minuta sem começar do zero. Exemplos: <em>"encurtar"</em>, <em>"mudar o tom"</em>, <em>"citar a IN TRF5 nº X"</em>, <em>"reforçar a fundamentação normativa"</em>. O modelo de referência continua o mesmo.</p></div>
         <div class="feat"><span class="feat__label">Refazer</span><h4>Nova minuta</h4><p>Gera uma nova versão do mesmo ato, do zero, sem usar modelo de referência. Útil quando você quer comparar duas opções ou começar de novo.</p></div>
+      </div>
+
+      <div class="callout callout--info">
+        <h4>Sobre a inserção no editor do SEI</h4>
+        <p>A inserção é <strong>opt-in</strong>: você confirma antes de o SEIrtão executar o fluxo de inclusão de documento. O texto é colocado apenas no <em>Corpo do Texto</em> da minuta (a raiz editável do CKEditor 5), preservando cabeçalho, título, data e rodapé que o SEI já popula com metadados do ato.</p>
       </div>
     </section>
 
@@ -936,21 +935,21 @@
         <span class="section-num">08</span>
         <div>
           <h2>Chat livre e entrada por voz</h2>
-          <p>Conversando com os autos</p>
+          <p>Conversando com o processo administrativo</p>
         </div>
       </div>
 
       <p>A área de chat na parte inferior permite fazer perguntas livres sobre o processo. Alguns exemplos:</p>
 
       <ul>
-        <li>"Qual o pedido principal do autor?"</li>
-        <li>"Existe laudo pericial nos autos? O que conclui?"</li>
-        <li>"Resuma as provas documentais."</li>
-        <li>"Há questões preliminares a resolver?"</li>
-        <li>"Liste todos os prazos mencionados."</li>
+        <li>"Qual o objeto deste processo administrativo?"</li>
+        <li>"Existe parecer jurídico anterior nos autos? O que conclui?"</li>
+        <li>"Resuma os documentos instrutórios apresentados."</li>
+        <li>"Há questões prejudiciais ou preliminares a resolver?"</li>
+        <li>"Liste todos os prazos mencionados nas manifestações."</li>
       </ul>
 
-      <h4>Falar com o pAIdegua em vez de digitar</h4>
+      <h4>Falar com o SEIrtão em vez de digitar</h4>
       <p>O chat também aceita entrada por voz: basta clicar no ícone do microfone e começar a falar. A ferramenta transforma a sua fala em texto de duas maneiras, dependendo do serviço de IA escolhido:</p>
       <ul>
         <li>Quando o serviço tem transcrição própria (OpenAI ou Gemini), o áudio é enviado para o serviço, que devolve o texto com boa precisão.</li>
@@ -959,7 +958,7 @@
 
       <div class="callout callout--warn">
         <h4>Usando Anthropic (Claude)?</h4>
-        <p>Esse serviço não transcreve áudio. Se você estiver usando Anthropic, o pAIdegua usa automaticamente o reconhecimento de voz do próprio navegador — ou troque o serviço para OpenAI ou Gemini se preferir.</p>
+        <p>Esse serviço não transcreve áudio. Se você estiver usando Anthropic, o SEIrtão usa automaticamente o reconhecimento de voz do próprio navegador — ou troque o serviço para OpenAI ou Gemini se preferir.</p>
       </div>
     </section>
 
@@ -973,31 +972,36 @@
         </div>
       </div>
 
-      <p>Para que a busca automática encontre sempre o modelo certo, organize seus arquivos em subpastas com nomes claros. Pastas chamadas <strong>procedente</strong>, <strong>improcedente</strong>, <strong>decisao</strong>, <strong>despacho</strong>, <strong>diligencia</strong>, <strong>voto-mantem</strong>, <strong>voto-reforma</strong> ou <strong>nega-seguimento</strong> têm prioridade natural na busca do botão correspondente.</p>
+      <p>Para que a busca automática encontre sempre o modelo certo, organize seus arquivos em subpastas com nomes claros. Pastas chamadas <strong>despacho-encaminhamento</strong>, <strong>despacho-instrucao</strong>, <strong>informacao-tecnica</strong>, <strong>parecer-juridico</strong>, <strong>decisao</strong>, <strong>ato-ordinatorio</strong>, <strong>memorando</strong> ou <strong>oficio</strong> têm prioridade natural na busca do botão correspondente.</p>
 
       <pre class="tree" aria-label="Estrutura de pastas de modelos">
 <span class="dir">Modelos/</span>
-├─ <span class="dir">procedente/</span>
-│    <span class="file">bpc-loas-procedente.docx</span>
-│    <span class="file">aposentadoria-procedente.docx</span>
-│    <span class="file">auxilio-doenca-procedente.docx</span>
-├─ <span class="dir">improcedente/</span>
-│    <span class="file">bpc-loas-improcedente.docx</span>
-│    <span class="file">aposentadoria-improcedente.docx</span>
+├─ <span class="dir">despacho-encaminhamento/</span>
+│    <span class="file">encaminha-diretoria.docx</span>
+│    <span class="file">encaminha-secao-judiciaria.docx</span>
+├─ <span class="dir">despacho-instrucao/</span>
+│    <span class="file">instrucao-documentos.docx</span>
+│    <span class="file">instrucao-manifestacao.docx</span>
+├─ <span class="dir">informacao-tecnica/</span>
+│    <span class="file">levantamento-patrimonial.docx</span>
+│    <span class="file">apuracao-preliminar.docx</span>
+├─ <span class="dir">parecer-juridico/</span>
+│    <span class="file">parecer-licitacao.docx</span>
+│    <span class="file">parecer-servidor.docx</span>
 ├─ <span class="dir">decisao/</span>
-│    <span class="file">tutela-urgencia.docx</span>
-│    <span class="file">liminar-bloqueio.docx</span>
-├─ <span class="dir">despacho/</span>
-│    <span class="file">saneador.docx</span>
-│    <span class="file">intimacao-pericia.docx</span>
-│    <span class="file">cite-se.docx</span>
-└─ <span class="dir">diligencia/</span>
-     <span class="file">conversao-diligencia.docx</span></pre>
+│    <span class="file">decisao-sancao.docx</span>
+│    <span class="file">decisao-recurso.docx</span>
+├─ <span class="dir">ato-ordinatorio/</span>
+│    <span class="file">juntada-intimacao.docx</span>
+├─ <span class="dir">memorando/</span>
+│    <span class="file">memorando-padrao.docx</span>
+└─ <span class="dir">oficio/</span>
+     <span class="file">oficio-externo.docx</span></pre>
 
       <ul>
         <li>Use <strong>nomes descritivos</strong> nos arquivos: a busca considera tanto o nome quanto o conteúdo da minuta.</li>
         <li>Formatos aceitos: arquivos comuns do Word, do LibreOffice, texto simples e PDF.</li>
-        <li>Sempre que adicionar, alterar ou remover modelos na pasta, abra a página de gerenciamento e clique em <strong>Reindexar agora</strong> para que o pAIdegua reconheça as mudanças.</li>
+        <li>Sempre que adicionar, alterar ou remover modelos na pasta, abra a página de gerenciamento e clique em <strong>Reindexar agora</strong> para que o SEIrtão reconheça as mudanças.</li>
       </ul>
     </section>
 
@@ -1015,12 +1019,12 @@
         <div class="feat">
           <span class="feat__label">Supervisão</span>
           <h4>A decisão é sempre humana</h4>
-          <p>Toda minuta gerada precisa ser revisada, editada e validada por magistrado ou servidor autorizado antes de ir para os autos. O pAIdegua é um apoio — a palavra final é sua.</p>
+          <p>Toda minuta gerada precisa ser revisada, editada e validada pela autoridade competente antes de ser assinada no SEI. O SEIrtão é um apoio — a palavra final é sua.</p>
         </div>
         <div class="feat">
           <span class="feat__label">Privacidade</span>
           <h4>Proteção dos dados</h4>
-          <p>Antes de enviar qualquer texto para os serviços de IA, o pAIdegua pode ocultar dados sensíveis com a função <em>Anonimizar autos</em>. Recomenda-se usar códigos de acesso de planos corporativos, em que o serviço se compromete a não usar os dados para treinar seus modelos.</p>
+          <p>Antes de enviar qualquer texto para os serviços de IA, o SEIrtão pode ocultar dados sensíveis com a função <em>Anonimizar documentos</em>. Recomenda-se usar códigos de acesso de planos corporativos, em que o serviço se compromete a não usar os dados para treinar seus modelos.</p>
         </div>
         <div class="feat">
           <span class="feat__label">Registro</span>
@@ -1036,7 +1040,7 @@
 
       <div class="callout callout--lgpd">
         <h4>Classificação: baixo risco</h4>
-        <p>Conforme a Resolução CNJ 615/2025, o pAIdegua é classificado como ferramenta de <strong>baixo risco</strong>, destinada a produzir textos de apoio para facilitar a elaboração de atos judiciais e a ocultar dados sensíveis em documentos. É um sistema de suporte, sem qualquer poder de decisão.</p>
+        <p>Conforme a Resolução CNJ 615/2025, o SEIrtão é classificado como ferramenta de <strong>baixo risco</strong>, destinada a produzir textos de apoio para facilitar a elaboração de atos administrativos e a ocultar dados sensíveis em documentos. É um sistema de suporte, sem qualquer poder de decisão.</p>
       </div>
     </section>
 
@@ -1052,12 +1056,12 @@
 
       <div class="qa">
         <details>
-          <summary>O pAIdegua não aparece no PJe</summary>
-          <p>Confira se ele está ativo na página de extensões do navegador (<strong>chrome://extensions</strong> ou <strong>edge://extensions</strong>). Recarregue o PJe. Se mesmo assim o botão flutuante não aparecer, feche e reabra a aba.</p>
+          <summary>O SEIrtão não aparece no SEI</summary>
+          <p>Confira se ele está ativo na página de extensões do navegador (<strong>chrome://extensions</strong> ou <strong>edge://extensions</strong>). Recarregue o SEI. Se mesmo assim o botão flutuante não aparecer, feche e reabra a aba. Lembre-se de que o SEIrtão só ativa em páginas do domínio <code>sei.trf5.jus.br</code>.</p>
         </details>
         <details>
           <summary>Um documento deu erro na extração</summary>
-          <p>Às vezes, o PJe devolve o documento vazio na primeira tentativa. O pAIdegua tenta até três vezes, cada uma de um jeito diferente. Se continuar dando erro, recarregue a página do processo e tente novamente.</p>
+          <p>Às vezes, o SEI devolve o documento vazio na primeira tentativa. O SEIrtão tenta até três vezes, cada uma de um jeito diferente. Se continuar dando erro, recarregue a árvore do processo e tente novamente.</p>
         </details>
         <details>
           <summary>Documentos de áudio e vídeo</summary>
@@ -1068,6 +1072,10 @@
           <p>Essa leitura é feita inteiramente no seu próprio computador para proteger o sigilo, e documentos com muitas páginas podem demorar. Ajuste o limite de páginas nas configurações para acelerar.</p>
         </details>
         <details>
+          <summary>"Inserir no SEI" abre o editor mas não injeta o texto</summary>
+          <p>O editor de minutas do SEI é um CKEditor 5 com múltiplas raízes (cabeçalho, título, corpo, data e rodapé). O SEIrtão detecta automaticamente a raiz <em>Corpo do Texto</em> e injeta nela. Se a injeção falhar, aguarde o editor terminar de carregar e acione o botão novamente — a falha costuma acontecer quando o popup do editor ainda não concluiu a inicialização.</p>
+        </details>
+        <details>
           <summary>A minuta usou um modelo que não era o ideal</summary>
           <p>A busca automática escolhe o modelo mais parecido com o caso. Se o resultado não ficou bom, você pode reorganizar seus modelos em subpastas mais específicas, ou clicar em <strong>Nova minuta</strong> para gerar do zero, sem referência.</p>
         </details>
@@ -1076,8 +1084,8 @@
           <p>Use o botão <strong>Testar</strong> na tela de configurações para conferir se o código está correto. Cada serviço tem um formato próprio — verifique se o código colado corresponde ao serviço escolhido.</p>
         </details>
         <details>
-          <summary>Como atualizar o pAIdegua</summary>
-          <p>Quando você receber uma nova versão da equipe do Inovajus, substitua a pasta antiga pela nova no seu computador. Depois, abra a página de extensões e clique na seta circular no quadro do pAIdegua para recarregar.</p>
+          <summary>Como atualizar o SEIrtão</summary>
+          <p>Quando você receber uma nova versão da equipe do Inovajus, substitua a pasta antiga pela nova no seu computador. Depois, abra a página de extensões e clique na seta circular no quadro do SEIrtão para recarregar.</p>
         </details>
       </div>
     </section>
@@ -1089,10 +1097,10 @@
 <footer>
   <div class="footer__inner">
     <div>
-      <h3 class="footer__brand">pA<span>I</span>degua <em>·</em></h3>
+      <h3 class="footer__brand">SE<span>I</span>rtão <em>·</em></h3>
       <p class="footer__meta">
         Desenvolvido pelo <strong>Laboratório de Inovação da Justiça Federal do Ceará</strong> — Inovajus.<br/>
-        Colaboração do Dr. George Marmelstein Lima (prompt FIRAC+).<br/>
+        Assistente com IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5.<br/>
         Versão 1.0.0 · Abril de 2026
       </p>
     </div>
@@ -1110,9 +1118,7 @@
       <h5>Contato</h5>
       <ul>
         <li><a href="mailto:inovajus@jfce.jus.br">inovajus@jfce.jus.br</a></li>
-        <li>pje1g.trf5.jus.br</li>
-        <li>pje2g.trf5.jus.br</li>
-        <li>pjett.trf5.jus.br</li>
+        <li>sei.trf5.jus.br</li>
       </ul>
     </div>
   </div>
