@@ -1,189 +1,225 @@
-# SEIrtão - Manual de Instalacao e Uso
+# SEIrtão — Manual de Instalação e Uso
 
-Assistente de IA integrado ao SEI (Sistema Eletronico de Informacoes) do TRF5 para resumo de processos, sugestao do proximo ato administrativo e geracao de minutas com insercao automatizada no editor do SEI.
+Assistente de IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5 para análise de processos administrativos, sugestão do próximo ato e geração de minutas, com inserção automatizada (opcional) no editor do SEI.
 
 ---
 
-## PARTE 1 - INSTALACAO
+## PARTE 1 — INSTALAÇÃO
 
 ### Navegadores suportados
 
-O SEIrtao e distribuido como extensao MV3 (Manifest V3). Recomenda-se seu uso em:
+O SEIrtão é distribuído como extensão MV3 (Manifest V3). Recomenda-se o uso em:
 
-- **Google Chrome** (versao 110 ou superior) - indicado para uso diario.
-- **Microsoft Edge** (versao 110 ou superior) - equivalente ao Chrome.
+- **Google Chrome** (versão 110 ou superior)
+- **Microsoft Edge** (versão 110 ou superior)
 
-O Firefox nao e suportado nesta versao. Extensoes MV3 em Firefox exigem empacotamento distinto e ajustes de compatibilidade que ainda nao foram feitos.
+O Firefox não é suportado nesta versão.
 
 ### Requisitos
 
-- Navegador: Google Chrome ou Microsoft Edge (versao 110 ou superior)
-- Acesso ao SEI do TRF5 (sei.trf5.jus.br)
+- Navegador: Google Chrome ou Microsoft Edge (versão 110 ou superior)
+- Acesso ao SEI do TRF5 (`sei.trf5.jus.br`)
 - Chave de API de um dos provedores: Google Gemini, Anthropic (Claude) ou OpenAI (GPT)
 
 ### Passo a passo
 
-1. Obtenha o arquivo "dist.zip" da extensao (fornecido pelo desenvolvedor ou gerado via build a partir do repositorio `seirtao`).
+1. Obtenha o arquivo `dist.zip` da extensão (fornecido pelo desenvolvedor ou gerado via build no repositório `seirtao`).
 
-2. IMPORTANTE - Extraia o arquivo antes de instalar: clique com o botao direito sobre "dist.zip" e escolha "Extrair tudo" (Windows) ou use o descompactador de sua preferencia. O resultado sera uma pasta chamada "dist" com todos os arquivos da extensao. O navegador NAO aceita carregar a extensao a partir do arquivo compactado - e obrigatorio descompactar primeiro.
+2. **Extraia o arquivo antes de instalar.** Clique com o botão direito sobre `dist.zip` e escolha "Extrair tudo" (Windows) ou use o descompactador de sua preferência. O resultado será uma pasta chamada `dist` com todos os arquivos da extensão. O navegador **não** aceita carregar a extensão a partir do `.zip`.
 
-3. Guarde a pasta "dist" extraida em um local permanente (ex.: Documentos\SEIrtao\dist). Se a pasta for apagada ou movida apos a instalacao, a extensao deixara de funcionar.
+3. Guarde a pasta `dist` em um local permanente (ex.: `Documentos\SEIrtão\dist`). Se a pasta for apagada ou movida após a instalação, a extensão deixa de funcionar.
 
-4. Abra a pagina de extensoes do navegador:
-   - Chrome: digite chrome://extensions na barra de endereco
-   - Edge: digite edge://extensions na barra de endereco
+4. Abra a página de extensões do navegador:
+   - Chrome: `chrome://extensions`
+   - Edge: `edge://extensions`
 
-5. Ative o "Modo do desenvolvedor" (interruptor no canto superior direito da pagina).
+5. Ative o **Modo do desenvolvedor** (interruptor no canto superior direito da página).
 
-6. Clique em "Carregar sem compactacao" (Chrome) ou "Carregar descompactada" (Edge).
+6. Clique em **Carregar sem compactação** (Chrome) ou **Carregar descompactada** (Edge).
 
-7. Selecione a pasta "dist" extraida do SEIrtao (nao selecione o arquivo .zip).
+7. Selecione a pasta `dist` extraída (não o arquivo `.zip`).
 
-8. A extensao aparecera na barra de ferramentas do navegador com o icone do SEIrtao.
+8. A extensão aparecerá na barra de ferramentas do navegador com o ícone do SEIrtão.
 
-9. Fixe a extensao na barra (clique no icone de quebra-cabeca e depois no alfinete ao lado de "SEIrtao").
+9. Fixe a extensão na barra (ícone de quebra-cabeça → alfinete ao lado de "SEIrtão").
 
-### Configuracao inicial
+### Configuração inicial
 
-Clique no icone do SEIrtao na barra de ferramentas. O popup de configuracoes sera aberto.
+Clique no ícone do SEIrtão na barra de ferramentas. O popup de configurações será aberto.
 
-1. LGPD: Leia o aviso de privacidade e marque a caixa de ciencia. A extensao envia o conteudo dos documentos para a API do provedor de IA escolhido. Confirme que esta ciente.
+1. **LGPD.** Leia o aviso de privacidade e marque a caixa de ciência. A extensão envia o conteúdo dos documentos para a API do provedor de IA escolhido.
 
-2. Provedor e modelo: Selecione o provedor de IA (Google Gemini, Anthropic ou OpenAI) e o modelo desejado.
+2. **Provedor e modelo.** Selecione o provedor (Google Gemini, Anthropic ou OpenAI) e o modelo desejado.
 
-3. Chave de API: Cole a chave de API do provedor selecionado no campo indicado. Clique em "Salvar" e depois em "Testar" para verificar se a conexao esta funcionando. A chave fica armazenada apenas no navegador local.
+3. **Chave de API.** Cole a chave do provedor selecionado no campo indicado. Clique em **Salvar** e depois em **Testar** para verificar a conexão. A chave fica armazenada apenas no navegador local.
 
-4. OCR (opcional): Marque "Rodar OCR automaticamente" se deseja que documentos digitalizados (imagens sem texto) sejam processados por reconhecimento optico de caracteres. O OCR roda localmente (Tesseract.js), sem enviar imagens ao provedor de IA. Ajuste o limite de paginas por documento conforme necessario.
+4. **OCR (opcional).** Marque "Rodar OCR automaticamente" se deseja que documentos digitalizados (imagens sem texto) sejam processados por reconhecimento óptico de caracteres. O OCR roda localmente (Tesseract.js), sem enviar imagens ao provedor de IA. Ajuste o limite de páginas por documento conforme necessário.
 
-5. Modelos de minuta (opcional): Clique em "Gerenciar modelos" (ou no icone de engrenagem no painel) para abrir a pagina de configuracao. Ali voce pode selecionar uma pasta do seu computador com seus modelos de atos administrativos (despachos, informacoes, pareceres, decisoes administrativas). A extensao aceita arquivos .docx, .pdf, .txt e .md. Organize por subpastas (ex.: "despachos", "informacoes", "pareceres", "decisoes", "oficios", "memorandos") para melhor selecao automatica.
+5. **Modelos de minuta (opcional).** Clique em **Gerenciar modelos** para abrir a página de opções. Selecione uma pasta do seu computador com seus modelos de atos administrativos (despachos, informações, pareceres, decisões, atos ordinatórios, memorandos, ofícios). Formatos aceitos: `.docx`, `.pdf`, `.txt`, `.md`. Organize por subpastas (ex.: `despachos/`, `informacoes/`, `pareceres/`, `decisoes/`, `ordinatorio/`, `memorandos/`, `oficios/`) para melhor seleção automática.
 
-6. Insercao automatica no SEI (OPT-IN): Por padrao, a extensao NAO executa os quatro passos do SEI (Incluir Documento -> Escolher Tipo -> Cadastrar -> Injetar no editor). Para habilitar esse modo, va em "Gerenciar modelos" e marque a opcao "Permitir insercao automatica de minutas no SEI". Mesmo com a opcao ativa, o SEIrtao nunca salva, assina ou publica o documento - a revisao e a assinatura permanecem sempre com o usuario. Cada tentativa gera um registro local (data, processo, tipo, nivel de acesso e hash truncado da minuta - sem o conteudo) para auditoria.
+6. **Inserção automática no SEI (opt-in).** Por padrão, a extensão **não** executa os passos automatizados dentro do SEI. Para habilitar, vá em "Gerenciar modelos" e marque **Permitir inserção automática de minutas no SEI**. Mesmo com a opção ativa, o SEIrtão nunca salva, assina nem publica o documento — a revisão e a assinatura permanecem sempre com o usuário. Cada tentativa gera um registro local (data, processo, tipo, nível de acesso e hash truncado da minuta — sem o conteúdo) para auditoria.
 
-7. Termos de uso e governanca: No popup ha a secao "Termos de uso e Governanca (Res. CNJ 615/2025)" com o enquadramento da ferramenta como de baixo risco (Anexo BR4/BR8), a obrigacao de supervisao humana (art. 19, IV e art. 34), a politica de privacidade/anonimizacao (art. 30), a trilha de auditoria (art. 19, par. 6 e art. 27 - parcialmente implementada via log local da insercao automatica) e a identificacao de conteudo gerado com apoio de IA (art. 21). Leia antes do uso em producao.
+7. **Termos de uso e governança.** No popup há a seção "Termos de uso e Governança (Res. CNJ 615/2025)" com o enquadramento da ferramenta como de baixo risco (Anexo BR4/BR8), a obrigação de supervisão humana (art. 19, IV e art. 34), a política de privacidade/anonimização (art. 30), a trilha de auditoria (art. 19, §6º e art. 27 — parcialmente implementada via log local da inserção automática) e a identificação de conteúdo gerado com apoio de IA (art. 21). Leia antes do uso em produção.
 
 ---
 
-## PARTE 2 - USO
+## PARTE 2 — USO
 
-### Acessando o SEIrtao
+### Acessando o SEIrtão
 
-1. Acesse o SEI (sei.trf5.jus.br) e faca login na sua unidade.
-2. Abra um processo (tela de "Controle de Processos" -> clicar no numero do processo).
-3. O SEIrtao adiciona um botao na barra superior do SEI. Clique para abrir o painel lateral.
+1. Acesse o SEI (`sei.trf5.jus.br`) e faça login na sua unidade.
+2. Abra um processo (tela "Controle de Processos" → clicar no número do processo).
+3. O SEIrtão injeta um **botão discreto "SEIrtão"** na barra superior direita do SEI (ao lado de *Controle de Processos*, *Novidades*, *Unidade* etc.). Clique para abrir o painel lateral.
 
-Observacao: O painel so aparece em telas que exibem o tramite de um processo (acao `procedimento_trabalhar`, `procedimento_visualizar` e correlatas). Na tela inicial do SEI ou em listagens gerais, o painel nao sera exibido.
+> **Observação.** O botão só aparece em telas que exibem o trâmite de um processo (ações `procedimento_trabalhar`, `procedimento_visualizar` e correlatas). Na tela inicial do SEI ou em listagens gerais, ele não é exibido.
 
-### Painel lateral
+### Layout do painel lateral
 
-O painel exibe:
-- Nome da extensao e provedor/modelo em uso
-- Numero do processo detectado (ex.: 0002026-76.2026.4.05.7600) e a unidade em que o processo esta
-- Barra de ferramentas com os botoes de acao: Carregar Documentos, Resumir, Minutar proximo ato, Anonimizar
-- Area de chat para interacao livre com a IA
+O painel abre em uma sidebar à direita com duas colunas:
 
-### Carregar Documentos
+**Coluna esquerda (lateral):**
+- **Cabeçalho** com nome da extensão e subtítulo.
+- **Status** do processo carregado (número detectado, unidade responsável).
+- **Ações** — três botões principais:
+  - **Analisar processo administrativo**
+  - **Minutar próximo ato**
+  - **Otimizar modelo do SEI**
+- **Documentos** — lista automática da árvore do processo, com caixas de seleção, botões *Todos* / *Nenhum*, filtro por texto e contador "N de M selecionados". A árvore é lida automaticamente quando o painel abre — não existe botão "Carregar Documentos".
 
-Primeiro passo obrigatorio antes de qualquer acao. Clique em "Carregar Documentos" para que a extensao:
-- Detecte todos os documentos da arvore do processo (anexos, oficios juntados, informacoes, despachos anteriores etc.)
-- Exiba a lista com checkbox para selecao individual
-- Permita marcar/desmarcar todos
+**Coluna direita (principal):**
+- Caixas de streaming de cada ação (análise, minuta, modelo otimizado) com barra de progresso, texto gerado em tempo real e barra de ações ao final.
+- **Chat livre** no rodapé, para perguntas abertas sobre o processo.
 
-Depois clique em "Extrair conteudo selecionados". A extensao baixa e extrai o texto de cada documento selecionado. O progresso e exibido em tempo real (ex.: "Extracao concluida - 12 ok, 0 com erro"). O conteudo extraido fica em cache por sessao, entao a segunda analise sobre os mesmos documentos e imediata.
+### Analisar processo administrativo
 
-### Resumir
+Seleciona os documentos marcados na seção "Documentos" e gera uma análise estruturada (FIRAC+ adaptado ao contexto administrativo), contendo:
 
-Gera uma analise do processo administrativo no formato FIRAC+ adaptado ao contexto administrativo:
-- Dados do processo (unidade, interessados, numero, tipo)
-- Historico em ordem cronologica (pecas juntadas, despachos, informacoes)
-- Questao administrativa em discussao
-- Normativos aplicaveis
-- Argumentos e manifestacoes das unidades envolvidas
-- Situacao atual e proxima etapa natural
+- Dados do processo (unidade, interessados, número, tipo)
+- Histórico em ordem cronológica
+- Questão administrativa em discussão
+- Normativos aplicáveis
+- Argumentos e manifestações
+- Situação atual e próxima providência natural
 
-### Minutar proximo ato (triagem automatica)
+O texto é transmitido em tempo real (streaming). Ao concluir, aparecem os botões de ação sobre a saída (ver mais adiante).
 
-O botao "Minutar proximo ato" funciona em duas rodadas:
+### Minutar próximo ato (triagem + geração)
 
-**1a rodada - triagem.** A extensao monta um contexto priorizando os ultimos atos juntados ao processo e consulta a IA para recomendar qual ato e mais adequado ao momento processual. A resposta vem em dois blocos fixos:
-   - ATO SUGERIDO: um dos 8 atos do catalogo (ver abaixo)
-   - JUSTIFICATIVA: 2 a 4 linhas explicando por que, com referencia ao documento que ancora a decisao
+O botão **Minutar próximo ato** funciona em duas rodadas:
 
-**2a rodada - minuta.** O painel exibe o cartao de pre-insercao com a sugestao e dois botoes:
-   - "Gerar esta minuta" - produz a minuta do ato recomendado.
-   - "Escolher outro ato..." - abre um seletor com os 8 atos do catalogo ou, opcionalmente, com os tipos de documento realmente habilitados na sua unidade no SEI (descobertos dinamicamente na tela "Escolher Tipo do Documento").
+**1ª rodada — triagem.** O SEIrtão monta um contexto priorizando os últimos atos juntados ao processo e consulta a IA para recomendar qual ato é mais adequado ao momento. A resposta vem em dois blocos:
 
-Caso a triagem falhe (sem chave de API, resposta invalida, etc.), a escolha manual e aberta imediatamente, preservando a funcionalidade.
+- **ATO SUGERIDO:** um dos 8 atos do catálogo (ver abaixo).
+- **JUSTIFICATIVA:** 2 a 4 linhas explicando a escolha, com referência ao documento que ancora a decisão.
 
-#### Catalogo de atos administrativos
+**2ª rodada — minuta.** O painel exibe um cartão com a sugestão e dois botões:
 
-1. **Despacho de encaminhamento** - move o processo a unidade competente para a proxima etapa.
-2. **Despacho de instrucao** - determina providencia concreta (juntada, manifestacao, diligencia).
-3. **Informacao tecnica** - manifestacao factual/tecnica da unidade competente.
-4. **Parecer juridico** - analise de legalidade/adequacao normativa.
-5. **Decisao administrativa** - ato da autoridade que resolve o merito (defere, aprova, homologa).
-6. **Ato ordinatorio** - ato de mero expediente da secretaria.
-7. **Memorando** - comunicacao formal entre unidades internas.
-8. **Oficio** - comunicacao formal com orgao ou pessoa externa.
+- **Gerar minuta deste ato** — abre o painel de orientações para o ato recomendado.
+- **Escolher outro ato…** — abre um seletor com os 8 atos do catálogo e, quando possível, com os tipos de documento efetivamente habilitados na sua unidade (descobertos na tela "Escolher Tipo do Documento" do SEI).
 
-O SEIrtao faz correspondencia fuzzy entre o ato sugerido pela IA e o catalogo oficial, e entre o catalogo e os tipos de documento efetivamente habilitados na sua unidade no SEI (ex.: "Despacho de instrucao" pode aparecer como "Despacho - Instrucao" dependendo da configuracao local).
+Caso a triagem falhe (sem chave, resposta inválida etc.), o seletor manual é aberto imediatamente.
 
-### Anonimizar autos
+#### Painel de orientações
 
-Substitui dados sensiveis nos documentos extraidos:
-- CPF, CNPJ, CEP, telefones, e-mails, RG e dados bancarios (via regex local, sem envio a IA)
-- Nomes de pessoas fisicas (via IA)
+Após escolher o ato, o painel de orientações apresenta:
 
-Os dados sao substituidos por marcadores genericos (ex.: "INTERESSADO", "CPF_OCULTO"). Util em processos administrativos que envolvem dados de servidores, beneficiarios ou terceiros.
+- **Modelo a usar** — seletor com as opções:
+  - *Automático (melhor correspondência)* — usa o top-1 da busca BM25 nos seus modelos, quando a similaridade estiver acima do limiar.
+  - *Sem modelo (gerar do zero)* — força geração sem template.
+  - *Top-3* — os três modelos mais compatíveis com o ato escolhido (cada opção mostra nome + percentual de compatibilidade). O seletor só aparece se você configurou uma pasta de modelos.
+- **Orientações adicionais (opcional)** — campo livre em que você pode digitar instruções específicas (ex.: *"citar a Lei 8.112/90, art. 116"*, *"encurtar para 6 parágrafos"*, *"tom mais formal"*).
+- Três botões: **Voltar**, **Sem orientações — gerar minuta**, **Gerar com orientações**.
 
-### Rodar OCR
+Para os atos de **informação**, **parecer** e **decisão administrativa** (rigidez *gabarito*), o modelo selecionado é seguido parágrafo a parágrafo. Para **despachos**, **atos ordinatórios**, **memorandos** e **ofícios** (rigidez *referência*), o modelo é usado como referência de estilo, sem obrigatoriedade estrutural.
 
-Aparece automaticamente quando ha documentos digitalizados (PDFs de imagem). Processa as paginas localmente com Tesseract.js para extrair o texto. Nao envia imagens ao provedor de IA.
+#### Catálogo de atos administrativos
+
+1. **Despacho de encaminhamento** — move o processo à unidade competente para a próxima etapa.
+2. **Despacho de instrução** — determina providência concreta (juntada, manifestação, diligência).
+3. **Informação técnica** — manifestação factual/técnica da unidade competente.
+4. **Parecer jurídico** — análise de legalidade / adequação normativa.
+5. **Decisão administrativa** — ato da autoridade que resolve o mérito (defere, aprova, homologa).
+6. **Ato ordinatório** — ato de mero expediente da secretaria.
+7. **Memorando** — comunicação formal entre unidades internas.
+8. **Ofício** — comunicação formal com órgão ou pessoa externa.
+
+O SEIrtão faz correspondência *fuzzy* entre o ato sugerido pela IA e o catálogo, e entre o catálogo e os tipos de documento habilitados na sua unidade (ex.: "Despacho de instrução" pode aparecer como "Despacho - Instrução" dependendo da configuração local).
+
+### Otimizar modelo do SEI
+
+Recebe um texto-modelo (colado na caixa dedicada do painel) e propõe:
+
+- Variáveis no formato `@tag@` (para o *infraEditor* do SEI) substituindo partes que variam de um caso para outro;
+- Remoção de redundâncias;
+- Ajustes de clareza.
+
+Útil para transformar modelos tradicionais em modelos reutilizáveis, compatíveis com o editor do SEI.
 
 ### Inserir minuta no editor do SEI
 
-Com a opcao "Permitir insercao automatica" habilitada (ver Configuracao Inicial, passo 6), ao aceitar uma minuta no cartao de pre-insercao, o SEIrtao executa os quatro passos do SEI:
+Com a opção **Permitir inserção automática** habilitada (Configuração Inicial, passo 6), ao confirmar uma minuta no cartão de pré-inserção, o SEIrtão executa quatro etapas macro dentro do SEI:
 
-1. **Incluir Documento** - aciona o link "Incluir Documento" na arvore do processo.
-2. **Escolher Tipo** - seleciona o tipo de documento recomendado (ou escolhido pelo usuario).
-3. **Cadastrar** - preenche a descricao e o nivel de acesso (Publico por padrao).
-4. **Abrir Editor** - aguarda o SEI abrir o popup do editor (CKEditor 5 multi-root do infraEditor).
-5. **Injetar minuta** - insere o conteudo da minuta no corpo do documento, preservando cabecalho e rodape pre-preenchidos pelo template do SEI.
+1. **Incluir Documento** — aciona o link "Incluir Documento" na árvore do processo.
+2. **Escolher Tipo** — seleciona o tipo de documento recomendado ou escolhido pelo usuário.
+3. **Cadastrar** — preenche descrição, nível de acesso (Público por padrão) e hipótese legal quando aplicável.
+4. **Injetar no Editor** — aguarda o SEI abrir o popup do editor (CKEditor 5 *multi-root* do `infraEditor`) e insere o conteúdo da minuta no corpo, preservando cabeçalho e rodapé pré-preenchidos pelo template do SEI.
 
-O painel exibe um stepper com o progresso de cada etapa e permite cancelar a qualquer momento. Se alguma etapa falhar (ex.: popup bloqueado, editor nao abriu a tempo), a extensao exibe a minuta no painel e orienta a colar manualmente (Ctrl+V) no editor ja aberto.
+O painel exibe um *stepper* com o progresso de cada etapa. Se alguma falhar (ex.: popup bloqueado, editor não abriu a tempo), a extensão exibe a minuta no painel e orienta a colar manualmente (`Ctrl+V`) no editor já aberto.
 
-**IMPORTANTE:** Apos a insercao, voce ainda precisa:
-- Revisar o conteudo da minuta
-- Ajustar manualmente o que for necessario
-- Clicar em "Salvar" no editor do SEI
-- Assinar o documento com seu token/certificado
-- Publicar ou encaminhar conforme o fluxo da unidade
+**IMPORTANTE.** Após a inserção, você ainda precisa:
 
-O SEIrtao nunca executa as quatro ultimas etapas (salvar, assinar, publicar, encaminhar).
+- Revisar o conteúdo da minuta.
+- Ajustar manualmente o que for necessário.
+- Clicar em **Salvar** no editor do SEI.
+- Assinar o documento com seu token/certificado.
+- Publicar ou encaminhar conforme o fluxo da unidade.
+
+O SEIrtão nunca executa essas quatro últimas etapas.
+
+#### Cartão de pré-inserção
+
+Antes de qualquer etapa automatizada, o SEIrtão abre um modal de revisão com:
+
+- Número do processo e ato (somente leitura).
+- **Descrição do documento** (editável, até 200 caracteres).
+- **Nível de acesso** (Público / Restrito / Sigiloso). Para *Restrito*, é obrigatório escolher a hipótese legal (combobox com o catálogo vigente).
+- **Minuta** em textarea editável — você pode corrigir o texto gerado pela IA antes de qualquer inserção.
+- Lista de verificações: *"Revisei integralmente"*, *"Estou ciente de que o SEIrtão não salvará nem assinará"*, *"Nível de acesso verificado"*.
+
+A inserção só prossegue depois das três confirmações.
 
 ### Chat livre
 
-A area de chat na parte inferior do painel permite fazer perguntas livres sobre o processo. Exemplos:
+Caixa de chat no rodapé do painel para perguntas abertas sobre o processo, por exemplo:
+
 - "Qual o pedido do interessado?"
-- "Existe manifestacao da unidade requerida? O que conclui?"
-- "Resuma os normativos citados ate agora"
-- "Ha prazo pendente? Para quem?"
-- "Liste os valores mencionados no processo"
+- "Existe manifestação da unidade requerida? O que conclui?"
+- "Há prazo pendente? Para quem?"
+- "Liste os valores mencionados no processo."
 
-### Acoes disponiveis em cada resposta/minuta
+Controles:
 
-Abaixo de cada resposta da IA (em especial minutas) aparecem botoes de acao rapida:
+- **Enter** envia; **Shift+Enter** pula linha.
+- **Ditar** — reconhecimento de voz em português (`pt-BR`) usando a API nativa do navegador.
+- **Nova** — limpa a conversa.
+- **Enviar** — submete a pergunta.
 
-- **Copiar**: copia a resposta (markdown) para a area de transferencia.
-- **Inserir no SEI**: insere o texto diretamente no editor CKEditor do SEI aberto em outra janela (popup do editor). Requer a opcao de insercao automatica habilitada.
-- **Baixar .doc**: salva a resposta como arquivo do Word (.doc), ja com nome sugerido a partir do numero do processo e do tipo de ato.
-- **Refinar minuta**: reaproveita a ultima minuta gerada com uma instrucao adicional digitada pelo usuario (ex.: "encurtar", "citar a Lei 8.112/90 art. 116", "reforcar o dispositivo", "trocar o tom para mais formal"), preservando o template usado.
-- **Nova minuta**: gera uma nova versao da mesma acao, do zero, sem modelo de referencia.
+### Ações disponíveis em cada saída de streaming
+
+Abaixo de cada caixa (análise, minuta, modelo otimizado), quando o streaming termina, aparecem:
+
+- **Copiar** — copia o texto (Markdown) para a área de transferência.
+- **Baixar .doc** — salva como arquivo do Word, com nome sugerido a partir do número do processo e do tipo de ato.
+- **Baixar PDF** — abre a janela de impressão para salvar em PDF.
+- **Nova** — limpa a caixa e permite rodar a ação novamente.
+- **Enviar por e-mail** — abre o cliente de e-mail padrão com o texto no corpo da mensagem.
+- **Inserir no processo** (apenas na caixa de minuta) — abre o cartão de pré-inserção descrito acima.
 
 ---
 
-## PARTE 3 - ORGANIZACAO DA PASTA DE MODELOS
+## PARTE 3 — ORGANIZAÇÃO DA PASTA DE MODELOS
 
-Para melhor aproveitamento da busca automatica de modelos, organize seus arquivos em subpastas por tipo de ato administrativo:
+Para melhor aproveitamento da busca automática, organize seus arquivos em subpastas por tipo de ato administrativo:
 
 ```
 Modelos/
@@ -210,35 +246,36 @@ Modelos/
     oficio-resposta.docx
 ```
 
-Dicas:
-- Use nomes descritivos nos arquivos (a busca considera o nome e o conteudo).
-- Subpastas com nomes como "despachos", "pareceres", "decisoes", "informacoes", "oficios", "memorandos" recebem prioridade automatica na busca do botao correspondente.
-- Formatos aceitos: .docx, .pdf, .txt, .md
-- Apos adicionar ou alterar modelos, clique em "Reindexar agora" na pagina de opcoes.
-- Os arquivos ficam indexados localmente (IndexedDB do navegador); a pasta original nao e modificada.
+**Dicas.**
+
+- Use nomes descritivos nos arquivos — a busca considera nome e conteúdo (BM25 com tokenização em português).
+- Subpastas com nomes `despachos`, `pareceres`, `decisoes`, `informacoes`, `oficios`, `memorandos`, `ordinatorio` recebem *boost* automático (1,3×) na busca do ato correspondente.
+- Formatos aceitos: `.docx`, `.pdf`, `.txt`, `.md`.
+- Após adicionar ou alterar modelos, clique em **Reindexar agora** na página de opções.
+- Os arquivos ficam indexados localmente (IndexedDB do navegador) — a pasta original não é modificada.
 
 ---
 
-## PARTE 4 - DICAS E SOLUCAO DE PROBLEMAS
+## PARTE 4 — DICAS E SOLUÇÃO DE PROBLEMAS
 
-- **Extensao nao aparece no SEI**: Verifique se a extensao esta ativa em chrome://extensions ou edge://extensions. O painel so aparece em telas de processo (nao na tela inicial nem em listagens). Recarregue a pagina do SEI apos instalar.
+- **Botão do SEIrtão não aparece na barra do SEI.** Verifique se a extensão está ativa em `chrome://extensions` ou `edge://extensions`. O botão só aparece em telas de processo (não na tela inicial nem em listagens). Recarregue a página do SEI após instalar.
 
-- **Erro ao extrair documentos**: Alguns documentos podem retornar vazio na primeira tentativa (timeouts, PDFs protegidos). A extensao faz ate 3 tentativas automaticas com estrategias diferentes. Se persistir, recarregue a pagina do SEI e tente novamente.
+- **Documentos vazios ou com erro na extração.** Alguns documentos podem falhar na primeira tentativa (timeouts, PDFs protegidos). A extensão faz até 3 tentativas automáticas com estratégias diferentes. Se persistir, recarregue a página e tente novamente.
 
-- **Documentos de audio/video**: Arquivos de midia (MP3, MP4, etc.) sao detectados automaticamente e marcados como conteudo nao-textual, sem gerar erro.
+- **Documentos de áudio/vídeo.** Arquivos de mídia (MP3, MP4 etc.) são detectados automaticamente e marcados como conteúdo não-textual, sem gerar erro.
 
-- **OCR lento**: O OCR roda localmente no navegador. Documentos com muitas paginas podem demorar. Ajuste o limite de paginas nas configuracoes.
+- **OCR lento.** O OCR roda localmente no navegador. Documentos com muitas páginas podem demorar — ajuste o limite de páginas nas configurações.
 
-- **Minuta usando modelo errado**: A busca automatica usa o conteudo do processo para encontrar o modelo mais similar. Se o resultado nao for adequado, reorganize seus modelos em subpastas mais especificas ou gere do zero (botao "Nova minuta").
+- **Minuta usando modelo errado.** A busca automática usa o rótulo do ato para encontrar o modelo mais similar. Se o resultado não for adequado, use o seletor **Modelo a usar** no painel de orientações para escolher manualmente outro candidato do top-3 ou *Sem modelo (gerar do zero)*.
 
-- **Chave de API invalida**: Use o botao "Testar" nas configuracoes para verificar. Cada provedor tem seu formato de chave. Certifique-se de que a chave corresponde ao provedor selecionado.
+- **Chave de API inválida.** Use o botão **Testar** nas configurações. Cada provedor tem seu formato de chave — certifique-se de que a chave corresponde ao provedor selecionado.
 
-- **Popup do editor nao abriu**: O SEI abre o editor em uma janela pop-up. Se o navegador estiver bloqueando popups para `sei.trf5.jus.br`, o fluxo de insercao automatica falha. Permita popups para o dominio do SEI em "Configuracoes do site" do navegador.
+- **Popup do editor não abriu.** O SEI abre o editor em uma janela *pop-up*. Se o navegador estiver bloqueando pop-ups para `sei.trf5.jus.br`, o fluxo de inserção automática falha. Permita pop-ups para o domínio do SEI em "Configurações do site".
 
-- **Erro "Editor CKEditor nao ficou pronto"**: Pode ocorrer em paginas com muitos frames ou conexao lenta. A extensao aguarda ate 30 segundos. Se persistir, copie a minuta pelo botao "Copiar" do painel e cole (Ctrl+V) manualmente no editor do SEI, que ja estara aberto.
+- **Erro "Editor CKEditor não ficou pronto".** Pode ocorrer em páginas com muitos frames ou conexão lenta. A extensão aguarda até 30 segundos. Se persistir, copie a minuta pelo botão **Copiar** e cole (`Ctrl+V`) manualmente no editor já aberto.
 
-- **Cadastro preenchido mas editor nao abriu**: Verifique se o SEI exibiu algum dialogo modal (nivel de acesso, confirmacao) bloqueando o fluxo. O SEIrtao aguarda o editor abrir naturalmente; dialogos manuais precisam ser respondidos antes.
+- **Cadastro preenchido mas editor não abriu.** Verifique se o SEI exibiu algum diálogo modal (nível de acesso, confirmação) bloqueando o fluxo. O SEIrtão aguarda o editor abrir naturalmente; diálogos manuais precisam ser respondidos antes.
 
-- **Insercao desabilitada**: Por seguranca, a insercao automatica e opt-in. Va em "Gerenciar modelos" -> "Insercao automatica de minutas no SEI" e habilite a opcao. O painel passa a exibir os quatro passos do stepper.
+- **Inserção desabilitada.** Por segurança, a inserção automática é *opt-in*. Vá em **Gerenciar modelos → Permitir inserção automática de minutas no SEI** e habilite a opção.
 
-- **Atualizacao da extensao**: Quando receber uma nova versao do "dist.zip", extraia o arquivo sobrescrevendo a pasta "dist" ja existente e depois va em chrome://extensions ou edge://extensions e clique no botao de atualizar (seta circular) no card da extensao.
+- **Atualização da extensão.** Quando receber uma nova versão do `dist.zip`, extraia o arquivo sobrescrevendo a pasta `dist` existente e depois vá em `chrome://extensions` ou `edge://extensions` e clique no botão de atualizar (seta circular) no card da extensão.

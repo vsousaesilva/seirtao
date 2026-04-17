@@ -96,7 +96,7 @@ const SHELL_BASE_CSS = `
   --paidegua-border-strong: rgba(19, 81, 180, 0.26);
   --paidegua-radius: 14px;
   --paidegua-radius-sm: 10px;
-  --paidegua-font: "Inter", "Rawline", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --paidegua-font: "Rawline", "Raleway", "Segoe UI", Tahoma, Verdana, Arial, sans-serif;
   --paidegua-shadow: 0 18px 52px rgba(12, 50, 111, 0.22), 0 2px 6px rgba(12, 50, 111, 0.08);
   --paidegua-blur: saturate(180%) blur(18px);
   --paidegua-gradient: linear-gradient(135deg, #1351B4 0%, #0C326F 100%);

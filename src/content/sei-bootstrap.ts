@@ -140,7 +140,7 @@ function wireMinutarAction(panel: PanelController): void {
     }, selected);
   });
 
-  panel.onMinutarAtoClick((atoLabel, orientations) => {
+  panel.onMinutarAtoClick((atoLabel, orientations, templateOverride) => {
     if (!currentArvore) {
       panel.minuta.error('Árvore do processo ainda não foi carregada.');
       return;
@@ -152,16 +152,26 @@ function wireMinutarAction(panel: PanelController): void {
     }
     panel.minuta.reset();
     panel.minuta.setProgress(0, selected.size, 'iniciando…');
-    console.log(`${LOG} gerando minuta para ato="${atoLabel}" (orientações: ${orientations ? 'sim' : 'não'}).`);
-    minutarAtoEspecifico(currentArvore, atoLabel, orientations, {
-      onProgress: (done, total, current) => panel.minuta.setProgress(done, total, current),
-      onChunk: (delta) => {
-        panel.minuta.startStreaming();
-        panel.minuta.appendChunk(delta);
+    console.log(
+      `${LOG} gerando minuta para ato="${atoLabel}" ` +
+      `(orientações: ${orientations ? 'sim' : 'não'}, modelo: ${templateOverride ?? 'auto'}).`,
+    );
+    minutarAtoEspecifico(
+      currentArvore,
+      atoLabel,
+      orientations,
+      {
+        onProgress: (done, total, current) => panel.minuta.setProgress(done, total, current),
+        onChunk: (delta) => {
+          panel.minuta.startStreaming();
+          panel.minuta.appendChunk(delta);
+        },
+        onDone: () => panel.minuta.done(),
+        onError: (msg) => panel.minuta.error(msg),
       },
-      onDone: () => panel.minuta.done(),
-      onError: (msg) => panel.minuta.error(msg),
-    }, selected);
+      selected,
+      templateOverride,
+    );
   });
 
   panel.onInserirMinutaConfirmed((result) => {

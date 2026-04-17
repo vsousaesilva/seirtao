@@ -1,12 +1,12 @@
 /**
- * Injeta um botão SEIrtão destacado na barra superior direita do SEI.
+ * Injeta um botão SEIrtão discreto na barra superior direita do SEI.
  *
  * Alvo: `#divInfraBarraSistemaPadraoD` (onde ficam Controle de Processos,
- * Novidades, Unidade, etc.). O botão é um pill azul institucional com
- * ícone + texto "SEIrtão" — intencionalmente mais largo que os ícones
- * nativos do SEI para sinalizar claramente ao servidor onde está o
- * assistente. Só é montado quando há um processo aberto (gate feito em
- * `sei-bootstrap.ts`).
+ * Novidades, Unidade, etc.). O botão adota a paleta institucional do SEI
+ * (azul govbr #1351B4 / #0C326F) com acabamento chapado, bordas pouco
+ * arredondadas e altura compatível com os itens nativos da barra —
+ * sinaliza presença sem competir visualmente com a UI do SEI. Só é
+ * montado quando há um processo aberto (gate feito em `sei-bootstrap.ts`).
  */
 
 const BUTTON_ID = 'seirtao-nav-button';
@@ -33,69 +33,51 @@ function ensureStyle(): void {
     #${BUTTON_ID} > a.seirtao-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 6px 14px 6px 10px;
-      min-height: 30px;
-      background: linear-gradient(135deg, #1351B4 0%, #0C326F 100%);
+      gap: 6px;
+      padding: 3px 10px;
+      min-height: 24px;
+      background: #1351B4;
       color: #ffffff !important;
-      border-radius: 999px;
-      box-shadow: 0 2px 8px rgba(12,50,111,0.25), inset 0 1px 0 rgba(255,255,255,0.18);
-      font-family: "Inter","Rawline",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
+      border: 1px solid #0C326F;
+      border-radius: 3px;
+      font-family: "Rawline","Segoe UI",Tahoma,Verdana,Arial,sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
       text-decoration: none !important;
-      line-height: 1;
+      line-height: 1.2;
       cursor: pointer;
-      transition: transform 140ms ease, box-shadow 140ms ease, filter 140ms ease;
+      transition: background-color 120ms ease, border-color 120ms ease;
       white-space: nowrap;
     }
     #${BUTTON_ID} > a.seirtao-pill:hover,
     #${BUTTON_ID} > a.seirtao-pill:focus-visible {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(12,50,111,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
-      filter: brightness(1.05);
+      background: #0C326F;
+      border-color: #071D3F;
       outline: none;
     }
     #${BUTTON_ID} > a.seirtao-pill:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 6px rgba(12,50,111,0.30), inset 0 1px 0 rgba(255,255,255,0.14);
+      background: #071D3F;
     }
     #${BUTTON_ID} > a.seirtao-pill > img {
-      width: 20px;
-      height: 20px;
-      border-radius: 5px;
+      width: 16px;
+      height: 16px;
+      border-radius: 2px;
       flex-shrink: 0;
       display: block;
-      background: rgba(255,255,255,0.12);
-      padding: 2px;
     }
     #${BUTTON_ID} > a.seirtao-pill > span.seirtao-label {
       color: #ffffff;
-      font-weight: 600;
-    }
-    #${BUTTON_ID} > a.seirtao-pill > span.seirtao-badge {
-      display: inline-block;
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 999px;
-      background: rgba(255,205,7,0.95);
-      color: #0C326F;
-      margin-left: 2px;
-      line-height: 1.1;
+      font-weight: 500;
     }
     /* Em layouts estreitos do SEI, o próprio SEI esconde elementos com
-       classes d-none d-md-block. Aqui queremos manter o pill sempre
+       classes d-none d-md-block. Aqui queremos manter o botão sempre
        visível — ele substitui tanto o modo desktop quanto o mobile. */
     @media (max-width: 767px) {
       #${BUTTON_ID} > a.seirtao-pill {
-        padding: 6px 10px 6px 8px;
-        font-size: 12px;
+        padding: 3px 8px;
+        font-size: 11.5px;
       }
-      #${BUTTON_ID} > a.seirtao-pill > span.seirtao-badge { display: none; }
     }
   `;
   document.head.appendChild(style);
@@ -126,7 +108,6 @@ export function mountToolbarButton(navRight?: HTMLElement | null): ToolbarContro
        tabindex="80">
       <img src="${iconUrl}" alt="" />
       <span class="seirtao-label">SEIrtão</span>
-      <span class="seirtao-badge">beta</span>
     </a>
   `;
 

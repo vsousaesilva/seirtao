@@ -9,8 +9,9 @@
 
 import type { ArvoreProcesso, NoArvore } from '../adapters/sei';
 import { invalidateDocsCache } from '../sei-docs-cache';
-import { ATOS_ADMINISTRATIVOS, parseMinutarResult } from '../../shared/prompts';
+import { ATOS_ADMINISTRATIVOS, findAtoByLabel, parseMinutarResult } from '../../shared/prompts';
 import { discoverDocumentTypes, peekDocumentTypes } from '../sei-document-types';
+import { MESSAGE_CHANNELS } from '../../shared/constants';
 
 const HOST_ID = 'seirtao-panel-host';
 /**
@@ -142,8 +143,21 @@ export interface PanelController {
    * Registra handler para a geração da minuta de um ato específico,
    * disparada pelos botões da zona de refinamento abaixo do minuta-box
    * após a triagem (fase A do fluxo de minutar).
+   *
+   * `templateOverride` reflete a escolha do usuário no seletor "Modelo a
+   * usar" dentro do painel de orientações:
+   *   - `undefined` → autoselection (o top-1 do BM25, se acima do limiar);
+   *   - `'__none__'` → forçar geração sem modelo;
+   *   - qualquer outro valor → `relativePath` do modelo escolhido
+   *     manualmente.
    */
-  onMinutarAtoClick(handler: (atoLabel: string, orientations: string | undefined) => void): void;
+  onMinutarAtoClick(
+    handler: (
+      atoLabel: string,
+      orientations: string | undefined,
+      templateOverride: string | undefined,
+    ) => void,
+  ): void;
   /**
    * Ids dos documentos atualmente marcados na seção "Documentos".
    * Só inclui nós do tipo DOCUMENTO com src válido (baixáveis).
@@ -244,7 +258,9 @@ export function mountPanel(): PanelController {
 
   const resumirHandlers: Array<() => void> = [];
   const minutarHandlers: Array<() => void> = [];
-  const minutarAtoHandlers: Array<(atoLabel: string, orientations: string | undefined) => void> = [];
+  const minutarAtoHandlers: Array<
+    (atoLabel: string, orientations: string | undefined, templateOverride: string | undefined) => void
+  > = [];
   const inserirConfirmedHandlers: Array<(result: InsertConfirmResult) => void> = [];
   const otimizarRequestHandlers: Array<(modeloText: string) => void> = [];
 
@@ -779,7 +795,9 @@ function wireMinutaTriage(
   shadow: ShadowRoot,
   w: {
     handlers: Array<() => void>;
-    atoHandlers: Array<(atoLabel: string, orientations: string | undefined) => void>;
+    atoHandlers: Array<
+      (atoLabel: string, orientations: string | undefined, templateOverride: string | undefined) => void
+    >;
     getMinutaState: () => StreamController;
   },
 ): TriageController {
@@ -807,6 +825,18 @@ function wireMinutaTriage(
   const btnOrientBack = root.querySelector<HTMLButtonElement>('[data-act="orient-back"]')!;
   const btnOrientSkip = root.querySelector<HTMLButtonElement>('[data-act="orient-skip"]')!;
   const btnOrientGo = root.querySelector<HTMLButtonElement>('[data-act="orient-go"]')!;
+
+  // Seletor de modelo (top-3 candidatos do BM25 + opção "Sem modelo").
+  const modelWrap = root.querySelector<HTMLDivElement>('.minuta-refine-model-wrap')!;
+  const modelSelect = root.querySelector<HTMLSelectElement>('#minuta-refine-model')!;
+  const modelHint = root.querySelector<HTMLDivElement>('.minuta-refine-model-hint')!;
+
+  /**
+   * Token que identifica a última execução de populateModelSelect. Usado
+   * para evitar que respostas tardias do service worker sobrescrevam o
+   * select quando o usuário já navegou para outro ato.
+   */
+  let modelSelectToken = 0;
 
   let accumulated = '';
   let suggestedAtoLabel: string | null = null;
@@ -850,6 +880,7 @@ function wireMinutaTriage(
     progText.textContent = 'Analisando processo…';
     hide(picker);
     hide(orientPanel);
+    resetModelSelect();
     setRootState('fetching');
     show(root);
     triageBusy = true;
@@ -859,14 +890,105 @@ function wireMinutaTriage(
 
   const fire = (ato: string, orientations: string | undefined): void => {
     chosenAtoLabel = ato;
+    const raw = modelSelect.value;
+    const templateOverride: string | undefined = raw === '' ? undefined : raw;
     hide(picker);
     hide(orientPanel);
     // Esconde o cartão da triagem — agora a stream final toma o palco.
     setRootState('idle');
     hide(root);
     w.atoHandlers.forEach((h) => {
-      try { h(ato, orientations); } catch (err) { console.error('[SEIrtão] erro em onMinutarAtoClick:', err); }
+      try { h(ato, orientations, templateOverride); }
+      catch (err) { console.error('[SEIrtão] erro em onMinutarAtoClick:', err); }
     });
+  };
+
+  /**
+   * Reseta o seletor para o estado base (Auto + Sem modelo) e esconde o
+   * wrap. Usado enquanto aguardamos a resposta do service worker.
+   */
+  const resetModelSelect = (): void => {
+    modelSelect.innerHTML =
+      '<option value="">Automático (melhor correspondência)</option>' +
+      '<option value="__none__">Sem modelo (gerar do zero)</option>';
+    modelSelect.value = '';
+    modelHint.textContent = '';
+    hide(modelWrap);
+  };
+
+  /**
+   * Consulta o índice de modelos no service worker e popula o seletor
+   * com os top-3 compatíveis. Estratégia:
+   *   - se não houver modelos cadastrados → mantém o wrap escondido;
+   *   - se houver, mas ato estiver fora do catálogo (sem folderHints) →
+   *     mostra só Auto + Sem modelo (sem candidatos);
+   *   - se houver candidatos → adiciona cada um como <option> com o
+   *     `relativePath` como valor e "nome — NN% compatível" como label.
+   * O dica final ajuda o usuário a entender a escolha automática.
+   */
+  const populateModelSelect = async (atoLabel: string): Promise<void> => {
+    const myToken = ++modelSelectToken;
+    resetModelSelect();
+
+    let hasTemplates = false;
+    try {
+      const r = (await chrome.runtime.sendMessage({
+        channel: MESSAGE_CHANNELS.TEMPLATES_HAS_CONFIG,
+        payload: null,
+      })) as { ok?: boolean; hasTemplates?: boolean } | undefined;
+      hasTemplates = !!r?.ok && !!r.hasTemplates;
+    } catch { /* silencioso */ }
+
+    if (myToken !== modelSelectToken) return;
+    if (!hasTemplates) { hide(modelWrap); return; }
+
+    const ato = findAtoByLabel(atoLabel);
+    if (!ato) {
+      // Ato fora do catálogo (vindo da Fase B): mostra o wrap para o
+      // usuário poder escolher "Sem modelo" mas sem candidatos BM25.
+      show(modelWrap);
+      modelHint.textContent = 'Ato fora do catálogo — sem sugestão automática.';
+      return;
+    }
+
+    let candidates: Array<{ relativePath: string; name: string; similarity: number }> = [];
+    try {
+      const query = `${ato.label} `.trim();
+      const resp = (await chrome.runtime.sendMessage({
+        channel: MESSAGE_CHANNELS.TEMPLATES_SEARCH,
+        payload: {
+          query,
+          opts: {
+            topK: 3,
+            folderHints: Array.from(ato.folderHints),
+            excludeTerms: Array.from(ato.excludeTerms),
+            minScore: 0.1,
+          },
+        },
+      })) as {
+        ok?: boolean;
+        results?: Array<{ relativePath: string; name: string; similarity: number }>;
+      } | undefined;
+      if (resp?.ok && resp.results) candidates = resp.results;
+    } catch { /* silencioso */ }
+
+    if (myToken !== modelSelectToken) return;
+
+    show(modelWrap);
+    if (candidates.length === 0) {
+      modelHint.textContent = 'Nenhum modelo compatível encontrado — a minuta será gerada do zero.';
+      return;
+    }
+    for (const c of candidates) {
+      const opt = document.createElement('option');
+      opt.value = c.relativePath;
+      opt.textContent = `${c.name} — ${c.similarity.toFixed(0)}% compatível`;
+      modelSelect.appendChild(opt);
+    }
+    const top = candidates[0]!;
+    const modoTxt = ato.rigidez === 'gabarito' ? 'gabarito' : 'referência de estilo';
+    modelHint.textContent =
+      `Automático usará "${top.name}" (${top.similarity.toFixed(0)}% compatível) como ${modoTxt}.`;
   };
 
   const openOrient = (ato: string): void => {
@@ -876,6 +998,7 @@ function wireMinutaTriage(
     hide(picker);
     show(orientPanel);
     orientText.focus();
+    void populateModelSelect(ato);
   };
 
   const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1579,8 +1702,15 @@ function escapeHtml(s: string): string {
 function renderShell(): string {
   return `
     <style>
-      :host { all: initial; }
-      * { box-sizing: border-box; font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+      :host {
+        all: initial;
+        /* Harmonização tipográfica com o SEI 4.x (govbr):
+           Rawline é carregada pelo próprio SEI; caímos em Raleway e nos
+           stacks clássicos de versões antigas (Tahoma/Verdana) para
+           manter parentesco visual em qualquer deploy. */
+        --seirtao-font: "Rawline","Raleway","Segoe UI",Tahoma,Verdana,Arial,sans-serif;
+      }
+      * { box-sizing: border-box; font-family: var(--seirtao-font); }
 
       /* ─────── Layout raiz do painel (grid 2 colunas) ─────── */
       #panel {
@@ -1812,7 +1942,7 @@ function renderShell(): string {
         padding: 3px 10px; border-radius: 6px;
         font-size: 10.5px; font-weight: 600;
         cursor: pointer;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .chat-msg-act:hover { background: rgba(19,81,180,0.06); border-color: #1351B4; }
       #chat-form { display: flex; flex-direction: column; gap: 6px; }
@@ -1821,7 +1951,7 @@ function renderShell(): string {
         padding: 8px 10px; font-size: 12.5px; line-height: 1.4;
         border: 1px solid rgba(19,81,180,0.22); border-radius: 8px;
         background: #ffffff; color: #16243A;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       #chat-input:focus { outline: none; border-color: #1351B4; box-shadow: 0 0 0 2px rgba(19,81,180,0.14); }
       #chat-controls { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
@@ -2111,7 +2241,7 @@ function renderShell(): string {
         padding: 7px 12px; border-radius: 8px;
         font-size: 11.5px; font-weight: 600;
         cursor: pointer;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .minuta-refine-btn:hover { background: rgba(19,81,180,0.06); border-color: #1351B4; }
       .minuta-refine-btn-primary {
@@ -2120,7 +2250,7 @@ function renderShell(): string {
         padding: 9px 14px; border-radius: 8px;
         font-size: 12px; font-weight: 600;
         cursor: pointer; text-align: left;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .minuta-refine-btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
       .minuta-refine-btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -2138,7 +2268,7 @@ function renderShell(): string {
         padding: 7px 10px; font-size: 12px;
         border: 1px solid rgba(19,81,180,0.22); border-radius: 8px;
         background: #ffffff; color: #16243A;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .minuta-refine-input:focus, .minuta-refine-textarea:focus {
         outline: none; border-color: #1351B4; box-shadow: 0 0 0 2px rgba(19,81,180,0.14);
@@ -2155,7 +2285,7 @@ function renderShell(): string {
         border: 1px solid rgba(19,81,180,0.12); border-radius: 6px;
         padding: 5px 10px; font-size: 11.5px; text-align: left;
         cursor: pointer;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .minuta-refine-suggestion:hover { background: rgba(19,81,180,0.08); border-color: #1351B4; }
       .minuta-refine-empty {
@@ -2164,6 +2294,19 @@ function renderShell(): string {
       .minuta-refine-footer {
         display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap;
       }
+      .minuta-refine-model-wrap {
+        display: flex; flex-direction: column; gap: 4px;
+        padding: 8px 10px;
+        background: #ffffff;
+        border: 1px solid rgba(19,81,180,0.12);
+        border-radius: 8px;
+      }
+      .minuta-refine-model-wrap[data-visible="false"] { display: none; }
+      .minuta-refine-model-hint {
+        font-size: 10.5px; color: #5B6B82; line-height: 1.35;
+        font-style: italic;
+      }
+      .minuta-refine-model-hint:empty { display: none; }
 
       /* ─────── Footer ─────── */
       footer {
@@ -2250,7 +2393,7 @@ function renderShell(): string {
         padding: 8px 10px; font-size: 12.5px;
         border: 1px solid rgba(19,81,180,0.22); border-radius: 8px;
         background: #ffffff; color: #16243A;
-        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        font-family: var(--seirtao-font);
       }
       .insert-input:focus, .insert-textarea:focus {
         outline: none; border-color: #1351B4; box-shadow: 0 0 0 2px rgba(19,81,180,0.14);
@@ -2603,6 +2746,14 @@ function renderMinutaTriage(): string {
       </div>
       <div class="minuta-refine-panel minuta-refine-orient" data-visible="false">
         <div class="minuta-refine-label">Ato escolhido: <span class="orient-ato-name"></span></div>
+        <div class="minuta-refine-model-wrap" data-visible="false">
+          <label class="minuta-refine-label" for="minuta-refine-model">Modelo a usar:</label>
+          <select id="minuta-refine-model" class="minuta-refine-input">
+            <option value="">Automático (melhor correspondência)</option>
+            <option value="__none__">Sem modelo (gerar do zero)</option>
+          </select>
+          <div class="minuta-refine-model-hint"></div>
+        </div>
         <label class="minuta-refine-label" for="minuta-refine-orient-text">Orientações adicionais (opcional):</label>
         <textarea id="minuta-refine-orient-text" class="minuta-refine-textarea"
           placeholder="Ex.: enfatizar a urgência, citar a Portaria X, incluir referência à Informação Y…" rows="3"></textarea>

@@ -196,11 +196,31 @@ NÃO escreva "MINUTA", nem rascunhe o corpo do ato, nem acrescente qualquer marc
  * de documento cadastrado no SEI — usado pelo autocomplete para casar
  * sugestão do modelo com os tipos realmente habilitados na unidade.
  */
+/**
+ * Natureza administrativa do ato. Controla a rigidez do prompt de geração
+ * quando há modelo: `gabarito` manda seguir o template parágrafo a parágrafo
+ * (típico de parecer, informação técnica, decisão); `referencia` trata o
+ * modelo só como referência de estilo (despacho, ordinatório, comunicação).
+ */
+export type NaturezaAdm =
+  | 'despacho'
+  | 'informacao'
+  | 'parecer'
+  | 'decisao-adm'
+  | 'ordinatorio'
+  | 'comunicacao';
+
 export interface AtoAdministrativo {
   id: string;
   label: string;
   description: string;
   seiTypeHints: readonly string[];
+  natureza: NaturezaAdm;
+  rigidez: 'gabarito' | 'referencia';
+  /** Subpastas preferenciais do diretório de modelos (case-insensitive). */
+  folderHints: readonly string[];
+  /** Termos que, se presentes no caminho/texto do modelo, o excluem. */
+  excludeTerms: readonly string[];
 }
 
 export const ATOS_ADMINISTRATIVOS: readonly AtoAdministrativo[] = [
@@ -209,50 +229,103 @@ export const ATOS_ADMINISTRATIVOS: readonly AtoAdministrativo[] = [
     label: 'Despacho de encaminhamento',
     description: 'Move o processo à unidade competente para a próxima etapa.',
     seiTypeHints: ['despacho', 'encaminhamento'],
+    natureza: 'despacho',
+    rigidez: 'referencia',
+    folderHints: ['despacho-encaminhamento', 'despachos', 'despacho', 'encaminhamento'],
+    excludeTerms: ['parecer', 'decisao', 'decisão'],
   },
   {
     id: 'despacho-instrucao',
     label: 'Despacho de instrução',
     description: 'Determina providência concreta (juntada, manifestação, diligência).',
     seiTypeHints: ['despacho', 'instrução', 'instrucao'],
+    natureza: 'despacho',
+    rigidez: 'referencia',
+    folderHints: ['despacho-instrucao', 'despachos', 'despacho', 'instrucao', 'instrução'],
+    excludeTerms: ['parecer', 'decisao', 'decisão'],
   },
   {
     id: 'informacao-tecnica',
     label: 'Informação técnica',
     description: 'Manifestação factual/técnica da unidade competente.',
     seiTypeHints: ['informação', 'informacao'],
+    natureza: 'informacao',
+    rigidez: 'gabarito',
+    folderHints: ['informacao-tecnica', 'informacoes', 'informações', 'informacao', 'informação'],
+    excludeTerms: ['parecer', 'decisao', 'decisão', 'oficio', 'ofício'],
   },
   {
     id: 'parecer-juridico',
     label: 'Parecer jurídico',
     description: 'Análise de legalidade/adequação normativa.',
     seiTypeHints: ['parecer'],
+    natureza: 'parecer',
+    rigidez: 'gabarito',
+    folderHints: ['parecer-juridico', 'pareceres', 'parecer'],
+    excludeTerms: ['despacho', 'ordinatorio', 'ordinatório', 'memorando', 'oficio', 'ofício'],
   },
   {
     id: 'decisao-administrativa',
     label: 'Decisão administrativa',
     description: 'Ato da autoridade que resolve o mérito (defere, aprova, homologa).',
     seiTypeHints: ['decisão', 'decisao'],
+    natureza: 'decisao-adm',
+    rigidez: 'gabarito',
+    folderHints: ['decisao-administrativa', 'decisoes', 'decisões', 'decisao', 'decisão'],
+    excludeTerms: ['despacho', 'ordinatorio', 'ordinatório', 'memorando', 'oficio', 'ofício'],
   },
   {
     id: 'ato-ordinatorio',
     label: 'Ato ordinatório',
     description: 'Ato de mero expediente da secretaria.',
     seiTypeHints: ['ato ordinatório', 'ato ordinatorio', 'ordinatório', 'ordinatorio'],
+    natureza: 'ordinatorio',
+    rigidez: 'referencia',
+    folderHints: ['ato-ordinatorio', 'ordinatorio', 'ordinatorios', 'ordinatório', 'ordinatórios'],
+    excludeTerms: ['parecer', 'decisao', 'decisão'],
   },
   {
     id: 'memorando',
     label: 'Memorando',
     description: 'Comunicação formal entre unidades internas.',
     seiTypeHints: ['memorando'],
+    natureza: 'comunicacao',
+    rigidez: 'referencia',
+    folderHints: ['memorando', 'memorandos'],
+    excludeTerms: ['parecer', 'decisao', 'decisão'],
   },
   {
     id: 'oficio',
     label: 'Ofício',
     description: 'Comunicação formal com órgão ou pessoa externa.',
     seiTypeHints: ['ofício', 'oficio'],
+    natureza: 'comunicacao',
+    rigidez: 'referencia',
+    folderHints: ['oficio', 'oficios', 'ofício', 'ofícios'],
+    excludeTerms: ['parecer', 'decisao', 'decisão'],
   },
 ];
+
+/**
+ * Resolve a entrada do catálogo a partir de um rótulo livre.
+ * Usa match fuzzy (normalize + contains) contra `label` e `id`. Usado pelo
+ * orquestrador da 2ª rodada do "Minutar próximo ato" para descobrir os
+ * hints de busca do ato escolhido pelo usuário.
+ */
+export function findAtoByLabel(label: string): AtoAdministrativo | null {
+  if (!label) return null;
+  const normalize = (s: string): string =>
+    s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+  const needle = normalize(label);
+  if (!needle) return null;
+  return (
+    ATOS_ADMINISTRATIVOS.find((a) => {
+      const l = normalize(a.label);
+      const i = normalize(a.id);
+      return needle === l || needle === i || needle.includes(l) || l.includes(needle);
+    }) ?? null
+  );
+}
 
 /**
  * Resultado parseado da triagem (1ª rodada) do `MINUTAR_PROXIMO_ATO_PROMPT`.
@@ -327,6 +400,167 @@ REGRAS DE REDAÇÃO
 
 FORMATO DE SAÍDA
 Responda APENAS com o corpo da minuta, sem preâmbulo, sem o rótulo "MINUTA:", sem repetir o nome do ato. NÃO escreva qualquer marcador de encerramento ao final (nada de "FIM DA MINUTA", "FIM", "---" ou similar) — encerre com a fórmula de encaminhamento natural do ato.`;
+}
+
+/**
+ * Instruções específicas por natureza administrativa, usadas quando NÃO há
+ * modelo cadastrado para o ato (fallback do `buildMinutaWithTemplatePrompt`).
+ * Cada entrada descreve a peça "do zero" no estilo administrativo.
+ */
+const INSTRUCOES_SEM_MODELO_ADM: Record<NaturezaAdm, string> = {
+  despacho:
+    `Redija o despacho do zero. Despachos são breves e objetivos — ` +
+    `determinam uma providência concreta (encaminhamento, juntada, ` +
+    `manifestação, diligência, prazo). NÃO estruture como parecer ou ` +
+    `decisão. Analise o estado atual do processo e indique o próximo ` +
+    `passo processual adequado.`,
+  informacao:
+    `Redija a informação técnica do zero, no estilo da unidade competente ` +
+    `do TRF5/JFCE. Estruture com: objeto da manifestação, dados verificados ` +
+    `(factuais, sem juízo de legalidade), fundamento técnico/normativo ` +
+    `específico do ponto consultado e conclusão objetiva. Linguagem ` +
+    `administrativa impessoal, sem dispositivos decisórios.`,
+  parecer:
+    `Redija o parecer jurídico do zero, no estilo da Assessoria Jurídica ` +
+    `do TRF5/JFCE. Estruture com: relatório sucinto do objeto, análise de ` +
+    `legalidade (normas aplicáveis — Lei 9.784/99, Lei 14.133/21, Lei ` +
+    `8.112/90, LGPD, resoluções CNJ/CJF/TRF5 conforme a matéria), ` +
+    `conclusão pela viabilidade (ou apontamento do que corrigir). NÃO ` +
+    `decida o mérito — o parecer opina, a decisão cabe à autoridade.`,
+  'decisao-adm':
+    `Redija a decisão administrativa do zero, no estilo da autoridade ` +
+    `competente do TRF5/JFCE. Estruture com: relatório breve do objeto e ` +
+    `da instrução, fundamentação (motivação obrigatória — art. 50 da Lei ` +
+    `9.784/99 — com as normas aplicáveis e o enfrentamento das questões ` +
+    `postas) e dispositivo (defere/indefere/aprova/homologa/ratifica, ` +
+    `com as providências subsequentes). Linguagem direta e precisa.`,
+  ordinatorio:
+    `Redija o ato ordinatório do zero. São atos de mero expediente da ` +
+    `secretaria (juntada automatizada, ciência, redistribuição, ` +
+    `publicação). Texto curto, impessoal, referenciando o ato praticado ` +
+    `e o destinatário da providência. NÃO fundamente como decisão nem ` +
+    `como parecer.`,
+  comunicacao:
+    `Redija a comunicação formal do zero. Memorandos são trocados entre ` +
+    `unidades internas da JFCE/TRF5; ofícios são dirigidos a órgãos ou ` +
+    `pessoas externas. Estruture com: referência ao processo/assunto, ` +
+    `exposição objetiva do que se comunica/requer, prazo quando cabível, ` +
+    `fórmula de cortesia e encaminhamento. Linguagem formal da ` +
+    `Administração Pública.`,
+};
+
+/**
+ * Bloco que empacota um template administrativo dentro do prompt de
+ * geração. Para atos de natureza `gabarito` (informação, parecer,
+ * decisão), instrui o LLM a reproduzir parágrafo a parágrafo. Para
+ * `referencia` (despacho, ordinatório, memorando, ofício), trata como
+ * mera inspiração de estilo.
+ */
+function buildAdmTemplateBlock(
+  ato: AtoAdministrativo,
+  template: { relativePath: string; text: string },
+): string {
+  if (ato.rigidez === 'gabarito') {
+    return `ATENÇÃO — REUSO DO GABARITO DA UNIDADE:
+
+O modelo abaixo é um GABARITO (template padrão da unidade). Reproduza a peça PARÁGRAFO A PARÁGRAFO, mantendo:
+  - a mesma sequência de seções/tópicos;
+  - os mesmos fundamentos normativos (leis, decretos, resoluções CNJ/CJF/TRF5, portarias internas);
+  - o mesmo estilo de redação, tom e nível de formalidade;
+  - as mesmas frases-padrão e fórmulas de estilo da unidade;
+  - a mesma estrutura da conclusão/dispositivo.
+
+O QUE VOCÊ DEVE TROCAR (e SOMENTE isto):
+  - dados do(s) interessado(s) (nomes, cargos, matrículas, CPF);
+  - número do processo, datas, valores, prazos;
+  - objeto específico e fatos do caso concreto;
+  - análise técnica/jurídica aplicada ao caso;
+  - conclusão, quando os fatos do caso exigirem diferença em relação ao gabarito.
+
+NÃO FAÇA:
+  - NÃO reorganize seções; NÃO omita nem acrescente seções não existentes no gabarito.
+  - NÃO troque os fundamentos normativos, a menos que sejam manifestamente inaplicáveis ao caso.
+  - NÃO resuma o gabarito — a peça final deve ter extensão comparável.
+  - NÃO copie dados factuais do gabarito (nomes, CPF, datas, valores) — esses vêm do processo em análise.
+
+=== GABARITO (modelo da unidade): ${template.relativePath} ===
+${template.text}
+=== FIM DO GABARITO ===
+
+Agora, com base nos documentos do processo em análise (já carregados no contexto), redija a peça reproduzindo fielmente a estrutura do gabarito, substituindo apenas os dados do caso concreto.`;
+  }
+
+  return `MODELO DE REFERÊNCIA (use como inspiração de estilo, NÃO como gabarito rígido):
+
+O modelo abaixo é uma referência da unidade. Use-o apenas para:
+  - observar o tom e o vocabulário típico deste tipo de ato;
+  - entender a extensão esperada (despachos e ordinatórios são curtos; ofícios e memorandos são moderados);
+  - identificar fórmulas de encaminhamento recorrentes.
+
+NÃO copie a estrutura parágrafo a parágrafo. A peça deve ser original, baseada exclusivamente na situação do processo em análise. O modelo é só referência de como peças deste tipo costumam ser redigidas na unidade.
+
+=== REFERÊNCIA DE ESTILO: ${template.relativePath} ===
+${template.text}
+=== FIM DA REFERÊNCIA ===
+
+Agora, com base nos documentos do processo em análise (já carregados no contexto), redija a peça adequada à situação atual.`;
+}
+
+/**
+ * Prompt da 2ª rodada do "Minutar próximo ato" ciente de modelos da
+ * unidade. Quando `template` é não-nulo, injeta gabarito/referência
+ * conforme a `rigidez` do ato; quando é nulo, usa `INSTRUCOES_SEM_MODELO_ADM`
+ * para a natureza correspondente. O texto livre de `orientations` é
+ * anexado como refinamento final.
+ */
+export function buildMinutaWithTemplatePrompt(
+  ato: AtoAdministrativo,
+  template: { relativePath: string; text: string } | null,
+  orientations?: string,
+): string {
+  const intro =
+    `Sua tarefa é redigir a MINUTA do seguinte ato administrativo para o ` +
+    `processo carregado no contexto:\n\n` +
+    `ATO A SER MINUTADO: ${ato.label}\n` +
+    `(${ato.description})`;
+
+  const especialidade =
+    `ESPECIALIDADE\n` +
+    `Você é especialista em Direito Administrativo, Lei 9.784/99, Lei ` +
+    `14.133/21, Lei 8.112/90, LGPD e na praxe administrativa do ` +
+    `TRF5/JFCE.`;
+
+  const body = template
+    ? buildAdmTemplateBlock(ato, template)
+    : INSTRUCOES_SEM_MODELO_ADM[ato.natureza];
+
+  const orientBlock = orientations?.trim()
+    ? `\n\nORIENTAÇÕES ADICIONAIS DO USUÁRIO (devem ser observadas na redação):\n${orientations.trim()}`
+    : '';
+
+  const regrasAdm =
+    `REGRAS ADICIONAIS PARA ATOS ADMINISTRATIVOS\n` +
+    `- NÃO inclua cabeçalho identificando o processo (número, unidade, ` +
+    `interessado), NÃO escreva o título do ato (ex.: "DESPACHO", ` +
+    `"INFORMAÇÃO"), NÃO assine — o SEI insere esses elementos ` +
+    `automaticamente. Comece direto pelo corpo.\n` +
+    `- Encerre com fórmula de encaminhamento condizente com o ato: ` +
+    `"À consideração superior.", "Encaminhe-se à [unidade] para ` +
+    `[finalidade].", "Publique-se.", "Cumpra-se.", "Dê-se ciência ao ` +
+    `interessado." etc.\n` +
+    `- NÃO invente fatos, datas, valores, unidades, servidores, empresas ` +
+    `ou números que não constem dos documentos. Se precisar de dado ` +
+    `ausente, use marcador entre colchetes ([indicar valor], ` +
+    `[fls. do doc X]).\n` +
+    `- Cite o id do documento que embasa cada fato relevante, no formato ` +
+    `"(doc 7654321)".\n` +
+    `- FORMATO DE SAÍDA: responda APENAS com o corpo da minuta, sem ` +
+    `preâmbulo, sem o rótulo "MINUTA:", sem repetir o nome do ato. NÃO ` +
+    `escreva marcador de encerramento ao final (nada de "FIM DA MINUTA", ` +
+    `"FIM", "---" ou similar) — encerre com a fórmula de encaminhamento ` +
+    `natural do ato.`;
+
+  return `${intro}\n\n${especialidade}\n\n${body}${orientBlock}\n\n${regrasAdm}`;
 }
 
 /**
@@ -574,8 +808,8 @@ const MINUTA_FORMAT_RULES = `REGRAS DE FORMATO (obrigatórias):
 1. Texto em prosa corrida, parágrafos separados por linha em branco.
 2. Sem nenhum marcador de markdown: nada de asteriscos, sustenidos, listas com hífen ou número, nem crases.
 3. Citações textuais de lei ou doutrina devem aparecer em parágrafo próprio iniciado pelo sinal de maior seguido de espaço (> ), que indica recuo de citação.
-4. NÃO inclua cabeçalho, número do processo, identificação das partes nem o título do ato — esses elementos já são preenchidos automaticamente pelo editor do PJe. Comece diretamente pelo corpo da peça.
-5. Encerre o texto com a linha "[Cidade]/[UF], datado eletronicamente." — identifique a cidade e o estado da vara/seção judiciária a partir dos documentos do processo (ex.: "Maracanaú/CE", "Recife/PE", "São Paulo/SP"). Não use assinatura, nome ou cargo (preenchidos pelo PJe).`;
+4. NÃO inclua cabeçalho, número do processo, identificação das partes nem o título do ato — esses elementos já são preenchidos automaticamente pelo editor do SEI. Comece diretamente pelo corpo da peça.
+5. Encerre o texto com a linha "[Cidade]/[UF], datado eletronicamente." — identifique a cidade e o estado da unidade da JFCE/TRF5 a partir dos documentos do processo (ex.: "Fortaleza/CE", "Juazeiro do Norte/CE", "Recife/PE"). Não use assinatura, nome ou cargo (preenchidos pelo SEI).`;
 
 /**
  * Instruções específicas por natureza de peça, para geração SEM modelo.

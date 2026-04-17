@@ -35,7 +35,7 @@ html, body {
     var(--bg);
   background-attachment: fixed;
   color: var(--fg);
-  font-family: "Inter", "Rawline", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Rawline", "Raleway", "Segoe UI", Tahoma, Verdana, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.55;
   min-height: 100vh;

@@ -1057,32 +1057,32 @@
       </div>
     </div>
 
-    <p class="lead">Antes de qualquer minuta, o SEIrtão precisa conhecer o processo. Esse é o momento de carregar os documentos, selecionar o que importa e deixar o assistente preparar o texto.</p>
+    <p class="lead">Antes de qualquer minuta, o SEIrtão precisa conhecer o processo. A árvore de documentos é lida automaticamente quando o painel abre — basta marcar quais peças entram na análise.</p>
 
-    <h3><span class="marker"></span>Carregar e extrair os documentos</h3>
-    <p>Clique em <strong>Carregar Documentos</strong> para que o SEIrtão liste todos os arquivos do processo SEI, com caixas de seleção. Marque ou desmarque tudo de uma vez. Em seguida, <strong>Extrair conteúdo selecionados</strong> — o SEIrtão abre cada documento e prepara o texto, mostrando o progresso em tempo real (ex.: <em>"Extração concluída — 14 ok, 1 com erro"</em>).</p>
+    <h3><span class="marker"></span>Seção Documentos — seleção da base de análise</h3>
+    <p>Assim que o painel abre, a seção <strong>Documentos</strong> lista toda a árvore do processo (anexos, ofícios juntados, informações, despachos anteriores) com caixas de seleção. Use <strong>Todos</strong> / <strong>Nenhum</strong> para marcar em bloco e o <strong>filtro</strong> para localizar peças pelo nome. O contador <em>"N de M selecionados"</em> indica o subconjunto que será enviado às ações de análise.</p>
 
     <h3><span class="marker"></span>Ferramentas de análise</h3>
     <div class="card-grid">
       <div class="card">
         <span class="card__tag">Síntese</span>
-        <h4>Resumir</h4>
-        <p>Produz uma análise estruturada do processo administrativo: partes e interessados, cronologia dos atos, questão central, fundamentos normativos aplicáveis, argumentos, provas e uma conclusão sobre o estado atual da tramitação.</p>
+        <h4>Analisar processo administrativo</h4>
+        <p>Produz uma análise estruturada (FIRAC+ adaptado ao contexto administrativo): dados do processo, histórico cronológico, questão em discussão, normativos aplicáveis, argumentos e manifestações, situação atual e próxima providência natural.</p>
       </div>
       <div class="card">
-        <span class="card__tag">Áudio</span>
-        <h4>Resumo narrado</h4>
-        <p>Gera um resumo falado por voz — útil para ter uma visão geral rápida do processo enquanto você realiza outra atividade.</p>
+        <span class="card__tag">IA</span>
+        <h4>Minutar próximo ato</h4>
+        <p>Triagem automática em duas rodadas: primeiro a IA sugere qual dos 8 atos do catálogo é mais adequado ao momento do processo, com breve justificativa; depois gera a minuta do ato escolhido, opcionalmente usando um modelo da sua pasta como gabarito ou referência de estilo.</p>
       </div>
       <div class="card">
-        <span class="card__tag">LGPD</span>
-        <h4>Anonimizar documentos</h4>
-        <p>Oculta CPF, CNPJ, CEP, telefones, e-mails, RG e dados bancários, substituindo-os por marcadores neutros. Nomes de pessoas físicas também são tratados. Útil para compartilhar trechos em reuniões, estudos e treinamentos.</p>
+        <span class="card__tag">Modelos</span>
+        <h4>Otimizar modelo do SEI</h4>
+        <p>Recebe um texto-modelo colado no painel e propõe variáveis no formato <code>@tag@</code> (compatível com o <em>infraEditor</em> do SEI), remoção de redundâncias e ajustes de clareza — transformando modelos tradicionais em modelos reutilizáveis.</p>
       </div>
       <div class="card">
         <span class="card__tag">OCR</span>
-        <h4>Ler digitalizados</h4>
-        <p>Aparece automaticamente quando há documentos que o SEI guardou como imagem. O SEIrtão transforma a imagem em texto dentro do seu próprio navegador, sem enviar as páginas para fora.</p>
+        <h4>Leitura de digitalizados</h4>
+        <p>Quando um documento da árvore é imagem sem texto (digitalização), o SEIrtão aplica OCR local (Tesseract.js) transparentemente, sem enviar as páginas para fora do navegador. Ajuste o limite de páginas em Configurações.</p>
       </div>
     </div>
   </section>
@@ -1199,33 +1199,38 @@
       </div>
     </div>
 
-    <p class="lead">Cada resposta do assistente traz abaixo um conjunto de ações rápidas. Copiar, inserir no SEI, baixar como Word, refinar ou recomeçar: tudo a um clique, sem sair do painel.</p>
+    <p class="lead">Cada caixa de saída (análise, minuta, modelo otimizado) traz, ao concluir o streaming, uma barra de ações rápidas — copiar, baixar, enviar por e-mail, inserir no SEI, recomeçar — tudo a um clique, sem sair do painel.</p>
 
     <div class="card-grid">
       <div class="card">
         <span class="card__tag">Copiar</span>
-        <h4>Copiar para a área de transferência</h4>
-        <p>Copia o texto da resposta. Depois é só colar onde você quiser.</p>
+        <h4>Copiar</h4>
+        <p>Copia o texto (em Markdown) para a área de transferência. Depois é só colar onde você quiser.</p>
       </div>
       <div class="card">
         <span class="card__tag">SEI</span>
-        <h4>Inserir no SEI</h4>
-        <p>Guia o fluxo de quatro etapas dentro do SEI — Incluir Documento → Escolher Tipo → Cadastrar → Abrir Editor — e, ao final, injeta o texto diretamente no corpo da minuta no editor CKEditor 5 do SEI. Sem copiar e colar manualmente.</p>
+        <h4>Inserir no processo</h4>
+        <p>Disponível apenas na caixa de minuta. Abre o cartão de pré-inserção com descrição, nível de acesso, hipótese legal (quando aplicável) e a minuta editável. Após as três confirmações, guia o fluxo de quatro etapas no SEI — Incluir Documento → Escolher Tipo → Cadastrar → Injetar no Editor — e injeta o texto diretamente no corpo da minuta no CKEditor 5 do SEI.</p>
       </div>
       <div class="card">
         <span class="card__tag">Word</span>
-        <h4>Baixar como Word</h4>
-        <p>Salva a minuta como arquivo do Word no seu computador. O nome já vem pronto, com o número do processo e o tipo de ato.</p>
+        <h4>Baixar .doc</h4>
+        <p>Salva a saída como arquivo do Word (<code>.doc</code>). O nome já vem pronto, com o número do processo e o tipo de ato.</p>
       </div>
       <div class="card">
-        <span class="card__tag">Ajustar</span>
-        <h4>Refinar minuta</h4>
-        <p>Pede ajustes na última minuta sem começar do zero. Exemplos: <em>"encurtar"</em>, <em>"mudar o tom"</em>, <em>"citar a IN TRF5 nº X"</em>, <em>"reforçar a fundamentação normativa"</em>. O modelo de referência continua o mesmo.</p>
+        <span class="card__tag">PDF</span>
+        <h4>Baixar PDF</h4>
+        <p>Abre a janela de impressão do navegador pré-configurada para salvar como PDF — útil para arquivar uma cópia local ou anexar fora do SEI.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">E-mail</span>
+        <h4>Enviar por e-mail</h4>
+        <p>Abre o cliente de e-mail padrão do sistema com o texto já no corpo da mensagem.</p>
       </div>
       <div class="card">
         <span class="card__tag">Refazer</span>
-        <h4>Nova minuta</h4>
-        <p>Gera uma nova versão do mesmo ato, do zero, sem modelo de referência. Útil para comparar duas opções ou começar de novo.</p>
+        <h4>Nova</h4>
+        <p>Limpa a caixa e permite rodar a ação novamente, do zero. Útil para comparar duas execuções ou recomeçar com outras orientações.</p>
       </div>
     </div>
 
@@ -1377,7 +1382,7 @@
       <div class="card">
         <span class="card__tag">Dados</span>
         <h4>Proteção de dados sensíveis</h4>
-        <p>Antes de enviar qualquer texto aos serviços de IA, use <em>Anonimizar documentos</em> quando houver dados sensíveis. Prefira códigos de acesso de planos corporativos, em que o serviço se compromete a não usar os dados para treinamento.</p>
+        <p>Selecione na seção <strong>Documentos</strong> apenas as peças estritamente necessárias à análise — quanto menos conteúdo sensível sair do navegador, melhor. Prefira chaves de API de planos corporativos, em que o provedor se compromete a não usar os dados para treinamento.</p>
       </div>
       <div class="card">
         <span class="card__tag">Registro</span>
@@ -1471,7 +1476,7 @@
           <span>A minuta usou um modelo que não era o ideal</span>
         </summary>
         <div class="faq__a">
-          <p>A busca escolhe o modelo mais parecido com o caso. Se o resultado não ficou bom, reorganize seus modelos em subpastas mais específicas, ou clique em <strong>Nova minuta</strong> para gerar do zero, sem referência.</p>
+          <p>A busca escolhe automaticamente o modelo mais parecido com o ato. Se o resultado não ficou bom, use o seletor <strong>Modelo a usar</strong> no painel de orientações — ele lista os três modelos mais compatíveis com percentual de semelhança e também a opção <strong>Sem modelo (gerar do zero)</strong>. Para ajustes estruturais, reorganize seus modelos em subpastas mais específicas (<code>despachos/</code>, <code>pareceres/</code>, <code>decisoes/</code> etc.) e clique em <strong>Reindexar agora</strong>.</p>
         </div>
       </details>
 
