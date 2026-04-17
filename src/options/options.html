@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEIrtão — Modelos e Preferências</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <header class="seirtao-options__header">
+      <span class="seirtao-options__logo" aria-hidden="true">
+        <svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="9" r="4.6" fill="#FFCD07"/>
+          <rect x="10.7" y="9" width="2.6" height="11" rx="0.6" fill="#ffffff"/>
+          <rect x="7.2" y="13" width="2" height="4" rx="0.5" fill="#ffffff"/>
+          <rect x="7.2" y="13" width="4" height="2" rx="0.5" fill="#ffffff"/>
+          <rect x="14" y="12" width="2" height="5" rx="0.5" fill="#ffffff"/>
+          <rect x="13" y="12" width="3" height="2" rx="0.5" fill="#ffffff"/>
+        </svg>
+      </span>
+      <div>
+        <h1>SEIrtão — Preferências</h1>
+        <p class="seirtao-options__subtitle">
+          Ajustes do assistente SEIrtão para o SEI/TRF5. Aqui você configura
+          a pasta de modelos locais que serão usados como referência para a IA
+          redigir atos no estilo da sua unidade, quando isso for desejado.
+        </p>
+      </div>
+    </header>
+
+    <main class="seirtao-options__main">
+      <section class="seirtao-options__card">
+        <h2>Pasta de modelos</h2>
+        <p class="seirtao-options__hint">
+          Selecione a pasta raiz onde estão suas minutas-modelo. Subpastas
+          são lidas recursivamente — você pode organizar por categoria
+          (ex.: <em>procedente</em>, <em>improcedente</em>, <em>despachos</em>).
+          Formatos aceitos: .docx, .pdf, .txt, .md.
+        </p>
+
+        <div id="dir-status" class="seirtao-options__status">
+          Nenhuma pasta configurada.
+        </div>
+
+        <div class="seirtao-options__row">
+          <button id="btn-pick" type="button" class="seirtao-options__btn seirtao-options__btn--primary">
+            Configurar pasta…
+          </button>
+          <button id="btn-reindex" type="button" class="seirtao-options__btn" disabled>
+            Reindexar agora
+          </button>
+          <button id="btn-clear" type="button" class="seirtao-options__btn seirtao-options__btn--danger" disabled>
+            Remover configuração
+          </button>
+        </div>
+
+        <div id="progress-wrap" class="seirtao-options__progress" hidden>
+          <div class="seirtao-options__progress-bar">
+            <div id="progress-fill" class="seirtao-options__progress-fill"></div>
+          </div>
+          <p id="progress-text" class="seirtao-options__hint seirtao-options__hint--small"></p>
+        </div>
+      </section>
+
+      <section class="seirtao-options__card">
+        <h2>Modelos indexados</h2>
+        <p id="templates-summary" class="seirtao-options__hint">
+          Nenhum modelo indexado ainda.
+        </p>
+        <ul id="templates-list" class="seirtao-options__list"></ul>
+        <p id="skipped-summary" class="seirtao-options__hint seirtao-options__hint--small"></p>
+      </section>
+
+      <section class="seirtao-options__card">
+        <h2>Inserção automática de minutas no SEI</h2>
+        <p class="seirtao-options__hint">
+          Quando habilitada, o SEIrtão executa os 4 passos do SEI (Incluir
+          Documento → Escolher Tipo → Cadastrar → Injetar no editor) com
+          os dados que você confirmou no cartão de pré-inserção.
+          <strong>O SEIrtão nunca salva, assina ou publica</strong> o
+          documento — a revisão e a assinatura permanecem sempre com você.
+        </p>
+        <p class="seirtao-options__hint seirtao-options__hint--small">
+          Padrão: <strong>desabilitado</strong>. Cada tentativa é
+          registrada localmente (data, processo, tipo, nível de acesso e
+          hash truncado da minuta — sem o conteúdo), para auditoria.
+        </p>
+        <label class="seirtao-options__row" style="align-items: center; gap: 10px;">
+          <input id="chk-auto-insert" type="checkbox" />
+          <span>Permitir inserção automática de minutas no SEI</span>
+        </label>
+        <p id="auto-insert-status" class="seirtao-options__hint seirtao-options__hint--small"></p>
+      </section>
+
+      <section class="seirtao-options__card seirtao-options__card--note">
+        <h2>Como funciona</h2>
+        <ul class="seirtao-options__doc">
+          <li>
+            Os arquivos ficam armazenados localmente no navegador (IndexedDB),
+            sem sair da sua estação.
+          </li>
+          <li>
+            Apenas o texto é indexado — sua pasta original não é modificada.
+          </li>
+          <li>
+            Você pode optar por gerar atos <strong>com base nos modelos</strong>
+            ou <strong>do zero</strong> a cada uso, diretamente no painel
+            lateral do SEIrtão, dentro do SEI.
+          </li>
+          <li>
+            Reindexar reprocessa toda a pasta — útil quando você adicionar,
+            editar ou remover modelos.
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <script src="options.js"></script>
+  </body>
+</html>

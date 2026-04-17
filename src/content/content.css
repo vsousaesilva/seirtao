@@ -1,0 +1,24 @@
+/*
+ * CSS do content script do SEIrtão.
+ *
+ * O painel lateral do SEIrtão é montado em Shadow DOM (ver
+ * src/content/ui/seirtao-panel.ts), portanto os estilos pesados ficam
+ * dentro do shadow root. Este arquivo reserva apenas variáveis globais
+ * e uma classe-âncora segura para uso eventual em conteúdo injetado
+ * diretamente no document host — sem colidir com o SEI.
+ */
+
+:root {
+  --seirtao-accent: #1351B4;
+  --seirtao-bg-dark: #0C326F;
+  --seirtao-bg-light: #F6F8FC;
+  --seirtao-text-dark: #ffffff;
+  --seirtao-text-light: #16243A;
+  --seirtao-radius: 12px;
+  --seirtao-font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+.seirtao-root {
+  all: initial;
+  font-family: var(--seirtao-font);
+}
