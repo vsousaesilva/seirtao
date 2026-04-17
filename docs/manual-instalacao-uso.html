@@ -3,472 +3,712 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>SEIrtão — Manual de Instalação e Uso · Inovajus / JFCE</title>
-<meta name="description" content="Manual oficial de instalação e uso da extensão SEIrtão — assistente com IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5, desenvolvido pelo Inovajus / Justiça Federal no Ceará." />
+<title>SEIrtão — Manual de Instalação e Uso · Inovajus JFCE</title>
+<meta name="description" content="Manual oficial do SEIrtão — assistente com IA para o SEI (Sistema Eletrônico de Informações) do TRF5, desenvolvido pelo Inovajus / Justiça Federal no Ceará." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <style>
+  /* ═══════════════════════════════════════════════════════════════
+     SEIrtão · Manual de Instalação e Uso
+     Identidade: sertão + institucional (azul/amarelo Gov.br,
+     areia seca, terracota, céu de fim de tarde)
+     ═══════════════════════════════════════════════════════════════ */
   :root{
-    --ink:           #10182B;
-    --ink-soft:      #2A3550;
-    --muted:         #6B7490;
-    --paper:         #F5EFE2;
-    --paper-warm:    #EFE6D2;
-    --paper-card:    #FBF7EC;
-    --rule:          #D9CEB7;
-    --rule-soft:     #E8DFCA;
-    --primary:       #0C326F;
-    --primary-2:     #1351B4;
-    --primary-tint:  rgba(19,81,180,.08);
-    --yellow:        #FFCD07;
-    --yellow-soft:   #FFE57A;
-    --danger:        #8E2A1F;
-    --success:       #1E5E3A;
-    --shadow-sm:     0 1px 2px rgba(12,50,111,.06), 0 2px 6px rgba(12,50,111,.05);
-    --shadow-md:     0 8px 24px rgba(12,50,111,.10), 0 2px 6px rgba(12,50,111,.06);
-    --maxw:          1240px;
+    /* tintas */
+    --ink:        #1A1410;
+    --ink-soft:   #3A2E24;
+    --muted:      #8A7458;
+    --line:       #CBB58A;
+    --line-soft:  #DECBA1;
+
+    /* papéis */
+    --paper:      #F5ECCF;
+    --paper-warm: #ECDDB8;
+    --paper-card: #FBF5E3;
+    --paper-deep: #E6D4A8;
+
+    /* cores institucionais (Gov.br) */
+    --blue:       #0C326F;
+    --blue-2:     #1351B4;
+    --blue-ink:   #071B42;
+    --sun:        #FFCD07;
+    --sun-soft:   #FFE57A;
+
+    /* cores do sertão */
+    --sunset:     #E0742F;
+    --terra:      #B0431F;
+    --terra-deep: #7A2E15;
+    --cactus:     #345542;
+
+    /* tipografia */
+    --sans:   "Inter", ui-sans-serif, system-ui, sans-serif;
+    --serif:  "Fraunces", Georgia, serif;
+    --mono:   "JetBrains Mono", ui-monospace, monospace;
+
+    --maxw:   1260px;
+    --shadow: 0 2px 4px rgba(26,20,16,.06), 0 12px 30px rgba(26,20,16,.10);
   }
 
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth; scroll-padding-top:84px}
+  html{scroll-behavior:smooth; scroll-padding-top:88px}
   body{
     margin:0;
-    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-family:var(--sans);
     font-size:16.5px;
-    line-height:1.65;
+    line-height:1.68;
     color:var(--ink);
     background:var(--paper);
-    background-image:
-      radial-gradient(1200px 500px at 85% -5%, rgba(19,81,180,.07), transparent 60%),
-      radial-gradient(900px 420px at -10% 110%, rgba(255,205,7,.10), transparent 60%);
     -webkit-font-smoothing:antialiased;
     text-rendering:optimizeLegibility;
-    font-feature-settings:"ss01","cv11";
   }
 
+  /* textura de papel envelhecido */
   body::before{
-    content:"";
-    position:fixed; inset:0; pointer-events:none; z-index:0;
-    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.08  0 0 0 0 0.16  0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    opacity:.55;
-    mix-blend-mode:multiply;
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.10  0 0 0 0 0.05  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    opacity:.7; mix-blend-mode:multiply;
   }
 
-  a{color:var(--primary-2); text-decoration:none; border-bottom:1px solid rgba(19,81,180,.25); transition:all .2s}
-  a:hover{color:var(--primary); border-bottom-color:var(--primary)}
+  a{color:var(--blue-2); text-decoration:none; border-bottom:1px dashed rgba(19,81,180,.35); transition:color .2s, border-color .2s}
+  a:hover{color:var(--terra); border-bottom-color:var(--terra); border-bottom-style:solid}
 
-  /* ————— TOPO / CABEÇALHO ————— */
+  /* ──────────────── TOPBAR ──────────────── */
   .topbar{
     position:sticky; top:0; z-index:50;
-    backdrop-filter:saturate(160%) blur(14px);
-    -webkit-backdrop-filter:saturate(160%) blur(14px);
-    background:rgba(245,239,226,.82);
-    border-bottom:1px solid var(--rule);
+    background:rgba(245,236,207,.9);
+    backdrop-filter:saturate(140%) blur(12px);
+    -webkit-backdrop-filter:saturate(140%) blur(12px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset;
   }
   .topbar__inner{
     max-width:var(--maxw); margin:0 auto;
     display:flex; align-items:center; gap:18px;
-    padding:14px 32px;
+    padding:12px 32px;
   }
-  .brand{display:flex; align-items:center; gap:12px; text-decoration:none; border:0}
+  .brand{display:flex; align-items:center; gap:14px; text-decoration:none; border:0}
   .brand__logo{
-    width:38px; height:38px; border-radius:11px;
-    background:linear-gradient(135deg,#1351B4 0%, #0C326F 100%);
-    display:grid; place-items:center;
-    box-shadow:0 8px 22px rgba(12,50,111,.26), inset 0 1px 0 rgba(255,255,255,.22);
-    color:#fff;
+    width:44px; height:44px;
+    display:block; flex-shrink:0;
+    filter:drop-shadow(0 4px 10px rgba(12,50,111,.28));
   }
+  .brand__text{line-height:1}
   .brand__name{
-    font-family:"Fraunces", serif;
-    font-weight:700; font-size:22px; letter-spacing:-.02em;
-    color:var(--primary);
-    font-variation-settings:"SOFT" 40, "opsz" 20;
+    font-family:var(--serif);
+    font-weight:700; font-size:24px; letter-spacing:-.015em;
+    color:var(--blue);
+    font-variation-settings:"SOFT" 50, "opsz" 24;
+    display:flex; align-items:baseline; gap:1px;
+  }
+  .brand__name em{
+    font-style:italic; font-weight:400;
+    color:var(--terra);
+    font-variation-settings:"SOFT" 90, "opsz" 24;
   }
   .brand__tag{
-    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
-    color:var(--muted); font-weight:500; margin-top:-2px;
+    display:block; margin-top:3px;
+    font-size:10.5px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--muted); font-weight:500;
   }
-  .topbar__nav{margin-left:auto; display:flex; gap:22px}
+  .topbar__nav{margin-left:auto; display:flex; gap:26px}
   .topbar__nav a{
-    font-size:13px; font-weight:500; color:var(--ink-soft);
-    border:0; text-transform:uppercase; letter-spacing:.08em;
+    font-size:12.5px; font-weight:500;
+    color:var(--ink-soft);
+    border:0; text-transform:uppercase; letter-spacing:.14em;
   }
-  .topbar__nav a:hover{color:var(--primary)}
+  .topbar__nav a:hover{color:var(--terra)}
 
-  /* ————— HERO ————— */
+  /* ──────────────── HERO ──────────────── */
   .hero{
-    max-width:var(--maxw); margin:0 auto;
-    padding:72px 32px 56px;
-    display:grid; grid-template-columns:1.25fr .9fr; gap:64px; align-items:end;
     position:relative; z-index:1;
+    padding:80px 32px 48px;
+    overflow:hidden;
+    background:
+      radial-gradient(1100px 500px at 85% 0%, rgba(255,205,7,.35), transparent 60%),
+      radial-gradient(800px 480px at 10% 100%, rgba(224,116,47,.25), transparent 65%),
+      linear-gradient(180deg, transparent 0%, rgba(176,67,31,.05) 100%);
+    border-bottom:1px solid var(--line);
   }
-  .eyebrow{
-    display:inline-flex; align-items:center; gap:10px;
-    font-size:11.5px; font-weight:600;
+  /* linha de horizonte com sol */
+  .hero::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:0;
+    height:1px; background:var(--line);
+  }
+  .hero__inner{
+    max-width:var(--maxw); margin:0 auto;
+    display:grid; grid-template-columns:1.3fr .8fr; gap:56px;
+    align-items:end;
+    position:relative;
+  }
+  .hero__ribbon{
+    display:inline-flex; align-items:center; gap:14px;
+    padding:6px 18px 6px 10px;
+    background:var(--blue);
+    color:var(--sun);
+    font-size:11px; font-weight:600;
     letter-spacing:.22em; text-transform:uppercase;
-    color:var(--primary);
+    clip-path:polygon(0 0, 100% 0, 96% 100%, 0 100%);
+    margin-bottom:28px;
   }
-  .eyebrow::before{
-    content:""; width:28px; height:1px; background:var(--primary);
-    display:inline-block;
+  .hero__ribbon::before{
+    content:""; width:8px; height:8px; border-radius:50%;
+    background:var(--sun); box-shadow:0 0 0 3px rgba(255,205,7,.25);
   }
   .hero h1{
-    font-family:"Fraunces", serif;
-    font-variation-settings:"SOFT" 30, "opsz" 144;
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 20, "opsz" 144;
     font-weight:400;
-    font-size:clamp(48px, 7.2vw, 104px);
-    line-height:.96; letter-spacing:-.03em;
-    margin:18px 0 20px;
+    font-size:clamp(52px, 8.2vw, 118px);
+    line-height:.94; letter-spacing:-.035em;
+    margin:0 0 28px;
     color:var(--ink);
   }
-  .hero h1 em{
+  .hero h1 span.sei{
+    color:var(--blue);
+    font-weight:600;
+    font-variation-settings:"SOFT" 10, "opsz" 144;
+  }
+  .hero h1 span.rtao{
     font-style:italic; font-weight:300;
-    color:var(--primary);
-    font-variation-settings:"SOFT" 90, "opsz" 144;
+    color:var(--terra);
+    font-variation-settings:"SOFT" 100, "opsz" 144;
+  }
+  .hero h1 small{
+    display:block;
+    font-family:var(--sans);
+    font-size:15px; font-weight:500;
+    text-transform:uppercase; letter-spacing:.28em;
+    color:var(--muted);
+    margin-top:18px;
   }
   .hero__lede{
-    font-size:19px; line-height:1.55;
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 30, "opsz" 20;
+    font-size:20.5px; font-weight:400; line-height:1.5;
     color:var(--ink-soft);
-    max-width:540px;
-    font-weight:400;
+    max-width:560px;
+    margin:0 0 28px;
   }
-  .hero__meta{
-    border-left:2px solid var(--yellow);
-    padding:4px 0 4px 20px;
-    display:flex; flex-direction:column; gap:12px;
-    font-size:13px; color:var(--muted);
-  }
-  .hero__meta dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:6px 22px}
-  .hero__meta dt{
-    font-weight:600; text-transform:uppercase; letter-spacing:.12em;
-    font-size:10.5px; color:var(--primary); padding-top:3px;
-  }
-  .hero__meta dd{margin:0; color:var(--ink-soft); font-size:13.5px}
+  .hero__lede strong{color:var(--blue); font-weight:600}
 
-  /* ————— LAYOUT DO MIOLO ————— */
-  .layout{
+  .hero__cta{display:flex; gap:14px; flex-wrap:wrap}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:12px 22px;
+    font-family:var(--sans); font-size:13px; font-weight:600;
+    letter-spacing:.1em; text-transform:uppercase;
+    border-radius:4px; border:1px solid transparent;
+    cursor:pointer; text-decoration:none;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn--primary{
+    background:var(--blue); color:var(--sun);
+    box-shadow:0 4px 12px rgba(12,50,111,.25);
+  }
+  .btn--primary:hover{transform:translateY(-2px); box-shadow:0 8px 20px rgba(12,50,111,.32); color:var(--sun)}
+  .btn--ghost{
+    background:transparent; color:var(--ink);
+    border-color:var(--line);
+  }
+  .btn--ghost:hover{border-color:var(--terra); color:var(--terra); transform:translateY(-2px)}
+
+  /* metadados */
+  .hero__meta{
+    background:var(--paper-card);
+    border:1px solid var(--line);
+    padding:28px 26px 24px;
+    position:relative;
+    box-shadow:var(--shadow);
+  }
+  .hero__meta::before{
+    content:"⁘"; position:absolute; top:-14px; left:24px;
+    background:var(--paper-card); padding:0 10px;
+    font-family:var(--serif); color:var(--terra);
+    font-size:22px; line-height:1;
+  }
+  .hero__meta h4{
+    margin:0 0 16px;
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 40, "opsz" 24;
+    font-size:18px; font-weight:600; font-style:italic;
+    color:var(--blue);
+  }
+  .hero__meta dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:10px 18px}
+  .hero__meta dt{
+    font-size:10.5px; font-weight:600;
+    letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted); padding-top:4px;
+  }
+  .hero__meta dd{
+    margin:0; font-size:13.5px; color:var(--ink-soft);
+    line-height:1.45;
+  }
+  .hero__meta dd code{
+    font-family:var(--mono); font-size:12px;
+    background:rgba(19,81,180,.08); color:var(--blue);
+    padding:1px 6px; border-radius:3px;
+  }
+
+  /* ──────────────── ÍNDICE ──────────────── */
+  .index{
     max-width:var(--maxw); margin:0 auto;
-    padding:32px 32px 120px;
-    display:grid; grid-template-columns:250px minmax(0, 1fr); gap:72px;
+    padding:56px 32px 0;
+    position:relative; z-index:1;
+  }
+  .index h2{
+    font-family:var(--serif);
+    font-style:italic; font-weight:300;
+    font-size:15px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--terra); margin:0 0 20px;
+    font-variation-settings:"SOFT" 100, "opsz" 14;
+    display:flex; align-items:center; gap:12px;
+  }
+  .index h2::after{
+    content:""; flex:1; height:1px; background:var(--line);
+  }
+  .index ol{
+    list-style:none; margin:0; padding:0;
+    columns:3; column-gap:38px;
+    font-size:14.5px;
+  }
+  .index li{
+    break-inside:avoid;
+    margin:6px 0; padding:5px 0;
+    display:flex; gap:16px; align-items:baseline;
+    border-bottom:1px dotted var(--line);
+  }
+  .index li a{
+    color:var(--ink-soft); border:0;
+    flex:1; display:flex; justify-content:space-between; gap:12px;
+  }
+  .index li a:hover{color:var(--terra)}
+  .index__num{
+    font-family:var(--serif); font-style:italic;
+    font-size:14px; color:var(--blue); font-weight:500;
+    width:28px; flex-shrink:0;
+  }
+  .index__page{
+    font-family:var(--mono); font-size:11.5px;
+    color:var(--muted); letter-spacing:.05em;
+  }
+
+  /* ──────────────── CONTEÚDO ──────────────── */
+  .content{
+    max-width:var(--maxw); margin:0 auto;
+    padding:48px 32px 120px;
     position:relative; z-index:1;
   }
 
-  /* TOC */
-  .toc{
-    position:sticky; top:88px; align-self:start;
-    font-size:13.5px; line-height:1.45;
-    padding-right:12px;
-    max-height:calc(100vh - 100px);
-    overflow:auto;
+  /* divisor com sol */
+  .horizon{
+    display:flex; align-items:center; gap:18px;
+    margin:88px 0 56px;
+    color:var(--line);
   }
-  .toc h4{
-    font-family:"IBM Plex Sans", sans-serif;
-    font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
-    color:var(--primary); margin:0 0 14px; font-weight:600;
+  .horizon::before, .horizon::after{
+    content:""; flex:1; height:1px;
+    background:linear-gradient(90deg, transparent, var(--line), transparent);
   }
-  .toc ol{list-style:none; margin:0; padding:0; counter-reset:toc}
-  .toc li{counter-increment:toc; margin:0}
-  .toc a{
-    display:flex; gap:10px; align-items:baseline;
-    padding:7px 8px 7px 0;
-    color:var(--ink-soft); border:0;
-    border-left:2px solid transparent;
-    padding-left:12px;
-    transition:all .2s;
-  }
-  .toc a::before{
-    content:counter(toc, decimal-leading-zero);
-    font-family:"IBM Plex Mono", monospace;
-    font-size:10.5px; color:var(--muted); padding-top:2px;
-    flex-shrink:0;
-  }
-  .toc a:hover{color:var(--primary); border-left-color:var(--yellow)}
-  .toc a.is-active{color:var(--primary); border-left-color:var(--primary); font-weight:500}
+  .horizon svg{flex-shrink:0; color:var(--sun)}
 
-  /* Conteúdo */
-  main{min-width:0}
-
-  section + section{margin-top:88px}
-  section[id]{scroll-margin-top:96px}
+  section[id]{scroll-margin-top:104px}
 
   .section-head{
-    display:flex; gap:24px; align-items:flex-start;
-    padding-bottom:20px; margin-bottom:36px;
-    border-bottom:1px solid var(--rule);
+    display:grid; grid-template-columns:auto 1fr; gap:36px;
+    align-items:start;
+    margin-bottom:40px;
+    padding-bottom:28px;
+    border-bottom:2px solid var(--ink);
+    position:relative;
+  }
+  .section-head::after{
+    content:""; position:absolute; left:0; bottom:-6px;
+    width:60px; height:1px; background:var(--ink);
   }
   .section-num{
-    font-family:"Fraunces", serif;
+    font-family:var(--serif);
     font-variation-settings:"SOFT" 100, "opsz" 144;
     font-style:italic; font-weight:300;
-    font-size:64px; line-height:.8;
-    color:var(--yellow); flex-shrink:0;
-    margin-top:8px;
-    text-shadow:2px 2px 0 var(--primary);
+    font-size:clamp(72px, 10vw, 120px);
+    line-height:.8;
+    color:var(--sun);
+    text-shadow:
+      3px 3px 0 var(--terra),
+      6px 6px 0 var(--blue);
+    user-select:none;
   }
   .section-head h2{
-    font-family:"Fraunces", serif;
+    font-family:var(--serif);
     font-variation-settings:"SOFT" 30, "opsz" 72;
-    font-weight:500; font-size:clamp(32px, 4vw, 44px);
-    line-height:1.05; letter-spacing:-.02em;
-    margin:0 0 6px; color:var(--ink);
+    font-weight:500;
+    font-size:clamp(34px, 4.4vw, 52px);
+    line-height:1.02; letter-spacing:-.025em;
+    margin:0 0 10px;
+    color:var(--ink);
   }
-  .section-head p{
-    margin:0; color:var(--muted); font-size:14.5px;
-    text-transform:uppercase; letter-spacing:.14em; font-weight:500;
+  .section-head h2 em{
+    font-style:italic; font-weight:300;
+    color:var(--terra);
+    font-variation-settings:"SOFT" 100, "opsz" 72;
   }
+  .section-kicker{
+    margin:0; font-family:var(--mono);
+    font-size:12px; color:var(--muted);
+    letter-spacing:.18em; text-transform:uppercase;
+  }
+  .section-kicker::before{content:"§ "; color:var(--terra)}
 
+  /* ──────────────── TIPOGRAFIA DO CORPO ──────────────── */
   h3{
-    font-family:"Fraunces", serif;
+    font-family:var(--serif);
     font-variation-settings:"SOFT" 40, "opsz" 36;
-    font-weight:600; font-size:24px; line-height:1.2;
-    letter-spacing:-.01em;
-    margin:48px 0 12px; color:var(--ink);
+    font-weight:600; font-size:26px; line-height:1.2;
+    letter-spacing:-.015em;
+    margin:48px 0 14px; color:var(--ink);
+    display:flex; align-items:center; gap:14px;
   }
   h3 .marker{
-    display:inline-block;
-    width:10px; height:10px; border-radius:2px;
-    background:var(--primary); margin-right:12px;
-    transform:translateY(-3px);
+    flex-shrink:0; width:14px; height:14px;
+    display:inline-block; position:relative;
+  }
+  h3 .marker::before{
+    content:""; position:absolute; inset:0;
+    background:var(--sun);
+    clip-path:polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   }
   h4{
-    font-family:"IBM Plex Sans", sans-serif;
-    font-size:13px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--primary); margin:28px 0 10px; font-weight:600;
+    font-family:var(--sans);
+    font-size:11.5px; letter-spacing:.2em; text-transform:uppercase;
+    color:var(--terra); margin:32px 0 12px; font-weight:600;
+    display:flex; align-items:center; gap:10px;
+  }
+  h4::after{
+    content:""; flex:1; height:1px;
+    background:var(--line);
+    max-width:140px;
   }
 
-  p{margin:0 0 16px; max-width:68ch}
+  p{margin:0 0 18px; max-width:70ch}
+  p.lead{
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 40, "opsz" 18;
+    font-size:18.5px; line-height:1.58;
+    color:var(--ink-soft);
+    max-width:62ch;
+  }
+  p.lead::first-letter{
+    font-family:var(--serif); font-weight:600;
+    float:left; font-size:56px; line-height:.88;
+    padding:6px 10px 0 0;
+    color:var(--blue);
+    font-variation-settings:"SOFT" 20, "opsz" 72;
+  }
 
-  ol, ul{max-width:68ch; padding-left:22px}
-  ul li{margin:8px 0; padding-left:6px}
-  ol{list-style:none; counter-reset:step; padding-left:0}
-  ol > li{
+  ul{max-width:70ch; padding-left:0; list-style:none}
+  ul li{
+    margin:10px 0; padding-left:26px; position:relative;
+  }
+  ul li::before{
+    content:"→"; position:absolute; left:0; top:0;
+    color:var(--terra); font-weight:700; font-family:var(--serif);
+  }
+
+  ol.steps{
+    list-style:none; counter-reset:step;
+    padding:0; margin:24px 0;
+    max-width:72ch;
+  }
+  ol.steps > li{
     counter-increment:step;
     position:relative;
-    padding-left:46px;
-    margin:14px 0;
-    min-height:30px;
+    padding:14px 0 14px 64px;
+    border-top:1px solid var(--line-soft);
+    min-height:50px;
   }
-  ol > li::before{
+  ol.steps > li:last-child{border-bottom:1px solid var(--line-soft)}
+  ol.steps > li::before{
     content:counter(step, decimal-leading-zero);
-    position:absolute;
-    left:0; top:2px;
-    font-family:"IBM Plex Mono", monospace;
-    font-size:12px; font-weight:500;
-    color:var(--primary);
-    background:var(--paper-card);
-    border:1px solid var(--rule);
-    border-radius:999px;
-    width:30px; height:30px;
-    display:flex; align-items:center; justify-content:center;
+    position:absolute; left:0; top:18px;
+    font-family:var(--serif); font-style:italic;
+    font-size:30px; font-weight:300;
+    color:var(--terra);
+    font-variation-settings:"SOFT" 100, "opsz" 36;
+    line-height:1;
+    width:44px; text-align:right;
   }
+  ol.steps > li strong{color:var(--ink); font-weight:600}
 
   kbd, code{
-    font-family:"IBM Plex Mono", monospace;
-    font-size:.88em;
-    padding:2px 6px; border-radius:5px;
-    display:inline-block;
-    max-width:100%;
-    vertical-align:baseline;
-    line-height:1.3;
-    white-space:normal;
-    overflow-wrap:break-word;
-    word-break:normal;
+    font-family:var(--mono); font-size:.86em;
+    padding:2px 7px; border-radius:3px;
+    display:inline-block; line-height:1.3;
   }
   kbd{
     background:var(--paper-card);
-    border:1px solid var(--rule);
-    border-bottom-width:2px;
+    border:1px solid var(--line);
+    border-bottom:2px solid var(--line);
     color:var(--ink);
-    box-shadow:0 1px 0 rgba(12,50,111,.04);
   }
   code{
-    background:rgba(19,81,180,.08);
-    color:var(--primary);
+    background:rgba(12,50,111,.08);
+    color:var(--blue);
   }
-  p, li{overflow-wrap:break-word; word-break:normal}
 
-  /* CALLOUTS */
-  .callout{
+  /* ──────────────── CALLOUTS ──────────────── */
+  .note{
     margin:28px 0;
-    padding:20px 22px 20px 56px;
-    border-radius:4px;
-    position:relative;
+    padding:22px 24px 22px 72px;
     background:var(--paper-card);
-    border:1px solid var(--rule-soft);
-    border-left:4px solid var(--primary-2);
-    box-shadow:var(--shadow-sm);
+    border-left:3px solid var(--blue);
+    border-right:1px solid var(--line-soft);
+    border-top:1px solid var(--line-soft);
+    border-bottom:1px solid var(--line-soft);
+    position:relative;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset;
   }
-  .callout::before{
-    content:"";
+  .note__label{
     position:absolute; left:20px; top:22px;
-    width:22px; height:22px;
-    background:var(--primary-2); color:#fff;
-    border-radius:50%;
-    display:grid; place-items:center;
-    font-family:"Fraunces",serif; font-style:italic; font-weight:600;
-    font-size:13px;
+    font-family:var(--serif); font-style:italic;
+    font-size:13px; font-weight:600;
+    color:var(--blue);
+    writing-mode:vertical-rl; transform:rotate(180deg);
+    letter-spacing:.1em;
   }
-  .callout--info::before{content:"i"}
-  .callout--warn{border-left-color:var(--danger); background:#FBEFEA}
-  .callout--warn::before{content:"!"; background:var(--danger)}
-  .callout--tip{border-left-color:var(--yellow); background:#FFF8DB}
-  .callout--tip::before{content:"★"; background:var(--primary); color:var(--yellow); font-size:11px}
-  .callout--lgpd{border-left-color:var(--primary); background:linear-gradient(180deg, #FFF8DB 0%, #FBF7EC 100%)}
-  .callout--lgpd::before{content:"§"; background:var(--primary); font-family:"Fraunces",serif; font-size:14px}
-  .callout h4{margin:0 0 6px; color:var(--primary)}
-  .callout p:last-child{margin-bottom:0}
+  .note h4{margin:0 0 8px; color:var(--blue)}
+  .note--warn{border-left-color:var(--terra); background:linear-gradient(180deg, #FBE9DC 0%, var(--paper-card) 100%)}
+  .note--warn .note__label, .note--warn h4{color:var(--terra-deep)}
+  .note--tip{border-left-color:var(--sun); background:linear-gradient(180deg, #FFF4C6 0%, var(--paper-card) 100%)}
+  .note--tip .note__label, .note--tip h4{color:var(--blue)}
+  .note--lgpd{
+    border-left:3px double var(--blue);
+    background:linear-gradient(180deg, #FFF7D4 0%, var(--paper-card) 100%);
+  }
+  .note p:last-child{margin-bottom:0}
 
-  /* Cards de funcionalidade */
-  .feat-grid{
-    display:grid; grid-template-columns:repeat(2, 1fr); gap:18px;
-    margin:24px 0;
+  /* ──────────────── GRID DE AÇÕES / ATOS ──────────────── */
+  .card-grid{
+    display:grid; grid-template-columns:repeat(2, 1fr);
+    gap:16px; margin:28px 0;
   }
-  .feat{
+  .card{
     padding:22px 22px 20px;
     background:var(--paper-card);
-    border:1px solid var(--rule-soft);
-    border-radius:4px;
-    transition:transform .25s ease, box-shadow .25s ease;
-    position:relative; overflow:hidden;
+    border:1px solid var(--line);
+    position:relative;
+    transition:transform .22s ease, box-shadow .22s ease;
   }
-  .feat::after{
-    content:""; position:absolute; inset:auto 0 0 0; height:2px;
-    background:linear-gradient(90deg, var(--primary) 0%, var(--yellow) 100%);
-    transform:scaleX(0); transform-origin:left; transition:transform .4s ease;
+  .card::before{
+    content:""; position:absolute; top:-1px; left:-1px; right:-1px;
+    height:3px;
+    background:linear-gradient(90deg, var(--blue), var(--sun), var(--terra));
+    transform:scaleX(0); transform-origin:left;
+    transition:transform .4s ease;
   }
-  .feat:hover{transform:translateY(-2px); box-shadow:var(--shadow-md)}
-  .feat:hover::after{transform:scaleX(1)}
-  .feat__label{
-    display:inline-block; font-size:10.5px; font-weight:600;
-    letter-spacing:.18em; text-transform:uppercase;
-    color:var(--yellow);
-    background:var(--primary);
-    padding:3px 8px; border-radius:3px;
+  .card:hover{transform:translateY(-3px); box-shadow:var(--shadow)}
+  .card:hover::before{transform:scaleX(1)}
+  .card__tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.14em; text-transform:uppercase;
+    color:var(--terra); font-weight:500;
     margin-bottom:10px;
   }
-  .feat h4{
-    font-family:"Fraunces", serif;
-    font-variation-settings:"SOFT" 40, "opsz" 28;
-    font-size:19px; font-weight:600; text-transform:none; letter-spacing:-.01em;
+  .card__tag::before{
+    content:""; width:6px; height:6px; border-radius:50%;
+    background:var(--terra);
+  }
+  .card h4{
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 40, "opsz" 24;
+    font-size:19.5px; font-weight:600;
+    text-transform:none; letter-spacing:-.01em;
     color:var(--ink); margin:0 0 8px;
+    display:block;
   }
-  .feat p{font-size:14.5px; color:var(--ink-soft); margin:0; line-height:1.55}
+  .card h4::after{display:none}
+  .card p{
+    font-size:14.5px; line-height:1.55;
+    color:var(--ink-soft); margin:0;
+    max-width:none;
+  }
 
-  /* Árvore de pastas */
-  .tree{
-    margin:24px 0;
-    font-family:"IBM Plex Mono", monospace;
-    font-size:13px; line-height:1.75;
-    background:#0C1833;
-    color:#E8DFCA;
-    padding:24px 28px;
-    border-radius:4px;
-    border:1px solid var(--primary);
-    box-shadow:var(--shadow-md);
-    overflow-x:auto;
+  /* ──────────────── FLUXO DE 4 PASSOS ──────────────── */
+  .flow{
+    display:grid; grid-template-columns:repeat(4, 1fr);
+    gap:0; margin:32px 0;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    background:var(--paper-card);
+  }
+  .flow__step{
+    padding:22px 20px 22px 24px;
     position:relative;
+    border-right:1px solid var(--line-soft);
   }
-  .tree::before{
-    content:"~/ Modelos";
-    position:absolute; top:-1px; left:18px;
-    background:var(--yellow); color:var(--primary);
-    font-size:10.5px; font-weight:700; letter-spacing:.12em;
-    padding:4px 10px; border-radius:0 0 3px 3px;
-    font-family:"IBM Plex Sans", sans-serif; text-transform:uppercase;
+  .flow__step:last-child{border-right:0}
+  .flow__step::after{
+    content:"→"; position:absolute;
+    right:-9px; top:50%; transform:translateY(-50%);
+    color:var(--terra); font-size:18px; font-family:var(--serif);
+    background:var(--paper-card); padding:2px 4px;
+    z-index:1;
   }
-  .tree .dir{color:var(--yellow-soft); font-weight:500}
-  .tree .file{color:#B9D5FF}
+  .flow__step:last-child::after{display:none}
+  .flow__num{
+    font-family:var(--serif); font-style:italic;
+    font-size:13px; color:var(--terra);
+    letter-spacing:.1em;
+  }
+  .flow__title{
+    font-family:var(--serif);
+    font-size:17px; font-weight:600;
+    margin:4px 0 6px; color:var(--blue);
+    font-variation-settings:"SOFT" 30, "opsz" 20;
+  }
+  .flow__desc{
+    font-size:13px; line-height:1.5; color:var(--ink-soft);
+    margin:0;
+  }
 
-  /* FAQ / problemas */
-  .qa details{
-    border-top:1px solid var(--rule);
-    padding:18px 4px;
+  /* ──────────────── ÁRVORE DE PASTAS ──────────────── */
+  .tree-wrap{margin:28px 0; position:relative}
+  .tree-wrap::before{
+    content:"./ Modelos";
+    position:absolute; top:-10px; left:24px;
+    background:var(--sun); color:var(--blue);
+    font-family:var(--mono); font-size:11px; font-weight:600;
+    letter-spacing:.1em;
+    padding:4px 12px;
+    z-index:1;
+    box-shadow:0 2px 4px rgba(12,50,111,.2);
   }
-  .qa details:last-child{border-bottom:1px solid var(--rule)}
-  .qa summary{
+  pre.tree{
+    margin:0;
+    font-family:var(--mono);
+    font-size:13px; line-height:1.75;
+    background:var(--blue-ink);
+    color:#F3D99B;
+    padding:30px 28px 26px;
+    border:1px solid var(--blue);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.04), var(--shadow);
+    overflow-x:auto;
+  }
+  pre.tree .d{color:var(--sun); font-weight:500}
+  pre.tree .f{color:#B4D5FF}
+  pre.tree .c{color:#8A9AB8; font-style:italic}
+
+  /* ──────────────── FAQ · "DÚVIDAS DO CAMINHANTE" ──────────────── */
+  .faq{margin:28px 0}
+  .faq details{
+    padding:22px 0;
+    border-top:1px solid var(--line);
+  }
+  .faq details:last-child{border-bottom:1px solid var(--line)}
+  .faq summary{
     cursor:pointer; list-style:none;
-    font-family:"Fraunces", serif;
-    font-size:19px; font-weight:500;
-    color:var(--ink);
-    display:flex; justify-content:space-between; align-items:center;
-    gap:18px;
+    font-family:var(--serif);
     font-variation-settings:"SOFT" 30, "opsz" 24;
+    font-size:20px; font-weight:500;
+    color:var(--ink);
+    display:grid; grid-template-columns:auto 1fr auto; gap:18px;
+    align-items:baseline;
   }
-  .qa summary::-webkit-details-marker{display:none}
-  .qa summary::after{
-    content:"+"; font-family:"IBM Plex Mono", monospace;
-    font-size:22px; color:var(--primary); font-weight:300;
-    transition:transform .3s ease;
+  .faq summary::-webkit-details-marker{display:none}
+  .faq__q{
+    font-family:var(--mono); font-size:11px;
+    color:var(--terra); letter-spacing:.1em;
+    padding-top:5px;
   }
-  .qa details[open] summary::after{transform:rotate(45deg)}
-  .qa details p{margin:12px 0 0; color:var(--ink-soft); font-size:15px}
-  .qa details[open] summary{color:var(--primary)}
+  .faq summary::after{
+    content:"+"; font-family:var(--serif);
+    font-size:26px; color:var(--blue); font-weight:300;
+    transition:transform .3s ease; line-height:.8;
+  }
+  .faq details[open] summary{color:var(--blue)}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq__a{
+    margin:14px 0 0 48px;
+    padding-left:18px;
+    border-left:2px solid var(--sun);
+    font-size:15px; color:var(--ink-soft);
+  }
+  .faq__a p{margin:0 0 10px}
+  .faq__a p:last-child{margin-bottom:0}
 
-  /* RODAPÉ */
+  /* ──────────────── RODAPÉ ──────────────── */
   footer{
-    margin-top:120px;
-    border-top:1px solid var(--rule);
-    background:
-      linear-gradient(180deg, transparent 0%, rgba(12,50,111,.03) 100%);
     position:relative; z-index:1;
+    margin-top:120px;
+    background:var(--blue-ink); color:var(--paper);
+    overflow:hidden;
+  }
+  footer::before{
+    content:""; position:absolute;
+    right:-40px; bottom:-20px;
+    width:280px; height:280px;
+    background:url("../icons/icon128.png") center/contain no-repeat;
+    opacity:.08;
+    filter:grayscale(1) brightness(2);
   }
   .footer__inner{
     max-width:var(--maxw); margin:0 auto;
-    padding:56px 32px 48px;
+    padding:64px 32px 40px;
     display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px;
+    position:relative;
   }
   .footer__brand{
-    font-family:"Fraunces", serif;
-    font-variation-settings:"SOFT" 80, "opsz" 72;
-    font-size:48px; font-style:italic; font-weight:300;
-    color:var(--primary); line-height:.95; letter-spacing:-.02em;
-    margin:0;
+    font-family:var(--serif);
+    font-variation-settings:"SOFT" 60, "opsz" 72;
+    font-size:54px; font-weight:400;
+    color:#fff; line-height:.95; letter-spacing:-.02em;
+    margin:0 0 14px;
   }
-  .footer__brand span{color:var(--yellow); font-style:normal; font-weight:400}
-  .footer__meta{font-size:13px; color:var(--muted); margin-top:14px}
+  .footer__brand span.sei{color:var(--sun); font-weight:600}
+  .footer__brand span.rtao{color:var(--sunset); font-style:italic; font-weight:300}
+  .footer__meta{
+    font-size:13.5px; color:rgba(245,236,207,.7);
+    max-width:42ch; line-height:1.65;
+  }
+  .footer__meta strong{color:var(--sun); font-weight:500}
   .footer__col h5{
-    font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
-    color:var(--primary); font-weight:600; margin:0 0 12px;
+    font-family:var(--mono); font-size:10.5px;
+    letter-spacing:.2em; text-transform:uppercase;
+    color:var(--sun); font-weight:500; margin:0 0 14px;
   }
-  .footer__col ul{list-style:none; padding:0; margin:0; font-size:14px}
-  .footer__col li{margin:6px 0}
-  .footer__col a{color:var(--ink-soft); border:0}
-  .footer__col a:hover{color:var(--primary)}
+  .footer__col ul{padding:0; list-style:none; font-size:14px}
+  .footer__col li{margin:7px 0}
+  .footer__col li::before{display:none}
+  .footer__col a{color:rgba(245,236,207,.85); border-bottom:1px dashed rgba(255,205,7,.25)}
+  .footer__col a:hover{color:var(--sun); border-color:var(--sun)}
+  .footer__col code{
+    background:rgba(255,205,7,.1); color:var(--sun);
+    font-size:12.5px;
+  }
   .footer__bar{
-    border-top:1px solid var(--rule);
+    border-top:1px solid rgba(255,205,7,.15);
     padding:18px 32px;
     max-width:var(--maxw); margin:0 auto;
-    display:flex; justify-content:space-between;
-    font-size:12px; color:var(--muted);
-    letter-spacing:.04em;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+    font-family:var(--mono);
+    font-size:11.5px; color:rgba(245,236,207,.55);
+    letter-spacing:.08em;
+    position:relative;
   }
 
-  /* REVEAL */
-  @keyframes riseIn{
-    from{opacity:0; transform:translateY(14px)}
-    to  {opacity:1; transform:translateY(0)}
-  }
-  .reveal{opacity:0; animation:riseIn .9s cubic-bezier(.2,.7,.2,1) forwards}
-  .reveal[data-d="1"]{animation-delay:.05s}
-  .reveal[data-d="2"]{animation-delay:.22s}
-  .reveal[data-d="3"]{animation-delay:.38s}
-  .reveal[data-d="4"]{animation-delay:.52s}
+  /* ──────────────── SELEÇÃO ──────────────── */
+  ::selection{background:var(--sun); color:var(--blue)}
 
-  /* SELEÇÃO */
-  ::selection{background:var(--yellow); color:var(--primary)}
-
-  /* Menu mobile (hamburger) */
+  /* ──────────────── MENU MOBILE ──────────────── */
   .menu-toggle{
-    display:none;
-    margin-left:auto;
+    display:none; margin-left:auto;
     width:42px; height:42px;
-    border:1px solid var(--rule);
+    border:1px solid var(--line);
     background:var(--paper-card);
-    border-radius:10px;
-    cursor:pointer;
+    border-radius:4px; cursor:pointer;
     padding:0; position:relative;
   }
   .menu-toggle span,
@@ -476,159 +716,130 @@
   .menu-toggle span::after{
     content:""; display:block; position:absolute;
     left:10px; right:10px; height:2px;
-    background:var(--primary); border-radius:2px;
-    transition:transform .3s ease, opacity .2s ease, top .3s ease;
+    background:var(--blue); border-radius:2px;
+    transition:transform .3s ease, top .3s ease;
   }
   .menu-toggle span{top:50%; margin-top:-1px}
   .menu-toggle span::before{top:-8px}
   .menu-toggle span::after{top:8px}
   .menu-toggle[aria-expanded="true"] span{background:transparent}
-  .menu-toggle[aria-expanded="true"] span::before{top:0; transform:rotate(45deg); background:var(--primary)}
-  .menu-toggle[aria-expanded="true"] span::after{top:0; transform:rotate(-45deg); background:var(--primary)}
+  .menu-toggle[aria-expanded="true"] span::before{top:0; transform:rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] span::after{top:0; transform:rotate(-45deg)}
 
-  /* TABLET */
-  @media (max-width: 1100px){
-    .layout{grid-template-columns:210px minmax(0, 1fr); gap:40px; padding:24px 28px 100px}
-    .hero{padding:60px 28px 48px; gap:40px}
-    .footer__inner{padding:48px 28px 40px; gap:36px}
-  }
-  /* Em larguras intermediárias (laptop pequeno), oculta o TOC para liberar espaço */
-  @media (max-width: 1000px){
-    .layout{grid-template-columns:1fr; gap:0; padding:20px 28px 80px}
-    .toc{display:none}
+  /* ──────────────── RESPONSIVO ──────────────── */
+  @media (max-width: 1080px){
+    .hero__inner{grid-template-columns:1fr; gap:32px}
+    .index ol{columns:2}
+    .flow{grid-template-columns:repeat(2, 1fr)}
+    .flow__step{border-right:0; border-bottom:1px solid var(--line-soft)}
+    .flow__step:nth-child(2n){border-right:0}
+    .flow__step::after{
+      right:50%; top:auto; bottom:-12px;
+      transform:translateX(50%) rotate(90deg);
+    }
+    .flow__step:nth-child(3), .flow__step:nth-child(4){border-bottom:0}
+    .flow__step:nth-child(2)::after{display:none}
   }
 
-  /* MOBILE ≤ 860px */
   @media (max-width: 860px){
     html{scroll-padding-top:72px}
     body{font-size:15.5px}
 
     .topbar__inner{padding:12px 18px}
-    .brand__name{font-size:19px}
-    .brand__tag{font-size:10px}
     .menu-toggle{display:block}
     .topbar__nav{
       position:absolute; left:0; right:0; top:100%;
       flex-direction:column; gap:0;
       background:var(--paper-card);
-      border-top:1px solid var(--rule);
-      border-bottom:1px solid var(--rule);
-      padding:10px 18px 14px;
+      border-bottom:1px solid var(--line);
+      padding:10px 18px 16px;
       transform:translateY(-8px); opacity:0; pointer-events:none;
       transition:transform .25s ease, opacity .25s ease;
     }
     .topbar__nav a{
-      padding:12px 0; border-bottom:1px solid var(--rule-soft);
-      font-size:14px; letter-spacing:.06em;
+      padding:12px 0; border-bottom:1px solid var(--line-soft);
+      font-size:13.5px;
     }
-    .topbar__nav a:last-child{border-bottom:0}
     .topbar.is-open .topbar__nav{
       transform:translateY(0); opacity:1; pointer-events:auto;
     }
 
-    .hero{
-      grid-template-columns:1fr; padding:40px 22px 36px; gap:28px;
-    }
-    .hero h1{font-size:clamp(42px, 11vw, 70px)}
-    .hero__lede{font-size:16.5px}
-    .hero__meta{padding-left:16px}
-    .hero__meta dl{grid-template-columns:1fr; gap:2px 0}
-    .hero__meta dt{padding-top:10px}
+    .hero{padding:56px 22px 40px}
+    .hero h1{font-size:clamp(44px, 11vw, 78px)}
+    .hero__lede{font-size:17px}
 
-    .layout{grid-template-columns:1fr; padding:12px 22px 64px; gap:0}
-    .toc{display:none}
+    .index{padding:40px 22px 0}
+    .index ol{columns:1}
 
-    section + section{margin-top:60px}
-    .section-head{gap:16px; margin-bottom:26px; padding-bottom:14px}
-    .section-num{font-size:40px; margin-top:4px; text-shadow:1px 1px 0 var(--primary)}
-    .section-head h2{font-size:28px}
-    .section-head p{font-size:12px; letter-spacing:.12em}
+    .content{padding:32px 22px 72px}
+    .section-head{grid-template-columns:1fr; gap:10px; padding-bottom:20px; margin-bottom:28px}
+    .section-num{font-size:68px}
+    .section-head h2{font-size:30px}
 
-    h3{font-size:20px; margin:36px 0 10px}
-    h3 .marker{width:8px; height:8px; margin-right:9px; transform:translateY(-2px)}
+    h3{font-size:22px; margin:40px 0 12px}
 
-    .feat-grid{grid-template-columns:1fr; gap:14px; margin:18px 0}
-    .feat{padding:18px 18px 16px}
-    .feat h4{font-size:17px}
+    .card-grid{grid-template-columns:1fr; gap:12px}
+    .flow{grid-template-columns:1fr}
+    .flow__step{border-bottom:1px solid var(--line-soft) !important}
+    .flow__step:last-child{border-bottom:0 !important}
+    .flow__step::after{display:none !important}
 
-    .callout{padding:18px 18px 18px 52px}
-    .callout::before{left:16px; top:19px}
+    .note{padding:22px 20px 22px 56px}
+    .note__label{left:12px; top:24px; font-size:11.5px}
 
-    ol > li{grid-template-columns:28px 1fr; gap:10px}
-    ol > li::before{width:26px; height:26px; font-size:11px}
+    .faq summary{grid-template-columns:auto 1fr auto; font-size:17px; gap:12px}
+    .faq__a{margin-left:0}
 
-    .tree{font-size:12px; padding:22px 18px 18px; line-height:1.7}
-
-    .qa summary{font-size:17px; gap:12px}
-    .qa summary::after{font-size:20px}
-
-    .footer__inner{
-      grid-template-columns:1fr; gap:28px;
-      padding:40px 22px 30px;
-    }
-    .footer__brand{font-size:40px}
-    .footer__bar{
-      flex-direction:column; gap:6px; align-items:flex-start;
-      padding:16px 22px;
-    }
+    .footer__inner{grid-template-columns:1fr; gap:32px; padding:48px 22px 32px}
+    .footer__brand{font-size:42px}
+    .footer__bar{flex-direction:column; gap:6px; padding:16px 22px}
   }
 
-  /* MOBILE ≤ 480px (smartphones compactos) */
   @media (max-width: 480px){
-    body{font-size:15px}
-    .topbar__inner{padding:10px 14px; gap:10px}
-    .brand__logo{width:34px; height:34px; border-radius:9px}
-    .brand__name{font-size:18px}
-
-    .hero{padding:32px 18px 28px}
-    .hero h1{font-size:44px; line-height:1}
-    .hero__lede{font-size:15.5px}
-
-    .layout{padding:8px 18px 48px}
-
-    .section-head{flex-direction:column; gap:6px; margin-bottom:22px}
-    .section-num{font-size:34px; margin-top:0}
-    .section-head h2{font-size:24px}
-
-    p, ol, ul{max-width:100%}
-    kbd{font-size:11.5px; padding:2px 5px}
-
-    .tree{padding:22px 14px 16px; font-size:11.5px}
-    .feat{padding:16px}
-    .callout{padding:16px 16px 16px 48px; font-size:14.5px}
-
-    .footer__inner{padding:32px 18px 24px}
-    .footer__brand{font-size:34px}
-    .footer__bar{padding:14px 18px; font-size:11px}
+    .hero{padding:44px 18px 32px}
+    .hero__meta{padding:22px 20px}
+    .content{padding:24px 18px 56px}
+    .section-num{font-size:54px}
+    .section-head h2{font-size:26px}
+    p, ul, ol.steps{max-width:100%}
+    pre.tree{padding:26px 18px 22px; font-size:11.5px}
+    .faq summary{font-size:16px}
+    .flow__step{padding:18px 16px}
   }
 
-  /* PRINT */
   @media print{
     body{background:#fff; color:#000}
-    body::before{display:none}
-    .topbar, .toc, footer, .footer__bar{display:none}
-    .layout{grid-template-columns:1fr; padding:0}
+    body::before, footer::before{display:none}
+    .topbar, footer, .footer__bar, .menu-toggle{display:none}
+    .card, .note{break-inside:avoid}
     a{color:#000; border:0}
-    .callout, .feat{break-inside:avoid}
   }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
+<!-- ════════════ TOPBAR ════════════ -->
 <header class="topbar">
   <div class="topbar__inner">
-    <a class="brand" href="#inicio">
-      <span class="brand__logo" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <rect x="6.6" y="4.08" width="2.88" height="17.04" rx="1.2" fill="currentColor"/>
-          <circle cx="14.28" cy="10.32" r="4.62" fill="none" stroke="currentColor" stroke-width="2.52"/>
-          <circle cx="14.28" cy="10.32" r="2.04" fill="#FFCD07"/>
-        </svg>
-      </span>
-      <span>
-        <span class="brand__name">SEIrtão</span>
-        <span class="brand__tag" style="display:block">Inovajus · JFCE</span>
+    <a class="brand" href="#inicio" aria-label="SEIrtão — início">
+      <svg class="brand__logo" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo do SEIrtão">
+        <defs>
+          <linearGradient id="bgBrand" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1964C0"/>
+            <stop offset="1" stop-color="#0A2A5C"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="128" height="128" rx="26" fill="url(#bgBrand)"/>
+        <circle cx="64" cy="62" r="38" fill="#FFCD07"/>
+        <g fill="#0C326F">
+          <rect x="57" y="36" width="14" height="62" rx="6"/>
+          <path d="M57 60 h-10 a6 6 0 0 0 -6 6 v14 a5 5 0 0 0 10 0 v-10 h6 z"/>
+          <path d="M71 50 h10 a6 6 0 0 1 6 6 v18 a5 5 0 0 1 -10 0 v-14 h-6 z"/>
+        </g>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__name">SE<em>I</em>rtão</span>
+        <span class="brand__tag">Inovajus · JFCE</span>
       </span>
     </a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-primary" aria-label="Abrir menu">
@@ -643,511 +854,715 @@
   </div>
 </header>
 
-<!-- HERO -->
+<!-- ════════════ HERO ════════════ -->
 <section class="hero" id="inicio">
-  <div>
-    <div class="eyebrow reveal" data-d="1">Manual v1.0 · Abril / 2026</div>
-    <h1 class="reveal" data-d="2">Administrar<br/>com a IA<br/><em>a seu lado.</em></h1>
-    <p class="hero__lede reveal" data-d="3">
-      O SEIrtão é um complemento instalado no seu navegador que traz um assistente
-      inteligente para dentro do SEI (Sistema Eletrônico de Informações) do TRF5.
-      Ele lê os processos administrativos, prepara resumos e minutas no seu estilo,
-      oculta dados sensíveis e mantém a decisão sempre nas suas mãos — como determina
-      a Resolução CNJ 615/2025.
-    </p>
-  </div>
+  <div class="hero__inner">
+    <div>
+      <span class="hero__ribbon">Manual v1.0 · Abril 2026</span>
 
-  <aside class="hero__meta reveal" data-d="4">
-    <dl>
-      <dt>Ambiente</dt><dd>Chrome · Edge (v. 110+)</dd>
-      <dt>Acesso</dt><dd>sei.trf5.jus.br</dd>
-      <dt>Serviços de IA</dt><dd>Anthropic · OpenAI · Google Gemini</dd>
-      <dt>Privacidade</dt><dd>Código de acesso guardado só no seu computador</dd>
-      <dt>Classificação</dt><dd>Baixo risco — Resolução CNJ 615/2025</dd>
-    </dl>
-  </aside>
+      <h1>
+        <span class="sei">SEI</span><span class="rtao">rtão</span>
+        <small>O sertão, agora em tempo de IA.</small>
+      </h1>
+
+      <p class="hero__lede">
+        Um <strong>assistente com inteligência artificial</strong> que vive dentro do seu navegador
+        e atravessa o SEI ao seu lado — lendo processos, sugerindo o próximo ato, adaptando
+        modelos da sua unidade e injetando a minuta direto no editor. Sem atalhos. Sem
+        tirar a caneta da sua mão.
+      </p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#instalacao">Começar a instalação →</a>
+        <a class="btn btn--ghost" href="#uso">Ir direto ao uso</a>
+      </div>
+    </div>
+
+    <aside class="hero__meta">
+      <h4>Do que você precisa</h4>
+      <dl>
+        <dt>Ambiente</dt><dd>Google Chrome · Microsoft Edge (v. 110+)</dd>
+        <dt>Acesso</dt><dd><code>sei.trf5.jus.br</code></dd>
+        <dt>IA</dt><dd>Anthropic · OpenAI · Google Gemini</dd>
+        <dt>Dados</dt><dd>Código de acesso guardado só no seu computador</dd>
+        <dt>Norma</dt><dd>Baixo risco · Res. CNJ 615/2025</dd>
+      </dl>
+    </aside>
+  </div>
 </section>
 
-<!-- LAYOUT -->
-<div class="layout">
+<!-- ════════════ ÍNDICE ════════════ -->
+<nav class="index" aria-label="Sumário">
+  <h2>Sumário do caminho</h2>
+  <ol>
+    <li><span class="index__num">I</span> <a href="#instalacao"><span>Instalação da extensão</span><span class="index__page">p. 01</span></a></li>
+    <li><span class="index__num">II</span> <a href="#configuracao"><span>Configuração inicial</span><span class="index__page">p. 02</span></a></li>
+    <li><span class="index__num">III</span> <a href="#painel"><span>O painel lateral</span><span class="index__page">p. 03</span></a></li>
+    <li><span class="index__num">IV</span> <a href="#acoes"><span>Ações de análise</span><span class="index__page">p. 04</span></a></li>
+    <li><span class="index__num">V</span> <a href="#uso"><span>Minutas com modelo</span><span class="index__page">p. 05</span></a></li>
+    <li><span class="index__num">VI</span> <a href="#minutar"><span>Minutar com triagem</span><span class="index__page">p. 06</span></a></li>
+    <li><span class="index__num">VII</span> <a href="#bubble"><span>Ações em cada resposta</span><span class="index__page">p. 07</span></a></li>
+    <li><span class="index__num">VIII</span> <a href="#chat"><span>Chat livre e voz</span><span class="index__page">p. 08</span></a></li>
+    <li><span class="index__num">IX</span> <a href="#modelos"><span>Organização dos modelos</span><span class="index__page">p. 09</span></a></li>
+    <li><span class="index__num">X</span> <a href="#governanca"><span>Governança e LGPD</span><span class="index__page">p. 10</span></a></li>
+    <li><span class="index__num">XI</span> <a href="#problemas"><span>Dúvidas do caminhante</span><span class="index__page">p. 11</span></a></li>
+  </ol>
+</nav>
 
-  <!-- TOC -->
-  <nav class="toc" aria-label="Índice">
-    <h4>Sumário</h4>
-    <ol>
-      <li><a href="#instalacao">Instalação</a></li>
-      <li><a href="#configuracao">Configuração inicial</a></li>
-      <li><a href="#painel">O painel lateral</a></li>
-      <li><a href="#acoes">Ações de análise</a></li>
-      <li><a href="#uso">Minutas com modelo</a></li>
-      <li><a href="#minutar">Minutar com triagem</a></li>
-      <li><a href="#bubble">Ações em cada resposta</a></li>
-      <li><a href="#chat">Chat e voz</a></li>
-      <li><a href="#modelos">Organização dos modelos</a></li>
-      <li><a href="#governanca">Governança e LGPD</a></li>
-      <li><a href="#problemas">Solução de problemas</a></li>
+<!-- ════════════ CONTEÚDO ════════════ -->
+<main class="content">
+
+  <!-- ─── I. INSTALAÇÃO ─── -->
+  <section id="instalacao">
+    <div class="section-head">
+      <span class="section-num">I</span>
+      <div>
+        <h2>A <em>chegada</em> ao sertão</h2>
+        <p class="section-kicker">Instalação · requisitos · carregamento no navegador</p>
+      </div>
+    </div>
+
+    <p class="lead">O SEIrtão é uma extensão distribuída em pasta. Você a instala uma vez no seu navegador e ela passa a viver no canto da tela, aparecendo apenas quando você abre o SEI. Para começar, você precisa do pacote <code>dist</code> entregue pela equipe do Inovajus.</p>
+
+    <h3><span class="marker"></span>Navegadores suportados</h3>
+    <ul>
+      <li><strong>Google Chrome</strong> — versão oficial, indicada para uso diário na JFCE.</li>
+      <li><strong>Microsoft Edge</strong> — totalmente compatível.</li>
+    </ul>
+
+    <div class="note note--tip">
+      <span class="note__label">Observação</span>
+      <h4>Por que só navegadores Chromium?</h4>
+      <p>O SEIrtão conversa de perto com o editor de minutas do SEI (CKEditor 5 em janela popup), usando APIs específicas do Chromium (Manifest V3). A versão para Firefox não está suportada nesta fase e o Inovajus avaliará compatibilidade em versões futuras.</p>
+    </div>
+
+    <h3><span class="marker"></span>O que você precisa ter em mãos</h3>
+    <ul>
+      <li>Chrome ou Edge atualizados.</li>
+      <li>Acesso normal ao SEI do TRF5 em <code>sei.trf5.jus.br</code>.</li>
+      <li>Um código de acesso de um dos serviços de IA: <strong>Anthropic (Claude)</strong>, <strong>OpenAI (ChatGPT)</strong> ou <strong>Google Gemini</strong>.</li>
+      <li>O arquivo <code>dist.zip</code> do SEIrtão.</li>
+    </ul>
+
+    <h3><span class="marker"></span>Sete passos para carregar a extensão</h3>
+    <ol class="steps">
+      <li>Receba o <strong>dist.zip</strong> entregue pelo Inovajus e salve em local fácil de encontrar.</li>
+      <li><strong>Extraia o arquivo antes de instalar.</strong> Clique com o botão direito sobre <code>dist.zip</code> e escolha <em>Extrair tudo</em>. O resultado será uma pasta <strong>dist</strong>. Guarde em local permanente (ex.: <code>Documentos\SEIrtão\dist</code>) — se ela for apagada ou movida, a extensão deixa de funcionar.</li>
+      <li>Abra a página de extensões: no Chrome, <code>chrome://extensions</code>; no Edge, <code>edge://extensions</code>.</li>
+      <li>Ative o <strong>Modo do desenvolvedor</strong> (interruptor no canto superior direito).</li>
+      <li>Clique em <strong>Carregar sem compactação</strong> (Chrome) ou <strong>Carregar descompactada</strong> (Edge).</li>
+      <li>Selecione a pasta <strong>dist</strong> que você extraiu.</li>
+      <li>Fixe o ícone na barra do navegador: clique no ícone de quebra-cabeça e depois no alfinete ao lado de <strong>SEIrtão</strong>.</li>
     </ol>
-  </nav>
 
-  <main>
+    <div class="note note--warn">
+      <span class="note__label">Atenção</span>
+      <h4>Não aponte para o .zip</h4>
+      <p>O navegador <strong>não aceita</strong> carregar a extensão a partir do arquivo compactado. É obrigatório descompactar primeiro e apontar para a pasta <code>dist</code> resultante.</p>
+    </div>
+  </section>
 
-    <!-- 1. INSTALAÇÃO -->
-    <section id="instalacao">
-      <div class="section-head">
-        <span class="section-num">01</span>
-        <div>
-          <h2>Instalação da extensão</h2>
-          <p>Parte 1 · Requisitos e carregamento</p>
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── II. CONFIGURAÇÃO ─── -->
+  <section id="configuracao">
+    <div class="section-head">
+      <span class="section-num">II</span>
+      <div>
+        <h2>Ajustes <em>de partida</em></h2>
+        <p class="section-kicker">Popup da extensão · primeiro uso</p>
+      </div>
+    </div>
+
+    <p class="lead">Clique no ícone do SEIrtão (aquele mandacaru sobre o sol) e o popup de configurações se abrirá. Todos os ajustes ficam num único lugar, e todo o que você define aqui fica guardado apenas no seu computador.</p>
+
+    <div class="note note--lgpd">
+      <span class="note__label">LGPD</span>
+      <h4>Aviso de privacidade</h4>
+      <p>Para preparar respostas e minutas, o SEIrtão envia o conteúdo dos documentos selecionados para o serviço de IA escolhido — um serviço que funciona fora da estrutura da Justiça Federal. Antes de usar em processos com dados sensíveis, confirme a política de privacidade do serviço. No primeiro uso, marque a caixa de ciência para liberar a ferramenta.</p>
+    </div>
+
+    <h3><span class="marker"></span>Serviço de IA e código de acesso</h3>
+    <ol class="steps">
+      <li>Escolha o <strong>serviço de IA</strong> e o <strong>modelo</strong> desejado.</li>
+      <li>Cole o <strong>código de acesso</strong> correspondente, clique em <strong>Salvar</strong> e depois em <strong>Testar</strong> para conferir.</li>
+      <li>O código fica guardado <strong>apenas no seu navegador, nesta estação</strong>. Use somente em máquinas da JFCE.</li>
+    </ol>
+
+    <h3><span class="marker"></span>Leitura de digitalizados e pasta de modelos</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card__tag">Digitalizados</span>
+        <h4>Leitura de documentos escaneados</h4>
+        <p>Marque <strong>Rodar leitura automaticamente</strong> para que o SEIrtão transforme em texto os documentos que o SEI guardou como imagem. A leitura acontece no seu próprio computador, sem enviar imagens para fora. Você pode ajustar um limite de páginas.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Modelos</span>
+        <h4>Pasta com suas minutas-modelo</h4>
+        <p>Em <strong>Gerenciar modelos</strong>, escolha a pasta com suas minutas administrativas de referência. São aceitos arquivos comuns do Word, texto simples e PDF. Organize por subpastas para que a busca automática encontre o exemplo certo.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="note__label">Governança</span>
+      <h4>Termos de uso e Res. CNJ 615/2025</h4>
+      <p>A tela de configurações traz a seção <em>Termos de uso e Governança</em>, explicando como a ferramenta se enquadra na Resolução CNJ 615/2025: classificação de baixo risco, supervisão humana obrigatória, proteção de dados sensíveis, trilha de uso e identificação dos documentos gerados com apoio de IA. Vale ler antes do primeiro uso.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── III. PAINEL ─── -->
+  <section id="painel">
+    <div class="section-head">
+      <span class="section-num">III</span>
+      <div>
+        <h2>O <em>painel</em> lateral</h2>
+        <p class="section-kicker">Onde o SEIrtão aparece · elementos da interface</p>
+      </div>
+    </div>
+
+    <p class="lead">Depois de instalado, o SEIrtão permanece invisível até você abrir um processo no SEI. É nesse momento que o mandacaru desponta no canto da tela, pronto para ser chamado.</p>
+
+    <ol class="steps">
+      <li>Acesse o SEI em <code>sei.trf5.jus.br</code> e abra um processo administrativo na árvore lateral.</li>
+      <li>O <strong>botão flutuante</strong> do SEIrtão aparece no canto da página.</li>
+      <li>Clique nele para abrir o <strong>painel lateral</strong>.</li>
+    </ol>
+
+    <p>O painel mostra o nome da ferramenta, o serviço de IA em uso, o número do processo SEI aberto e a lista de <strong>atos administrativos</strong> disponíveis para minuta. Todos os botões foram desenhados para a realidade dos processos administrativos da JFCE — sem distinção de grau ou instância, pois o SEI trata de administração interna.</p>
+
+    <div class="note">
+      <span class="note__label">Automático</span>
+      <h4>Reconhecimento do processo</h4>
+      <p>O SEIrtão identifica automaticamente o número do processo administrativo aberto no SEI, a partir da URL e da árvore lateral. Esse ajuste é automático — você não precisa fazer nada.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── IV. AÇÕES ─── -->
+  <section id="acoes">
+    <div class="section-head">
+      <span class="section-num">IV</span>
+      <div>
+        <h2>Ações de <em>análise</em></h2>
+        <p class="section-kicker">Barra principal · carregamento e leitura</p>
+      </div>
+    </div>
+
+    <p class="lead">Antes de qualquer minuta, o SEIrtão precisa conhecer o processo. Esse é o momento de carregar os documentos, selecionar o que importa e deixar o assistente preparar o texto.</p>
+
+    <h3><span class="marker"></span>Carregar e extrair os documentos</h3>
+    <p>Clique em <strong>Carregar Documentos</strong> para que o SEIrtão liste todos os arquivos do processo SEI, com caixas de seleção. Marque ou desmarque tudo de uma vez. Em seguida, <strong>Extrair conteúdo selecionados</strong> — o SEIrtão abre cada documento e prepara o texto, mostrando o progresso em tempo real (ex.: <em>"Extração concluída — 14 ok, 1 com erro"</em>).</p>
+
+    <h3><span class="marker"></span>Ferramentas de análise</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card__tag">Síntese</span>
+        <h4>Resumir</h4>
+        <p>Produz uma análise estruturada do processo administrativo: partes e interessados, cronologia dos atos, questão central, fundamentos normativos aplicáveis, argumentos, provas e uma conclusão sobre o estado atual da tramitação.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Áudio</span>
+        <h4>Resumo narrado</h4>
+        <p>Gera um resumo falado por voz — útil para ter uma visão geral rápida do processo enquanto você realiza outra atividade.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">LGPD</span>
+        <h4>Anonimizar documentos</h4>
+        <p>Oculta CPF, CNPJ, CEP, telefones, e-mails, RG e dados bancários, substituindo-os por marcadores neutros. Nomes de pessoas físicas também são tratados. Útil para compartilhar trechos em reuniões, estudos e treinamentos.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">OCR</span>
+        <h4>Ler digitalizados</h4>
+        <p>Aparece automaticamente quando há documentos que o SEI guardou como imagem. O SEIrtão transforma a imagem em texto dentro do seu próprio navegador, sem enviar as páginas para fora.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── V. MINUTAS COM MODELO ─── -->
+  <section id="uso">
+    <div class="section-head">
+      <span class="section-num">V</span>
+      <div>
+        <h2>Minutas com <em>modelo</em></h2>
+        <p class="section-kicker">Oito atos administrativos · busca na sua pasta</p>
+      </div>
+    </div>
+
+    <p class="lead">Esta é a parte central do SEIrtão. Para cada ato administrativo, há um botão que gera a minuta inspirando-se nas suas próprias minutas-modelo. Quanto mais organizada estiver sua pasta de referência, mais preciso o resultado.</p>
+
+    <h3><span class="marker"></span>Catálogo de atos</h3>
+    <div class="card-grid">
+      <div class="card">
+        <span class="card__tag">Despacho</span>
+        <h4>Despacho de encaminhamento</h4>
+        <p>Encaminha o processo a outra unidade, com destino e justificativa sintética. Reaproveita a estrutura e o estilo dos seus modelos de encaminhamento.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Despacho</span>
+        <h4>Despacho de instrução</h4>
+        <p>Solicita providências instrutórias (diligências, documentos, manifestação de interessado), com indicação de prazos e fundamentos procedimentais.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Técnico</span>
+        <h4>Informação técnica</h4>
+        <p>Prepara informação com análise fática e técnica do tema, sem caráter decisório. Subsidia a autoridade competente com dados, cálculos e contextualização normativa.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Jurídico</span>
+        <h4>Parecer jurídico</h4>
+        <p>Parecer com relatório, análise e conclusão jurídica fundamentada em legislação, jurisprudência e normativos internos, destinado a orientar decisão administrativa.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Decisão</span>
+        <h4>Decisão administrativa</h4>
+        <p>Decisão da autoridade competente, com relatório, fundamentação (fática e jurídica) e dispositivo, observando o devido processo administrativo.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Ordinatório</span>
+        <h4>Ato ordinatório</h4>
+        <p>Ato de mero expediente para impulsionar o processo (juntadas, intimações, aberturas de prazo), sem conteúdo decisório, conforme delegação regulamentar.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Interno</span>
+        <h4>Memorando</h4>
+        <p>Comunicação interna dirigida a outra unidade da JFCE, com redação formal e objetiva sobre a matéria administrativa em questão.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Externo</span>
+        <h4>Ofício</h4>
+        <p>Comunicação externa com órgãos públicos ou particulares, seguindo as normas de redação oficial.</p>
+      </div>
+    </div>
+
+    <h4>Como a busca de modelos funciona</h4>
+    <ul>
+      <li><strong>Pasta configurada e há modelo parecido:</strong> escolha automática do mais semelhante. O SEIrtão mostra o caminho do arquivo usado.</li>
+      <li><strong>Pasta configurada, sem modelo parecido:</strong> pergunta se você quer gerar do zero ou cancelar.</li>
+      <li><strong>Pasta não configurada:</strong> gera do zero, sem modelo de referência.</li>
+    </ul>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── VI. MINUTAR TRIAGEM ─── -->
+  <section id="minutar">
+    <div class="section-head">
+      <span class="section-num">VI</span>
+      <div>
+        <h2>Minutar com <em>triagem</em></h2>
+        <p class="section-kicker">A IA sugere qual ato produzir</p>
+      </div>
+    </div>
+
+    <p class="lead">Em processos com muitos andamentos, escolher o ato correto pode demandar leitura extensa. O botão <strong>Minutar</strong> funciona como um auxiliar de triagem: olha o que já foi feito e sugere o próximo passo.</p>
+
+    <ol class="steps">
+      <li>Analisa os documentos mais recentes do processo administrativo e o andamento até aqui.</li>
+      <li>Consulta a IA para sugerir o ato mais adequado àquele momento — despacho de encaminhamento, informação técnica, parecer jurídico, decisão administrativa, ato ordinatório...</li>
+      <li>Mostra no chat a <strong>sugestão com breve justificativa</strong>, com dois botões: <strong>Gerar esta minuta</strong>, que produz o ato imediatamente, e <strong>Escolher outro ato</strong>, que abre a lista com os oito do catálogo.</li>
+      <li>Se a sugestão não puder ser feita (código ausente, resposta incompleta), a lista de opções é aberta direto — o botão continua funcionando.</li>
+    </ol>
+
+    <div class="note note--tip">
+      <span class="note__label">Por quê</span>
+      <h4>Triagem antes de minutar</h4>
+      <p>A sugestão automática poupa você da leitura completa para a decisão inicial — qual ato produzir. Depois, você revisa a sugestão com o contexto já preparado pelo assistente, em vez de começar do zero.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── VII. AÇÕES EM CADA RESPOSTA ─── -->
+  <section id="bubble">
+    <div class="section-head">
+      <span class="section-num">VII</span>
+      <div>
+        <h2>Ações em <em>cada resposta</em></h2>
+        <p class="section-kicker">Botões rápidos abaixo da minuta</p>
+      </div>
+    </div>
+
+    <p class="lead">Cada resposta do assistente traz abaixo um conjunto de ações rápidas. Copiar, inserir no SEI, baixar como Word, refinar ou recomeçar: tudo a um clique, sem sair do painel.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card__tag">Copiar</span>
+        <h4>Copiar para a área de transferência</h4>
+        <p>Copia o texto da resposta. Depois é só colar onde você quiser.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">SEI</span>
+        <h4>Inserir no SEI</h4>
+        <p>Guia o fluxo de quatro etapas dentro do SEI — Incluir Documento → Escolher Tipo → Cadastrar → Abrir Editor — e, ao final, injeta o texto diretamente no corpo da minuta no editor CKEditor 5 do SEI. Sem copiar e colar manualmente.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Word</span>
+        <h4>Baixar como Word</h4>
+        <p>Salva a minuta como arquivo do Word no seu computador. O nome já vem pronto, com o número do processo e o tipo de ato.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Ajustar</span>
+        <h4>Refinar minuta</h4>
+        <p>Pede ajustes na última minuta sem começar do zero. Exemplos: <em>"encurtar"</em>, <em>"mudar o tom"</em>, <em>"citar a IN TRF5 nº X"</em>, <em>"reforçar a fundamentação normativa"</em>. O modelo de referência continua o mesmo.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Refazer</span>
+        <h4>Nova minuta</h4>
+        <p>Gera uma nova versão do mesmo ato, do zero, sem modelo de referência. Útil para comparar duas opções ou começar de novo.</p>
+      </div>
+    </div>
+
+    <h3><span class="marker"></span>O fluxo de inserção no SEI, passo a passo</h3>
+    <p>A ação <strong>Inserir no SEI</strong> é opt-in — você confirma antes de o SEIrtão executar. Funciona assim:</p>
+
+    <div class="flow" role="list" aria-label="Fluxo de inserção no SEI">
+      <div class="flow__step" role="listitem">
+        <span class="flow__num">etapa I</span>
+        <div class="flow__title">Incluir Documento</div>
+        <p class="flow__desc">O SEIrtão aciona a opção <em>Incluir Documento</em> na árvore do processo SEI.</p>
+      </div>
+      <div class="flow__step" role="listitem">
+        <span class="flow__num">etapa II</span>
+        <div class="flow__title">Escolher Tipo</div>
+        <p class="flow__desc">Seleciona o tipo correspondente ao ato minutado (Despacho, Parecer, Decisão…).</p>
+      </div>
+      <div class="flow__step" role="listitem">
+        <span class="flow__num">etapa III</span>
+        <div class="flow__title">Cadastrar</div>
+        <p class="flow__desc">Preenche os metadados mínimos do cadastro e confirma a criação do documento.</p>
+      </div>
+      <div class="flow__step" role="listitem">
+        <span class="flow__num">etapa IV</span>
+        <div class="flow__title">Injetar no Editor</div>
+        <p class="flow__desc">Aguarda o editor CKEditor 5 abrir em popup e insere o texto no <em>Corpo do Texto</em>.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="note__label">Multi-raiz</span>
+      <h4>Onde o texto é inserido</h4>
+      <p>O editor do SEI é um CKEditor 5 com múltiplas raízes (cabeçalho, título, corpo, data e rodapé). O SEIrtão detecta a raiz <em>Corpo do Texto</em> e injeta apenas nela, preservando cabeçalho e rodapé que o SEI já popula com metadados do ato.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── VIII. CHAT E VOZ ─── -->
+  <section id="chat">
+    <div class="section-head">
+      <span class="section-num">VIII</span>
+      <div>
+        <h2>Chat <em>livre</em> e voz</h2>
+        <p class="section-kicker">Conversando com o processo administrativo</p>
+      </div>
+    </div>
+
+    <p class="lead">Além dos botões prontos, o SEIrtão aceita conversa. A caixa de chat na parte inferior do painel recebe qualquer pergunta sobre o processo que está aberto.</p>
+
+    <h4>Exemplos de perguntas</h4>
+    <ul>
+      <li>"Qual o objeto deste processo administrativo?"</li>
+      <li>"Existe parecer jurídico anterior nos autos? O que conclui?"</li>
+      <li>"Resuma os documentos instrutórios apresentados."</li>
+      <li>"Há questões prejudiciais ou preliminares a resolver?"</li>
+      <li>"Liste todos os prazos mencionados nas manifestações."</li>
+    </ul>
+
+    <h3><span class="marker"></span>Falar em vez de digitar</h3>
+    <p>O chat também aceita entrada por voz. Clique no ícone do microfone e fale. A transcrição funciona de duas maneiras, a depender do serviço de IA:</p>
+    <ul>
+      <li>Quando o serviço tem transcrição própria (<strong>OpenAI</strong> ou <strong>Gemini</strong>), o áudio é enviado e o texto volta com boa precisão.</li>
+      <li>Quando o serviço não tem transcrição, o próprio navegador faz o reconhecimento ao vivo, enquanto você fala.</li>
+    </ul>
+
+    <div class="note note--warn">
+      <span class="note__label">Anthropic</span>
+      <h4>Usando o Claude?</h4>
+      <p>O Claude não transcreve áudio. Nesse caso, o SEIrtão usa automaticamente o reconhecimento de voz do próprio navegador. Se preferir transcrição do serviço, troque para OpenAI ou Gemini nas configurações.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── IX. MODELOS ─── -->
+  <section id="modelos">
+    <div class="section-head">
+      <span class="section-num">IX</span>
+      <div>
+        <h2>A <em>pasta</em> de modelos</h2>
+        <p class="section-kicker">Organização para busca precisa</p>
+      </div>
+    </div>
+
+    <p class="lead">Quanto mais clara a organização da sua pasta, melhor a escolha automática do modelo. Subpastas com nomes que espelham os botões do painel têm prioridade natural na busca.</p>
+
+    <p>Pastas chamadas <strong>despacho-encaminhamento</strong>, <strong>despacho-instrucao</strong>, <strong>informacao-tecnica</strong>, <strong>parecer-juridico</strong>, <strong>decisao</strong>, <strong>ato-ordinatorio</strong>, <strong>memorando</strong> ou <strong>oficio</strong> são reconhecidas automaticamente pelo SEIrtão.</p>
+
+    <div class="tree-wrap">
+<pre class="tree" aria-label="Estrutura sugerida da pasta de modelos">
+<span class="d">Modelos/</span>
+├─ <span class="d">despacho-encaminhamento/</span>
+│    <span class="f">encaminha-diretoria.docx</span>
+│    <span class="f">encaminha-secao-judiciaria.docx</span>
+├─ <span class="d">despacho-instrucao/</span>
+│    <span class="f">instrucao-documentos.docx</span>
+│    <span class="f">instrucao-manifestacao.docx</span>
+├─ <span class="d">informacao-tecnica/</span>
+│    <span class="f">levantamento-patrimonial.docx</span>
+│    <span class="f">apuracao-preliminar.docx</span>
+├─ <span class="d">parecer-juridico/</span>
+│    <span class="f">parecer-licitacao.docx</span>
+│    <span class="f">parecer-servidor.docx</span>
+├─ <span class="d">decisao/</span>
+│    <span class="f">decisao-sancao.docx</span>
+│    <span class="f">decisao-recurso.docx</span>
+├─ <span class="d">ato-ordinatorio/</span>
+│    <span class="f">juntada-intimacao.docx</span>
+├─ <span class="d">memorando/</span>
+│    <span class="f">memorando-padrao.docx</span>
+└─ <span class="d">oficio/</span>
+     <span class="f">oficio-externo.docx</span>    <span class="c"># comunicação externa</span></pre>
+    </div>
+
+    <ul>
+      <li><strong>Nomes descritivos</strong> nos arquivos: a busca considera nome e conteúdo.</li>
+      <li><strong>Formatos aceitos:</strong> Word, LibreOffice, texto simples e PDF.</li>
+      <li>Ao adicionar, alterar ou remover modelos, abra o <strong>Gerenciar modelos</strong> e clique em <strong>Reindexar agora</strong>.</li>
+    </ul>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── X. GOVERNANÇA ─── -->
+  <section id="governanca">
+    <div class="section-head">
+      <span class="section-num">X</span>
+      <div>
+        <h2>Governança e <em>LGPD</em></h2>
+        <p class="section-kicker">Resolução CNJ nº 615/2025</p>
+      </div>
+    </div>
+
+    <p class="lead">O SEIrtão é um sistema de apoio, sem poder de decisão. A responsabilidade pelo conteúdo dos atos permanece com a autoridade competente. Quatro pilares sustentam essa relação.</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <span class="card__tag">Humano</span>
+        <h4>Supervisão obrigatória</h4>
+        <p>Toda minuta gerada precisa ser revisada, editada e validada pela autoridade competente antes de ser assinada no SEI. O SEIrtão é um apoio — a palavra final é sua.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Dados</span>
+        <h4>Proteção de dados sensíveis</h4>
+        <p>Antes de enviar qualquer texto aos serviços de IA, use <em>Anonimizar documentos</em> quando houver dados sensíveis. Prefira códigos de acesso de planos corporativos, em que o serviço se compromete a não usar os dados para treinamento.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Registro</span>
+        <h4>Trilha de uso <em>(em desenvolvimento)</em></h4>
+        <p>Recurso ainda não disponível na versão atual. Está prevista a gravação de registros (quem usou, qual ato, qual serviço, quando) para auditoria. Depende de infraestrutura institucional de back-end; até lá, não há histórico persistente fora do navegador local.</p>
+      </div>
+      <div class="card">
+        <span class="card__tag">Claro</span>
+        <h4>Transparência do conteúdo</h4>
+        <p>Todo documento gerado traz indicação de que foi produzido com apoio de inteligência artificial sob supervisão humana, em respeito ao princípio da transparência.</p>
+      </div>
+    </div>
+
+    <div class="note note--lgpd">
+      <span class="note__label">Classificação</span>
+      <h4>Baixo risco</h4>
+      <p>Pela Resolução CNJ 615/2025, o SEIrtão é classificado como ferramenta de <strong>baixo risco</strong>, destinada a produzir textos de apoio para facilitar a elaboração de atos administrativos e ocultar dados sensíveis. É sistema de suporte, sem qualquer poder de decisão.</p>
+    </div>
+  </section>
+
+  <div class="horizon" aria-hidden="true">
+    <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="4" fill="currentColor"/><g stroke="currentColor" stroke-width="1.5"><line x1="10" y1="0" x2="10" y2="3"/><line x1="10" y1="17" x2="10" y2="20"/><line x1="0" y1="10" x2="3" y2="10"/><line x1="17" y1="10" x2="20" y2="10"/></g></svg>
+  </div>
+
+  <!-- ─── XI. PROBLEMAS ─── -->
+  <section id="problemas">
+    <div class="section-head">
+      <span class="section-num">XI</span>
+      <div>
+        <h2>Dúvidas do <em>caminhante</em></h2>
+        <p class="section-kicker">Perguntas frequentes · solução de problemas</p>
+      </div>
+    </div>
+
+    <p class="lead">Uma coleção das situações mais comuns que aparecem no dia a dia. Se o seu caso não estiver aqui, procure a equipe do Inovajus.</p>
+
+    <div class="faq">
+      <details>
+        <summary>
+          <span class="faq__q">Q 01</span>
+          <span>O SEIrtão não aparece no SEI</span>
+        </summary>
+        <div class="faq__a">
+          <p>Confira se ele está ativo na página de extensões do navegador (<code>chrome://extensions</code> ou <code>edge://extensions</code>). Recarregue o SEI. Se mesmo assim o botão flutuante não aparecer, feche e reabra a aba. Lembre-se: o SEIrtão só ativa em páginas do domínio <code>sei.trf5.jus.br</code>.</p>
         </div>
-      </div>
+      </details>
 
-      <h3><span class="marker"></span>Navegadores suportados</h3>
-      <p>O SEIrtão é distribuído como extensão Manifest V3 e funciona nos navegadores baseados em Chromium:</p>
-      <ul>
-        <li><strong>Google Chrome</strong> — versão oficial, indicada para uso diário na JFCE.</li>
-        <li><strong>Microsoft Edge</strong> — totalmente compatível.</li>
-      </ul>
-      <div class="callout callout--info">
-        <h4>Por que apenas Chromium?</h4>
-        <p>O SEIrtão interage de perto com o editor de minutas do SEI (CKEditor 5 em janela popup), o que exige APIs específicas da plataforma de extensões Chromium (MV3). A versão para Firefox não é suportada nesta fase.</p>
-      </div>
-
-      <h3><span class="marker"></span>O que você precisa</h3>
-      <ul>
-        <li>Navegador <strong>Google Chrome</strong> ou <strong>Microsoft Edge</strong>, em versão atualizada.</li>
-        <li>Acesso normal ao <strong>SEI do TRF5</strong> (<code>sei.trf5.jus.br</code>), com login e senha.</li>
-        <li>Um código de acesso de um dos serviços de inteligência artificial: <strong>Anthropic (Claude)</strong>, <strong>OpenAI (ChatGPT)</strong> ou <strong>Google Gemini</strong>. A equipe do Inovajus pode orientar como obter.</li>
-      </ul>
-
-      <h3><span class="marker"></span>Passo a passo</h3>
-      <ol>
-        <li>Receba o arquivo <strong>dist.zip</strong> do SEIrtão entregue pela equipe do Inovajus e salve em um local fácil de encontrar no seu computador.</li>
-        <li><strong>Extraia o arquivo antes de instalar.</strong> Clique com o botão direito sobre <strong>dist.zip</strong> e escolha <em>Extrair tudo</em> (Windows). O resultado será uma pasta chamada <strong>dist</strong> com todos os arquivos da extensão. Guarde-a em um local permanente (ex.: <code>Documentos\SEIrtão\dist</code>), pois se ela for apagada ou movida a extensão deixará de funcionar.</li>
-        <li>Abra a página de extensões do navegador. No Chrome, digite <strong>chrome://extensions</strong> na barra de endereços. No Edge, digite <strong>edge://extensions</strong>.</li>
-        <li>Ative o <strong>Modo do desenvolvedor</strong> (interruptor no canto superior direito da página).</li>
-        <li>Clique em <strong>Carregar sem compactação</strong> (Chrome) ou <strong>Carregar descompactada</strong> (Edge).</li>
-        <li>Selecione a pasta <strong>dist</strong> extraída no passo 2 (não selecione o arquivo .zip).</li>
-        <li>Fixe o ícone na barra do navegador: clique no ícone de quebra-cabeça e depois no alfinete ao lado de <strong>SEIrtão</strong>.</li>
-      </ol>
-
-      <div class="callout callout--warn">
-        <h4>Atenção</h4>
-        <p>O navegador <strong>não aceita</strong> carregar a extensão diretamente a partir do arquivo <code>.zip</code>. É obrigatório descompactar primeiro e apontar para a pasta <code>dist</code> resultante.</p>
-      </div>
-
-      <div class="callout callout--tip">
-        <h4>Dica</h4>
-        <p>Quando o ícone está fixado, você acessa as configurações com um único clique. Sem isso, o ícone fica escondido no menu do quebra-cabeça.</p>
-      </div>
-    </section>
-
-    <!-- 2. CONFIGURAÇÃO -->
-    <section id="configuracao">
-      <div class="section-head">
-        <span class="section-num">02</span>
-        <div>
-          <h2>Configuração inicial</h2>
-          <p>Popup da extensão · primeiro uso</p>
+      <details>
+        <summary>
+          <span class="faq__q">Q 02</span>
+          <span>Um documento deu erro na extração</span>
+        </summary>
+        <div class="faq__a">
+          <p>Às vezes o SEI devolve o documento vazio na primeira tentativa. O SEIrtão repete até três vezes, cada uma de um jeito diferente. Se continuar dando erro, recarregue a árvore do processo e tente novamente.</p>
         </div>
-      </div>
+      </details>
 
-      <p>Clique no ícone do SEIrtão na barra de ferramentas. O popup de configurações se abrirá com tudo o que você precisa definir antes do primeiro uso.</p>
-
-      <div class="callout callout--lgpd">
-        <h4>LGPD · Aviso de privacidade</h4>
-        <p>Para preparar respostas e minutas, o SEIrtão envia o conteúdo dos documentos selecionados para o serviço de inteligência artificial escolhido — um serviço que funciona fora da estrutura da Justiça Federal. Antes de usar em processos com dados sensíveis, confirme a política de privacidade do serviço. No primeiro uso, marque a caixa de ciência para liberar o uso da ferramenta.</p>
-      </div>
-
-      <h3><span class="marker"></span>Serviço de IA e código de acesso</h3>
-      <ol>
-        <li>Escolha o <strong>serviço de IA</strong> e o <strong>modelo</strong> desejado.</li>
-        <li>Cole o <strong>código de acesso</strong> do serviço correspondente, clique em <strong>Salvar</strong> e depois em <strong>Testar</strong> para conferir se está funcionando.</li>
-        <li>O código fica guardado <strong>apenas no seu navegador, neste computador</strong>. Use somente em estações da JFCE.</li>
-      </ol>
-
-      <h3><span class="marker"></span>Leitura de digitalizados e modelos de minuta</h3>
-      <div class="feat-grid">
-        <div class="feat">
-          <span class="feat__label">Digitalizados</span>
-          <h4>Leitura de documentos escaneados</h4>
-          <p>Marque <strong>Rodar leitura automaticamente</strong> para que o SEIrtão transforme em texto os documentos do SEI que foram digitalizados como imagem. Essa leitura acontece no seu próprio computador, sem enviar imagens para fora. Você pode ajustar um limite de páginas.</p>
+      <details>
+        <summary>
+          <span class="faq__q">Q 03</span>
+          <span>Arquivos de áudio e vídeo</span>
+        </summary>
+        <div class="faq__a">
+          <p>Arquivos de mídia (MP3, MP4 e afins) são reconhecidos automaticamente e marcados como conteúdo que não pode ser lido como texto. Aparecem na lista, mas não geram erro.</p>
         </div>
-        <div class="feat">
-          <span class="feat__label">Modelos</span>
-          <h4>Pasta com suas minutas-modelo</h4>
-          <p>Em <strong>Gerenciar modelos</strong>, escolha a pasta onde ficam suas minutas administrativas de referência. São aceitos arquivos comuns do Word, texto simples e PDF. Organize por subpastas para que a busca automática encontre o exemplo certo.</p>
+      </details>
+
+      <details>
+        <summary>
+          <span class="faq__q">Q 04</span>
+          <span>A leitura dos digitalizados está lenta</span>
+        </summary>
+        <div class="faq__a">
+          <p>A leitura é feita inteiramente no seu próprio computador, para proteger o sigilo. Documentos com muitas páginas demoram. Ajuste o limite de páginas nas configurações para acelerar.</p>
         </div>
-      </div>
+      </details>
 
-      <div class="callout callout--info">
-        <h4>Termos de uso e governança</h4>
-        <p>Na tela de configurações há a seção <em>Termos de uso e Governança</em>, que explica como a ferramenta se enquadra na Resolução CNJ 615/2025: é classificada como de baixo risco, exige supervisão humana, protege dados sensíveis, registra trilha de uso e identifica os documentos gerados com apoio de IA. Recomenda-se ler antes do uso no dia a dia.</p>
-      </div>
-    </section>
-
-    <!-- 3. PAINEL -->
-    <section id="painel">
-      <div class="section-head">
-        <span class="section-num">03</span>
-        <div>
-          <h2>O painel lateral</h2>
-          <p>Acesso e elementos da interface</p>
+      <details>
+        <summary>
+          <span class="faq__q">Q 05</span>
+          <span>"Inserir no SEI" abre o editor mas não injeta o texto</span>
+        </summary>
+        <div class="faq__a">
+          <p>O editor do SEI é um CKEditor 5 com múltiplas raízes. O SEIrtão detecta a raiz <em>Corpo do Texto</em> e injeta nela. Se a injeção falhar, aguarde o editor terminar de carregar e acione o botão novamente — a falha costuma acontecer quando o popup do editor ainda não concluiu a inicialização.</p>
         </div>
-      </div>
+      </details>
 
-      <ol>
-        <li>Acesse o SEI (<code>sei.trf5.jus.br</code>) e abra um processo administrativo na árvore lateral.</li>
-        <li>O <strong>botão flutuante</strong> do SEIrtão aparecerá no canto da página.</li>
-        <li>Clique no botão para abrir o <strong>painel lateral</strong>.</li>
-      </ol>
-
-      <p>O painel mostra o nome da ferramenta, o serviço de IA em uso, o número do processo SEI aberto e a lista de <strong>atos administrativos</strong> disponíveis para minuta. Todos os botões foram desenhados para a realidade dos processos administrativos da JFCE — sem distinção de grau ou instância, pois o SEI trata de administração interna.</p>
-
-      <div class="callout callout--info">
-        <h4>Reconhecimento automático do processo</h4>
-        <p>O SEIrtão identifica automaticamente o número do processo administrativo aberto no SEI, a partir da URL e da árvore lateral. Esse ajuste é automático — você não precisa fazer nada.</p>
-      </div>
-    </section>
-
-    <!-- 4. AÇÕES -->
-    <section id="acoes">
-      <div class="section-head">
-        <span class="section-num">04</span>
-        <div>
-          <h2>Ações de análise</h2>
-          <p>Barra principal do painel</p>
+      <details>
+        <summary>
+          <span class="faq__q">Q 06</span>
+          <span>A minuta usou um modelo que não era o ideal</span>
+        </summary>
+        <div class="faq__a">
+          <p>A busca escolhe o modelo mais parecido com o caso. Se o resultado não ficou bom, reorganize seus modelos em subpastas mais específicas, ou clique em <strong>Nova minuta</strong> para gerar do zero, sem referência.</p>
         </div>
-      </div>
+      </details>
 
-      <h3><span class="marker"></span>Carregar e ler os documentos</h3>
-      <p>Esse é sempre o primeiro passo. Clique em <strong>Carregar Documentos</strong> para que o SEIrtão liste todos os documentos do processo SEI, com caixas de seleção para você escolher quais quer usar. É possível marcar ou desmarcar tudo de uma vez. Depois, clique em <strong>Extrair conteúdo selecionados</strong> — o SEIrtão abre cada documento e prepara o texto, mostrando o progresso em tempo real (por exemplo: <em>"Extração concluída — 14 ok, 1 com erro"</em>).</p>
-
-      <div class="feat-grid">
-        <div class="feat">
-          <span class="feat__label">Análise</span>
-          <h4>Resumir</h4>
-          <p>Produz uma análise estruturada do processo administrativo: partes e interessados, cronologia dos atos, questão central, fundamentos normativos aplicáveis, argumentos e provas, e conclusão sobre o estado atual da tramitação.</p>
+      <details>
+        <summary>
+          <span class="faq__q">Q 07</span>
+          <span>O código de acesso do serviço de IA está dando erro</span>
+        </summary>
+        <div class="faq__a">
+          <p>Use o botão <strong>Testar</strong> na tela de configurações para conferir. Cada serviço tem um formato próprio — verifique se o código colado corresponde ao serviço escolhido.</p>
         </div>
-        <div class="feat">
-          <span class="feat__label">Áudio</span>
-          <h4>Resumo em áudio</h4>
-          <p>Gera um resumo narrado por voz — útil para ter uma visão geral rápida do processo enquanto você faz outra atividade.</p>
+      </details>
+
+      <details>
+        <summary>
+          <span class="faq__q">Q 08</span>
+          <span>Como atualizar o SEIrtão</span>
+        </summary>
+        <div class="faq__a">
+          <p>Quando receber uma nova versão da equipe do Inovajus, substitua a pasta antiga pela nova no seu computador. Em seguida, abra a página de extensões e clique na seta circular no quadro do SEIrtão para recarregar.</p>
         </div>
-        <div class="feat">
-          <span class="feat__label">LGPD</span>
-          <h4>Anonimizar documentos</h4>
-          <p>Oculta dados sensíveis como CPF, CNPJ, CEP, telefones, e-mails, RG e informações bancárias, substituindo-os por marcadores neutros. Nomes de pessoas físicas também são tratados. Útil para compartilhar trechos do processo em reuniões, estudos e materiais de treinamento.</p>
-        </div>
-        <div class="feat">
-          <span class="feat__label">Digitalizados</span>
-          <h4>Ler documentos escaneados</h4>
-          <p>Aparece automaticamente quando existem documentos digitalizados no processo (aqueles que o SEI guardou como imagem). O SEIrtão transforma a imagem em texto dentro do seu próprio navegador, sem enviar as páginas para fora.</p>
-        </div>
-      </div>
-    </section>
+      </details>
+    </div>
+  </section>
 
-    <!-- 5. MINUTAS COM MODELO -->
-    <section id="uso">
-      <div class="section-head">
-        <span class="section-num">05</span>
-        <div>
-          <h2>Minutas com modelo</h2>
-          <p>Busca inteligente na sua pasta de referência</p>
-        </div>
-      </div>
+</main>
 
-      <p>Esta seção reúne botões que geram minutas de atos administrativos usando suas próprias minutas-modelo como referência. Funciona melhor quando você apontou uma pasta de modelos nas configurações.</p>
-
-      <h3><span class="marker"></span>Catálogo de atos administrativos</h3>
-      <div class="feat-grid">
-        <div class="feat"><span class="feat__label">Despacho</span><h4>Despacho de encaminhamento</h4><p>Prepara despacho que encaminha o processo a outra unidade, com destino e justificativa sintética. Reaproveita a estrutura e o estilo dos seus modelos de despacho de encaminhamento.</p></div>
-        <div class="feat"><span class="feat__label">Despacho</span><h4>Despacho de instrução</h4><p>Prepara despacho que solicita providências instrutórias (diligências, documentos adicionais, manifestação de interessado), com indicação de prazos e fundamentos procedimentais.</p></div>
-        <div class="feat"><span class="feat__label">Técnico</span><h4>Informação técnica</h4><p>Prepara informação com análise fática e técnica do tema, sem caráter decisório. Útil para subsidiar a autoridade competente com dados, cálculos e contextualização normativa.</p></div>
-        <div class="feat"><span class="feat__label">Jurídico</span><h4>Parecer jurídico</h4><p>Prepara parecer com relatório, análise e conclusão jurídica fundamentada em legislação, jurisprudência e normativos internos, destinado a orientar decisão administrativa.</p></div>
-        <div class="feat"><span class="feat__label">Decisão</span><h4>Decisão administrativa</h4><p>Prepara decisão da autoridade competente, com relatório, fundamentação (fática e jurídica) e dispositivo, observando o devido processo administrativo.</p></div>
-        <div class="feat"><span class="feat__label">Ordinatório</span><h4>Ato ordinatório</h4><p>Prepara ato de mero expediente para impulsionar o processo (juntadas, intimações, aberturas de prazo), sem conteúdo decisório, conforme delegação regulamentar.</p></div>
-        <div class="feat"><span class="feat__label">Comunicação</span><h4>Memorando</h4><p>Prepara memorando interno dirigido a outra unidade da JFCE, com redação formal e objetiva sobre a matéria administrativa em questão.</p></div>
-        <div class="feat"><span class="feat__label">Comunicação</span><h4>Ofício</h4><p>Prepara ofício para comunicação externa com órgãos públicos ou particulares, seguindo as normas de redação oficial.</p></div>
-      </div>
-
-      <h4>Como a busca de modelos funciona</h4>
-      <ul>
-        <li><strong>Pasta configurada e há modelo parecido:</strong> o SEIrtão escolhe o mais semelhante automaticamente e mostra o caminho do arquivo usado.</li>
-        <li><strong>Pasta configurada, mas sem modelo parecido:</strong> o SEIrtão pergunta se você quer gerar do zero ou cancelar.</li>
-        <li><strong>Pasta não configurada:</strong> o SEIrtão gera do zero, sem usar modelos.</li>
-      </ul>
-    </section>
-
-    <!-- 6. MINUTAR TRIAGEM -->
-    <section id="minutar">
-      <div class="section-head">
-        <span class="section-num">06</span>
-        <div>
-          <h2>Minutar com triagem</h2>
-          <p>A IA sugere qual ato produzir</p>
-        </div>
-      </div>
-
-      <p>O botão <strong>Minutar</strong> funciona como um auxiliar de triagem. Ao clicar nele, o SEIrtão faz o seguinte:</p>
-
-      <ol>
-        <li>Analisa os documentos mais recentes do processo administrativo e o andamento até aqui.</li>
-        <li>Consulta a IA para sugerir qual é o ato mais adequado àquele momento — por exemplo: despacho de encaminhamento, informação técnica, parecer jurídico, decisão administrativa ou ato ordinatório.</li>
-        <li>Mostra no chat a <strong>sugestão com uma breve justificativa</strong>, acompanhada de dois botões: <strong>Gerar esta minuta</strong>, que produz o ato sugerido imediatamente, e <strong>Escolher outro ato</strong>, que abre a lista com os oito atos do catálogo.</li>
-        <li>Se a sugestão não puder ser feita por algum motivo (por exemplo, código de acesso ausente ou resposta incompleta), a lista de opções é aberta direto — o botão continua funcionando normalmente.</li>
-      </ol>
-
-      <div class="callout callout--tip">
-        <h4>Por que essa ajuda na escolha?</h4>
-        <p>Em processos administrativos com muitos andamentos, escolher o ato correto pode demandar leitura extensa. A sugestão automática olha o que já foi feito nos autos e indica o próximo passo mais provável, poupando você da análise completa para essa decisão inicial.</p>
-      </div>
-    </section>
-
-    <!-- 7. BUBBLE ACTIONS -->
-    <section id="bubble">
-      <div class="section-head">
-        <span class="section-num">07</span>
-        <div>
-          <h2>Ações em cada resposta</h2>
-          <p>Botões rápidos abaixo de cada minuta</p>
-        </div>
-      </div>
-
-      <p>Abaixo de cada resposta do assistente — principalmente quando é uma minuta — aparecem botões de ação rápida:</p>
-
-      <div class="feat-grid">
-        <div class="feat"><span class="feat__label">Copiar</span><h4>Copiar</h4><p>Copia o texto da resposta para a área de transferência. Depois é só colar onde você quiser.</p></div>
-        <div class="feat"><span class="feat__label">SEI</span><h4>Inserir no SEI</h4><p>Guia o fluxo de quatro etapas dentro do SEI — Incluir Documento → Escolher Tipo → Cadastrar → Abrir Editor — e, ao final, injeta o texto diretamente no corpo da minuta no editor CKEditor 5 do SEI. Sem copiar e colar manualmente.</p></div>
-        <div class="feat"><span class="feat__label">Word</span><h4>Baixar como Word</h4><p>Salva a minuta como um arquivo do Word no seu computador. O nome já vem pronto, com o número do processo SEI e o tipo de ato.</p></div>
-        <div class="feat"><span class="feat__label">Ajustar</span><h4>Refinar minuta</h4><p>Pede ajustes na última minuta sem começar do zero. Exemplos: <em>"encurtar"</em>, <em>"mudar o tom"</em>, <em>"citar a IN TRF5 nº X"</em>, <em>"reforçar a fundamentação normativa"</em>. O modelo de referência continua o mesmo.</p></div>
-        <div class="feat"><span class="feat__label">Refazer</span><h4>Nova minuta</h4><p>Gera uma nova versão do mesmo ato, do zero, sem usar modelo de referência. Útil quando você quer comparar duas opções ou começar de novo.</p></div>
-      </div>
-
-      <div class="callout callout--info">
-        <h4>Sobre a inserção no editor do SEI</h4>
-        <p>A inserção é <strong>opt-in</strong>: você confirma antes de o SEIrtão executar o fluxo de inclusão de documento. O texto é colocado apenas no <em>Corpo do Texto</em> da minuta (a raiz editável do CKEditor 5), preservando cabeçalho, título, data e rodapé que o SEI já popula com metadados do ato.</p>
-      </div>
-    </section>
-
-    <!-- 8. CHAT E VOZ -->
-    <section id="chat">
-      <div class="section-head">
-        <span class="section-num">08</span>
-        <div>
-          <h2>Chat livre e entrada por voz</h2>
-          <p>Conversando com o processo administrativo</p>
-        </div>
-      </div>
-
-      <p>A área de chat na parte inferior permite fazer perguntas livres sobre o processo. Alguns exemplos:</p>
-
-      <ul>
-        <li>"Qual o objeto deste processo administrativo?"</li>
-        <li>"Existe parecer jurídico anterior nos autos? O que conclui?"</li>
-        <li>"Resuma os documentos instrutórios apresentados."</li>
-        <li>"Há questões prejudiciais ou preliminares a resolver?"</li>
-        <li>"Liste todos os prazos mencionados nas manifestações."</li>
-      </ul>
-
-      <h4>Falar com o SEIrtão em vez de digitar</h4>
-      <p>O chat também aceita entrada por voz: basta clicar no ícone do microfone e começar a falar. A ferramenta transforma a sua fala em texto de duas maneiras, dependendo do serviço de IA escolhido:</p>
-      <ul>
-        <li>Quando o serviço tem transcrição própria (OpenAI ou Gemini), o áudio é enviado para o serviço, que devolve o texto com boa precisão.</li>
-        <li>Quando o serviço não tem transcrição, o próprio navegador faz o reconhecimento ao vivo, enquanto você fala.</li>
-      </ul>
-
-      <div class="callout callout--warn">
-        <h4>Usando Anthropic (Claude)?</h4>
-        <p>Esse serviço não transcreve áudio. Se você estiver usando Anthropic, o SEIrtão usa automaticamente o reconhecimento de voz do próprio navegador — ou troque o serviço para OpenAI ou Gemini se preferir.</p>
-      </div>
-    </section>
-
-    <!-- 9. MODELOS -->
-    <section id="modelos">
-      <div class="section-head">
-        <span class="section-num">09</span>
-        <div>
-          <h2>Organização da pasta de modelos</h2>
-          <p>Estrutura sugerida para busca precisa</p>
-        </div>
-      </div>
-
-      <p>Para que a busca automática encontre sempre o modelo certo, organize seus arquivos em subpastas com nomes claros. Pastas chamadas <strong>despacho-encaminhamento</strong>, <strong>despacho-instrucao</strong>, <strong>informacao-tecnica</strong>, <strong>parecer-juridico</strong>, <strong>decisao</strong>, <strong>ato-ordinatorio</strong>, <strong>memorando</strong> ou <strong>oficio</strong> têm prioridade natural na busca do botão correspondente.</p>
-
-      <pre class="tree" aria-label="Estrutura de pastas de modelos">
-<span class="dir">Modelos/</span>
-├─ <span class="dir">despacho-encaminhamento/</span>
-│    <span class="file">encaminha-diretoria.docx</span>
-│    <span class="file">encaminha-secao-judiciaria.docx</span>
-├─ <span class="dir">despacho-instrucao/</span>
-│    <span class="file">instrucao-documentos.docx</span>
-│    <span class="file">instrucao-manifestacao.docx</span>
-├─ <span class="dir">informacao-tecnica/</span>
-│    <span class="file">levantamento-patrimonial.docx</span>
-│    <span class="file">apuracao-preliminar.docx</span>
-├─ <span class="dir">parecer-juridico/</span>
-│    <span class="file">parecer-licitacao.docx</span>
-│    <span class="file">parecer-servidor.docx</span>
-├─ <span class="dir">decisao/</span>
-│    <span class="file">decisao-sancao.docx</span>
-│    <span class="file">decisao-recurso.docx</span>
-├─ <span class="dir">ato-ordinatorio/</span>
-│    <span class="file">juntada-intimacao.docx</span>
-├─ <span class="dir">memorando/</span>
-│    <span class="file">memorando-padrao.docx</span>
-└─ <span class="dir">oficio/</span>
-     <span class="file">oficio-externo.docx</span></pre>
-
-      <ul>
-        <li>Use <strong>nomes descritivos</strong> nos arquivos: a busca considera tanto o nome quanto o conteúdo da minuta.</li>
-        <li>Formatos aceitos: arquivos comuns do Word, do LibreOffice, texto simples e PDF.</li>
-        <li>Sempre que adicionar, alterar ou remover modelos na pasta, abra a página de gerenciamento e clique em <strong>Reindexar agora</strong> para que o SEIrtão reconheça as mudanças.</li>
-      </ul>
-    </section>
-
-    <!-- 10. GOVERNANÇA -->
-    <section id="governanca">
-      <div class="section-head">
-        <span class="section-num">10</span>
-        <div>
-          <h2>Governança e LGPD</h2>
-          <p>Resolução CNJ nº 615/2025</p>
-        </div>
-      </div>
-
-      <div class="feat-grid">
-        <div class="feat">
-          <span class="feat__label">Supervisão</span>
-          <h4>A decisão é sempre humana</h4>
-          <p>Toda minuta gerada precisa ser revisada, editada e validada pela autoridade competente antes de ser assinada no SEI. O SEIrtão é um apoio — a palavra final é sua.</p>
-        </div>
-        <div class="feat">
-          <span class="feat__label">Privacidade</span>
-          <h4>Proteção dos dados</h4>
-          <p>Antes de enviar qualquer texto para os serviços de IA, o SEIrtão pode ocultar dados sensíveis com a função <em>Anonimizar documentos</em>. Recomenda-se usar códigos de acesso de planos corporativos, em que o serviço se compromete a não usar os dados para treinar seus modelos.</p>
-        </div>
-        <div class="feat">
-          <span class="feat__label">Registro</span>
-          <h4>Trilha de uso <em>(em desenvolvimento)</em></h4>
-          <p><strong>Aviso:</strong> recurso ainda não disponível na versão atual. Está prevista a gravação de registros de quem usou, qual tipo de ato foi gerado, qual serviço de IA foi escolhido e quando — permitindo auditoria posterior, com visualização restrita por unidade. A entrega depende de infraestrutura de back-end institucional (autenticação corporativa e banco com controle de acesso por linha); até lá, não há histórico persistente fora do navegador local do usuário.</p>
-        </div>
-        <div class="feat">
-          <span class="feat__label">Transparência</span>
-          <h4>Identificação do conteúdo</h4>
-          <p>Todo documento gerado traz a indicação de que foi produzido com o apoio de inteligência artificial sob supervisão humana, em respeito ao princípio da transparência.</p>
-        </div>
-      </div>
-
-      <div class="callout callout--lgpd">
-        <h4>Classificação: baixo risco</h4>
-        <p>Conforme a Resolução CNJ 615/2025, o SEIrtão é classificado como ferramenta de <strong>baixo risco</strong>, destinada a produzir textos de apoio para facilitar a elaboração de atos administrativos e a ocultar dados sensíveis em documentos. É um sistema de suporte, sem qualquer poder de decisão.</p>
-      </div>
-    </section>
-
-    <!-- 11. PROBLEMAS -->
-    <section id="problemas">
-      <div class="section-head">
-        <span class="section-num">11</span>
-        <div>
-          <h2>Solução de problemas</h2>
-          <p>Perguntas frequentes</p>
-        </div>
-      </div>
-
-      <div class="qa">
-        <details>
-          <summary>O SEIrtão não aparece no SEI</summary>
-          <p>Confira se ele está ativo na página de extensões do navegador (<strong>chrome://extensions</strong> ou <strong>edge://extensions</strong>). Recarregue o SEI. Se mesmo assim o botão flutuante não aparecer, feche e reabra a aba. Lembre-se de que o SEIrtão só ativa em páginas do domínio <code>sei.trf5.jus.br</code>.</p>
-        </details>
-        <details>
-          <summary>Um documento deu erro na extração</summary>
-          <p>Às vezes, o SEI devolve o documento vazio na primeira tentativa. O SEIrtão tenta até três vezes, cada uma de um jeito diferente. Se continuar dando erro, recarregue a árvore do processo e tente novamente.</p>
-        </details>
-        <details>
-          <summary>Documentos de áudio e vídeo</summary>
-          <p>Arquivos de mídia (como MP3 e MP4) são reconhecidos automaticamente e marcados como conteúdo que não pode ser lido como texto. Eles aparecem na lista, mas não geram erro.</p>
-        </details>
-        <details>
-          <summary>A leitura dos digitalizados está lenta</summary>
-          <p>Essa leitura é feita inteiramente no seu próprio computador para proteger o sigilo, e documentos com muitas páginas podem demorar. Ajuste o limite de páginas nas configurações para acelerar.</p>
-        </details>
-        <details>
-          <summary>"Inserir no SEI" abre o editor mas não injeta o texto</summary>
-          <p>O editor de minutas do SEI é um CKEditor 5 com múltiplas raízes (cabeçalho, título, corpo, data e rodapé). O SEIrtão detecta automaticamente a raiz <em>Corpo do Texto</em> e injeta nela. Se a injeção falhar, aguarde o editor terminar de carregar e acione o botão novamente — a falha costuma acontecer quando o popup do editor ainda não concluiu a inicialização.</p>
-        </details>
-        <details>
-          <summary>A minuta usou um modelo que não era o ideal</summary>
-          <p>A busca automática escolhe o modelo mais parecido com o caso. Se o resultado não ficou bom, você pode reorganizar seus modelos em subpastas mais específicas, ou clicar em <strong>Nova minuta</strong> para gerar do zero, sem referência.</p>
-        </details>
-        <details>
-          <summary>O código de acesso do serviço de IA está dando erro</summary>
-          <p>Use o botão <strong>Testar</strong> na tela de configurações para conferir se o código está correto. Cada serviço tem um formato próprio — verifique se o código colado corresponde ao serviço escolhido.</p>
-        </details>
-        <details>
-          <summary>Como atualizar o SEIrtão</summary>
-          <p>Quando você receber uma nova versão da equipe do Inovajus, substitua a pasta antiga pela nova no seu computador. Depois, abra a página de extensões e clique na seta circular no quadro do SEIrtão para recarregar.</p>
-        </details>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- FOOTER -->
+<!-- ════════════ FOOTER ════════════ -->
 <footer>
   <div class="footer__inner">
     <div>
-      <h3 class="footer__brand">SE<span>I</span>rtão <em>·</em></h3>
+      <h3 class="footer__brand"><span class="sei">SEI</span><span class="rtao">rtão</span></h3>
       <p class="footer__meta">
-        Desenvolvido pelo <strong>Laboratório de Inovação da Justiça Federal do Ceará</strong> — Inovajus.<br/>
-        Assistente com IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5.<br/>
+        <strong>Laboratório de Inovação da Justiça Federal do Ceará — Inovajus.</strong><br/>
+        Assistente com IA integrado ao SEI (Sistema Eletrônico de Informações) do TRF5,
+        classificado como ferramenta de baixo risco pela Resolução CNJ 615/2025.<br/><br/>
         Versão 1.0.0 · Abril de 2026
       </p>
     </div>
+
     <div class="footer__col">
       <h5>Navegar</h5>
       <ul>
-        <li><a href="#instalacao">Instalação</a></li>
-        <li><a href="#configuracao">Configuração</a></li>
-        <li><a href="#uso">Minutas com modelo</a></li>
-        <li><a href="#modelos">Modelos</a></li>
-        <li><a href="#problemas">Ajuda</a></li>
+        <li><a href="#instalacao">I. Instalação</a></li>
+        <li><a href="#configuracao">II. Configuração</a></li>
+        <li><a href="#uso">V. Minutas com modelo</a></li>
+        <li><a href="#modelos">IX. Modelos</a></li>
+        <li><a href="#problemas">XI. Ajuda</a></li>
       </ul>
     </div>
+
     <div class="footer__col">
       <h5>Contato</h5>
       <ul>
         <li><a href="mailto:inovajus@jfce.jus.br">inovajus@jfce.jus.br</a></li>
-        <li>sei.trf5.jus.br</li>
+        <li><code>sei.trf5.jus.br</code></li>
       </ul>
     </div>
   </div>
+
   <div class="footer__bar">
     <span>© 2026 Justiça Federal no Ceará · Inovajus</span>
-    <span>Res. CNJ 615/2025 · LGPD · Baixo risco (BR4 · BR8)</span>
+    <span>Res. CNJ 615/2025 · LGPD · baixo risco (BR4 · BR8)</span>
   </div>
 </footer>
 
 <script>
-  // Scroll-spy para destacar item da TOC ativo
+  // Scroll-spy do índice
   (function(){
-    const links = document.querySelectorAll('.toc a');
+    const links = document.querySelectorAll('.index a, .topbar__nav a');
     const map = new Map();
     links.forEach(a => {
-      const id = a.getAttribute('href').slice(1);
+      const href = a.getAttribute('href') || '';
+      if (!href.startsWith('#')) return;
+      const id = href.slice(1);
       const sec = document.getElementById(id);
-      if (sec) map.set(sec, a);
+      if (sec) {
+        if (!map.has(sec)) map.set(sec, []);
+        map.get(sec).push(a);
+      }
     });
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        const link = map.get(e.target);
-        if (!link) return;
+        const arr = map.get(e.target);
+        if (!arr) return;
         if (e.isIntersecting) {
-          links.forEach(l => l.classList.remove('is-active'));
-          link.classList.add('is-active');
+          document.querySelectorAll('.index a, .topbar__nav a').forEach(l => l.classList.remove('is-active'));
+          arr.forEach(l => l.classList.add('is-active'));
         }
       });
-    }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
     map.forEach((_, sec) => io.observe(sec));
   })();
 
@@ -1157,7 +1572,11 @@
     const bar = document.querySelector('.topbar');
     const nav = document.getElementById('nav-primary');
     if (!btn || !bar || !nav) return;
-    const close = () => { bar.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); btn.setAttribute('aria-label', 'Abrir menu'); };
+    const close = () => {
+      bar.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-label', 'Abrir menu');
+    };
     btn.addEventListener('click', () => {
       const open = bar.classList.toggle('is-open');
       btn.setAttribute('aria-expanded', String(open));
