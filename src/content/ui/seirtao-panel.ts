@@ -1723,7 +1723,7 @@ function renderShell(): string {
         box-shadow: -12px 0 32px rgba(12,50,111,0.22);
         transform: translateX(100%);
         transition: transform 260ms cubic-bezier(0.2, 0.7, 0.1, 1);
-        font-size: 13px;
+        font-size: 14px;
         display: grid;
         grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
         grid-template-rows: auto minmax(0, 1fr) auto;
@@ -1753,8 +1753,33 @@ function renderShell(): string {
         display: flex; align-items: center; justify-content: space-between;
         border-bottom: 2px solid #0A2552;
       }
-      header .brand h1 { margin: 0; font-size: 16px; font-weight: 700; letter-spacing: 0.4px; }
-      header .brand .sub { font-size: 11px; opacity: 0.9; margin-top: 2px; }
+      header .brand {
+        display: flex; align-items: center; gap: 12px;
+      }
+      header .brand .logo {
+        width: 40px; height: 40px; border-radius: 10px;
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        display: inline-flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(7, 29, 63, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        position: relative;
+      }
+      header .brand .logo img {
+        width: 26px; height: 26px; display: block;
+      }
+      header .brand .logo::after {
+        content: "";
+        position: absolute;
+        bottom: -2px; right: -2px;
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        background: #FFCD07;
+        box-shadow: 0 0 0 2px #0C326F;
+      }
+      header .brand .brand-text { display: flex; flex-direction: column; }
+      header .brand h1 { margin: 0; font-size: 18px; font-weight: 700; letter-spacing: 0.4px; }
+      header .brand .sub { font-size: 12.5px; opacity: 0.9; margin-top: 2px; }
       #btn-close {
         background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18);
         color: #ffffff; width: 28px; height: 28px; border-radius: 8px;
@@ -1785,7 +1810,7 @@ function renderShell(): string {
       }
       .panel-section > h2 {
         margin: 0; padding: 0;
-        font-size: 10.5px; letter-spacing: 0.8px;
+        font-size: 12px; letter-spacing: 0.8px;
         color: #0C326F; font-weight: 700;
         text-transform: uppercase;
       }
@@ -1806,16 +1831,16 @@ function renderShell(): string {
         padding: 3px 0;
       }
       #status .row + .row { border-top: 1px dotted rgba(19,81,180,0.12); }
-      #status .k { color: #5B6B82; font-size: 10.5px; }
-      #status .v { font-weight: 600; font-size: 12px; }
+      #status .k { color: #5B6B82; font-size: 11.5px; }
+      #status .v { font-weight: 600; font-size: 13px; }
 
       /* ─────── Botões de ação principal (sidebar) ─────── */
       .actions { display: flex; flex-direction: column; gap: 6px; }
       .actions button.main-action {
         background: #ffffff; color: #16243A;
         border: 1px solid rgba(19,81,180,0.22);
-        padding: 10px 12px; border-radius: 10px;
-        font-size: 12.5px; cursor: pointer;
+        padding: 11px 13px; border-radius: 10px;
+        font-size: 13.5px; cursor: pointer;
         text-align: left;
         transition: background 140ms, border-color 140ms, box-shadow 140ms, transform 140ms;
       }
@@ -1826,10 +1851,10 @@ function renderShell(): string {
       }
       .actions button.main-action:disabled { opacity: 0.6; cursor: not-allowed; }
       .actions button.main-action .btn-label {
-        display: block; font-weight: 600; font-size: 12.5px; color: #0C326F;
+        display: block; font-weight: 600; font-size: 13.5px; color: #0C326F;
       }
       .actions button.main-action .hint {
-        display: block; font-weight: 400; font-size: 11px; color: #5B6B82;
+        display: block; font-weight: 400; font-size: 12px; color: #5B6B82;
         margin-top: 3px; line-height: 1.4;
       }
 
@@ -1841,21 +1866,21 @@ function renderShell(): string {
       .doc-toolbar button {
         background: #ffffff; color: #16243A;
         border: 1px solid rgba(19,81,180,0.22);
-        padding: 4px 10px; border-radius: 8px;
-        font-size: 11px; font-weight: 600;
+        padding: 5px 11px; border-radius: 8px;
+        font-size: 12px; font-weight: 600;
         cursor: pointer;
         transition: background 120ms, border-color 120ms;
       }
       .doc-toolbar button:hover { background: rgba(19,81,180,0.06); border-color: #1351B4; }
       .doc-toolbar input.doc-filter {
         flex: 1; min-width: 100px;
-        padding: 4px 10px; font-size: 11px;
+        padding: 5px 11px; font-size: 12px;
         border: 1px solid rgba(19,81,180,0.22); border-radius: 8px;
         background: #ffffff; color: #16243A;
       }
       .doc-toolbar input.doc-filter:focus { outline: none; border-color: #1351B4; box-shadow: 0 0 0 2px rgba(19,81,180,0.14); }
       .doc-toolbar .doc-counter {
-        font-size: 10.5px; color: #5B6B82; white-space: nowrap;
+        font-size: 11.5px; color: #5B6B82; white-space: nowrap;
         flex-basis: 100%; margin-top: 2px;
       }
 
@@ -1867,7 +1892,7 @@ function renderShell(): string {
         background: #ffffff;
       }
       ul#doc-list li.doc-item {
-        padding: 5px 10px; font-size: 11.5px;
+        padding: 6px 11px; font-size: 12.5px;
         border-bottom: 1px dotted rgba(19,81,180,0.08);
         white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
@@ -1878,7 +1903,7 @@ function renderShell(): string {
         background: rgba(19,81,180,0.05);
         font-weight: 700; color: #0C326F;
         letter-spacing: 0.3px;
-        font-size: 11px;
+        font-size: 12px;
         cursor: pointer; user-select: none;
       }
       ul#doc-list li.doc-folder:hover { background: rgba(19,81,180,0.09); }
@@ -1912,24 +1937,24 @@ function renderShell(): string {
       #chat-box { display: flex; flex-direction: column; gap: 6px; }
       #chat-messages {
         background: #F6F8FC; border: 1px solid rgba(19,81,180,0.12); border-radius: 8px;
-        padding: 8px 10px; max-height: 320px; min-height: 80px; overflow-y: auto;
-        font-size: 12px; line-height: 1.5; color: #16243A;
+        padding: 9px 11px; max-height: 320px; min-height: 80px; overflow-y: auto;
+        font-size: 13px; line-height: 1.5; color: #16243A;
         display: flex; flex-direction: column; gap: 10px;
       }
       #chat-messages:empty::before {
         content: "Faça uma pergunta sobre o processo — o SEIrtão usa os documentos selecionados como contexto.";
-        color: #5B6B82; font-style: italic; font-size: 11.5px;
+        color: #5B6B82; font-style: italic; font-size: 12.5px;
       }
       .chat-msg { display: flex; flex-direction: column; }
       .chat-msg .chat-role {
-        font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+        font-size: 10.5px; font-weight: 700; letter-spacing: 0.5px;
         text-transform: uppercase; margin-bottom: 2px;
       }
       .chat-msg.user .chat-role { color: #0C326F; }
       .chat-msg.assistant .chat-role { color: #1351B4; }
       .chat-msg .chat-body {
         white-space: pre-wrap; word-wrap: break-word;
-        padding: 6px 10px; border-radius: 8px; font-size: 12px;
+        padding: 7px 11px; border-radius: 8px; font-size: 13px;
       }
       .chat-msg.user .chat-body { background: rgba(19,81,180,0.08); }
       .chat-msg.assistant .chat-body { background: #ffffff; border: 1px solid rgba(19,81,180,0.14); }
@@ -1939,16 +1964,16 @@ function renderShell(): string {
       .chat-msg-act {
         background: #ffffff; color: #16243A;
         border: 1px solid rgba(19,81,180,0.22);
-        padding: 3px 10px; border-radius: 6px;
-        font-size: 10.5px; font-weight: 600;
+        padding: 4px 11px; border-radius: 6px;
+        font-size: 11.5px; font-weight: 600;
         cursor: pointer;
         font-family: var(--seirtao-font);
       }
       .chat-msg-act:hover { background: rgba(19,81,180,0.06); border-color: #1351B4; }
       #chat-form { display: flex; flex-direction: column; gap: 6px; }
       #chat-input {
-        width: 100%; min-height: 68px; resize: vertical;
-        padding: 8px 10px; font-size: 12.5px; line-height: 1.4;
+        width: 100%; min-height: 72px; resize: vertical;
+        padding: 9px 11px; font-size: 13.5px; line-height: 1.45;
         border: 1px solid rgba(19,81,180,0.22); border-radius: 8px;
         background: #ffffff; color: #16243A;
         font-family: var(--seirtao-font);
@@ -1958,8 +1983,8 @@ function renderShell(): string {
       #chat-controls button {
         background: #ffffff; color: #16243A;
         border: 1px solid rgba(19,81,180,0.22);
-        padding: 6px 14px; border-radius: 8px;
-        font-size: 11.5px; font-weight: 600;
+        padding: 7px 15px; border-radius: 8px;
+        font-size: 12.5px; font-weight: 600;
         cursor: pointer;
         transition: background 120ms, border-color 120ms;
       }
@@ -1984,7 +2009,7 @@ function renderShell(): string {
         50%      { box-shadow: 0 0 0 6px rgba(192,57,43,0); }
       }
       #chat-status {
-        font-size: 10.5px; color: #5B6B82;
+        font-size: 11.5px; color: #5B6B82;
         white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
 
@@ -2002,7 +2027,7 @@ function renderShell(): string {
       .stream-box[data-state="error"] .stream-toolbar { display: none; }
       .stream-box:not([data-state="error"]) .stream-error { display: none; }
       .stream-box-title {
-        font-size: 10.5px; font-weight: 700; color: #0C326F;
+        font-size: 11.5px; font-weight: 700; color: #0C326F;
         letter-spacing: 0.5px; text-transform: uppercase;
       }
       .stream-progress {
@@ -2018,20 +2043,20 @@ function renderShell(): string {
         transition: width 120ms ease;
       }
       .stream-progress-text {
-        margin-top: 6px; font-size: 10.5px; color: #5B6B82;
+        margin-top: 6px; font-size: 11.5px; color: #5B6B82;
         white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
       .stream-output {
-        padding: 10px 12px;
+        padding: 11px 13px;
         background: #F6F8FC; border: 1px solid rgba(19,81,180,0.12); border-radius: 8px;
         max-height: 420px; overflow-y: auto;
         white-space: pre-wrap; word-wrap: break-word;
-        font-size: 12.5px; line-height: 1.55; color: #16243A;
+        font-size: 13.5px; line-height: 1.55; color: #16243A;
       }
       .stream-error {
         padding: 10px 12px;
         background: #FDECEA; border: 1px solid #c0392b; border-radius: 8px;
-        color: #7B1F15; font-size: 11.5px; line-height: 1.4;
+        color: #7B1F15; font-size: 12.5px; line-height: 1.45;
       }
       .stream-toolbar {
         display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end;
@@ -2039,8 +2064,8 @@ function renderShell(): string {
       .stream-toolbar button {
         background: #ffffff; color: #16243A;
         border: 1px solid rgba(19,81,180,0.22);
-        padding: 5px 12px; border-radius: 8px;
-        font-size: 11px; font-weight: 600;
+        padding: 6px 13px; border-radius: 8px;
+        font-size: 12px; font-weight: 600;
         cursor: pointer;
         transition: background 120ms, border-color 120ms;
       }
@@ -2061,7 +2086,7 @@ function renderShell(): string {
       }
       .insert-stepper[data-visible="false"] { display: none; }
       .insert-stepper-title {
-        font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+        font-size: 12px; font-weight: 700; letter-spacing: 0.04em;
         text-transform: uppercase; color: #0C326F;
       }
       .insert-steps {
@@ -2070,7 +2095,7 @@ function renderShell(): string {
       }
       .insert-step {
         display: flex; align-items: center; gap: 10px;
-        font-size: 12px; color: #16243A;
+        font-size: 13px; color: #16243A;
         padding: 4px 2px;
       }
       .insert-step-icon {
@@ -2448,8 +2473,13 @@ function renderShell(): string {
     <div id="panel" role="complementary" aria-label="SEIrtão — painel lateral">
       <header>
         <div class="brand">
-          <h1>SEIrtão</h1>
-          <div class="sub">assistente SEI — JFCE</div>
+          <div class="logo" aria-hidden="true">
+            <img src="${chrome.runtime.getURL('icons/icon32.png')}" alt="" />
+          </div>
+          <div class="brand-text">
+            <h1>SEIrtão</h1>
+            <div class="sub">assistente SEI — JFCE</div>
+          </div>
         </div>
         <button id="btn-close" title="Fechar" aria-label="Fechar">×</button>
       </header>

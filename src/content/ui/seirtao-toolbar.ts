@@ -1,12 +1,13 @@
 /**
- * Injeta um botão SEIrtão discreto na barra superior direita do SEI.
+ * Injeta o botão SEIrtão na barra superior direita do SEI.
  *
  * Alvo: `#divInfraBarraSistemaPadraoD` (onde ficam Controle de Processos,
- * Novidades, Unidade, etc.). O botão adota a paleta institucional do SEI
- * (azul govbr #1351B4 / #0C326F) com acabamento chapado, bordas pouco
- * arredondadas e altura compatível com os itens nativos da barra —
- * sinaliza presença sem competir visualmente com a UI do SEI. Só é
- * montado quando há um processo aberto (gate feito em `sei-bootstrap.ts`).
+ * Novidades, Unidade, etc.). Segue o mesmo padrão visual do FAB do
+ * pAIdegua — gradiente institucional govbr (#1351B4 → #0C326F), formato
+ * pill com cantos arredondados, sombra sutil e detalhe amarelo (#FFCD07)
+ * como acento institucional — adaptado para inline dentro da toolbar do
+ * SEI. Só é montado quando há um processo aberto (gate em
+ * `sei-bootstrap.ts`).
  */
 
 const BUTTON_ID = 'seirtao-nav-button';
@@ -33,49 +34,80 @@ function ensureStyle(): void {
     #${BUTTON_ID} > a.seirtao-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 3px 10px;
-      min-height: 24px;
-      background: #1351B4;
+      gap: 8px;
+      padding: 5px 14px 5px 10px;
+      min-height: 28px;
+      background: linear-gradient(135deg, #1351B4 0%, #0C326F 100%);
       color: #ffffff !important;
-      border: 1px solid #0C326F;
-      border-radius: 3px;
-      font-family: "Rawline","Segoe UI",Tahoma,Verdana,Arial,sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.1px;
+      border: 0;
+      border-radius: 999px;
+      font-family: "Rawline","Raleway","Segoe UI",Tahoma,Verdana,Arial,sans-serif;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.15px;
       text-decoration: none !important;
       line-height: 1.2;
       cursor: pointer;
-      transition: background-color 120ms ease, border-color 120ms ease;
+      box-shadow:
+        0 4px 12px rgba(19, 81, 180, 0.32),
+        0 1px 3px rgba(12, 50, 111, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
       white-space: nowrap;
     }
-    #${BUTTON_ID} > a.seirtao-pill:hover,
+    #${BUTTON_ID} > a.seirtao-pill:hover {
+      background: linear-gradient(135deg, #0C326F 0%, #1351B4 100%);
+      box-shadow:
+        0 6px 16px rgba(19, 81, 180, 0.42),
+        0 2px 5px rgba(12, 50, 111, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
     #${BUTTON_ID} > a.seirtao-pill:focus-visible {
-      background: #0C326F;
-      border-color: #071D3F;
-      outline: none;
+      outline: 2px solid rgba(255, 205, 7, 0.85);
+      outline-offset: 2px;
     }
     #${BUTTON_ID} > a.seirtao-pill:active {
-      background: #071D3F;
+      transform: translateY(0);
+      box-shadow:
+        0 2px 6px rgba(19, 81, 180, 0.28),
+        inset 0 1px 2px rgba(12, 50, 111, 0.25);
     }
-    #${BUTTON_ID} > a.seirtao-pill > img {
-      width: 16px;
-      height: 16px;
-      border-radius: 2px;
+    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      position: relative;
+    }
+    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon > img {
+      width: 14px;
+      height: 14px;
       display: block;
+    }
+    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      right: -1px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #FFCD07;
+      box-shadow: 0 0 0 1.5px #0C326F;
     }
     #${BUTTON_ID} > a.seirtao-pill > span.seirtao-label {
       color: #ffffff;
-      font-weight: 500;
+      font-weight: 600;
     }
-    /* Em layouts estreitos do SEI, o próprio SEI esconde elementos com
-       classes d-none d-md-block. Aqui queremos manter o botão sempre
-       visível — ele substitui tanto o modo desktop quanto o mobile. */
     @media (max-width: 767px) {
       #${BUTTON_ID} > a.seirtao-pill {
-        padding: 3px 8px;
+        padding: 4px 12px 4px 8px;
         font-size: 11.5px;
       }
     }
@@ -106,7 +138,9 @@ export function mountToolbarButton(navRight?: HTMLElement | null): ToolbarContro
        title="SEIrtão — assistente de análise do processo administrativo"
        aria-label="Abrir assistente SEIrtão"
        tabindex="80">
-      <img src="${iconUrl}" alt="" />
+      <span class="seirtao-pill-icon" aria-hidden="true">
+        <img src="${iconUrl}" alt="" />
+      </span>
       <span class="seirtao-label">SEIrtão</span>
     </a>
   `;
