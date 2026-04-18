@@ -36,70 +36,47 @@ function ensureStyle(): void {
       align-items: center;
       gap: 8px;
       padding: 5px 14px 5px 10px;
-      min-height: 28px;
-      background: linear-gradient(135deg, #1351B4 0%, #0C326F 100%);
+      min-height: 30px;
+      /* Fundo transparente para herdar a cor do header do SEI */
+      background: transparent;
       color: #ffffff !important;
-      border: 0;
-      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      border-radius: 8px;
       font-family: "Rawline","Raleway","Segoe UI",Tahoma,Verdana,Arial,sans-serif;
       font-size: 12.5px;
       font-weight: 600;
-      letter-spacing: 0.15px;
+      letter-spacing: 0.2px;
       text-decoration: none !important;
       line-height: 1.2;
       cursor: pointer;
       box-shadow:
-        0 4px 12px rgba(19, 81, 180, 0.32),
-        0 1px 3px rgba(12, 50, 111, 0.18),
-        inset 0 1px 0 rgba(255, 255, 255, 0.22);
-      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+        0 4px 14px rgba(7, 29, 63, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.20);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
       white-space: nowrap;
     }
     #${BUTTON_ID} > a.seirtao-pill:hover {
-      background: linear-gradient(135deg, #0C326F 0%, #1351B4 100%);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #ffffff;
       box-shadow:
-        0 6px 16px rgba(19, 81, 180, 0.42),
-        0 2px 5px rgba(12, 50, 111, 0.22),
+        0 6px 18px rgba(7, 29, 63, 0.42),
         inset 0 1px 0 rgba(255, 255, 255, 0.28);
       transform: translateY(-1px);
     }
     #${BUTTON_ID} > a.seirtao-pill:focus-visible {
-      outline: 2px solid rgba(255, 205, 7, 0.85);
+      outline: 2px solid #FFCD07;
       outline-offset: 2px;
     }
     #${BUTTON_ID} > a.seirtao-pill:active {
       transform: translateY(0);
-      box-shadow:
-        0 2px 6px rgba(19, 81, 180, 0.28),
-        inset 0 1px 2px rgba(12, 50, 111, 0.25);
+      box-shadow: 0 1px 4px rgba(7, 29, 63, 0.22);
     }
-    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.16);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      position: relative;
-    }
-    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon > img {
-      width: 14px;
-      height: 14px;
+    #${BUTTON_ID} > a.seirtao-pill > img.seirtao-pill-icon {
+      width: 18px;
+      height: 18px;
       display: block;
-    }
-    #${BUTTON_ID} > a.seirtao-pill > .seirtao-pill-icon::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      right: -1px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #FFCD07;
-      box-shadow: 0 0 0 1.5px #0C326F;
+      flex-shrink: 0;
+      border-radius: 3px;
     }
     #${BUTTON_ID} > a.seirtao-pill > span.seirtao-label {
       color: #ffffff;
@@ -108,7 +85,7 @@ function ensureStyle(): void {
     @media (max-width: 767px) {
       #${BUTTON_ID} > a.seirtao-pill {
         padding: 4px 12px 4px 8px;
-        font-size: 11.5px;
+        font-size: 12px;
       }
     }
   `;
@@ -138,9 +115,7 @@ export function mountToolbarButton(navRight?: HTMLElement | null): ToolbarContro
        title="SEIrtão — assistente de análise do processo administrativo"
        aria-label="Abrir assistente SEIrtão"
        tabindex="80">
-      <span class="seirtao-pill-icon" aria-hidden="true">
-        <img src="${iconUrl}" alt="" />
-      </span>
+      <img src="${iconUrl}" alt="" class="seirtao-pill-icon" />
       <span class="seirtao-label">SEIrtão</span>
     </a>
   `;

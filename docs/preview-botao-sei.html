@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>SEIrtão — Prévia do botão no header do SEI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Rawline", "Raleway", "Segoe UI", Tahoma, Verdana, Arial, sans-serif;
+      background: #F6F8FC;
+      color: #16243A;
+      padding: 24px;
+    }
+    h1 { font-size: 20px; color: #0C326F; margin: 0 0 8px; }
+    .lead { color: #5B6B82; margin: 0 0 28px; font-size: 14px; }
+
+    /* Simula o header do SEI — aproximação do azul institucional govbr */
+    .sei-header {
+      background: #165AC2;
+      color: #ffffff;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 42px;
+      border-radius: 4px 4px 0 0;
+    }
+    .sei-header .sei-logo {
+      background: #ffffff;
+      color: #165AC2;
+      font-weight: 800;
+      font-size: 18px;
+      padding: 4px 12px;
+      border-radius: 3px;
+    }
+    .sei-header .sei-nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+    }
+    .sei-header .sei-nav span { opacity: 0.9; }
+
+    .opt-card {
+      background: #ffffff;
+      border: 1px solid rgba(19,81,180,0.14);
+      border-radius: 12px;
+      padding: 0;
+      margin-bottom: 28px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(12,50,111,0.06);
+    }
+    .opt-card h2 {
+      margin: 0;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: #0C326F;
+      border-bottom: 1px solid rgba(19,81,180,0.10);
+      background: #F6F8FC;
+    }
+    .opt-card .spec {
+      padding: 14px 18px 18px;
+      font-size: 12.5px;
+      color: #5B6B82;
+      line-height: 1.55;
+    }
+    .opt-card .spec code {
+      background: rgba(19,81,180,0.08);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #0C326F;
+    }
+
+    /* Base comum do botão (todas as opções) */
+    .seirtao-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: #ffffff !important;
+      font-family: inherit;
+      font-weight: 600;
+      text-decoration: none;
+      line-height: 1.2;
+      cursor: pointer;
+      white-space: nowrap;
+      padding: 5px 14px 5px 10px;
+      min-height: 30px;
+      font-size: 12.5px;
+      letter-spacing: 0.2px;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+    .seirtao-btn img {
+      width: 18px;
+      height: 18px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+    .seirtao-btn:hover { transform: translateY(-1px); }
+    .seirtao-btn:active { transform: translateY(0); }
+
+    /* ───── OPÇÃO 1 — mais discreta ───── */
+    .opt1 {
+      border: 1px solid rgba(255,255,255,0.40);
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(7,29,63,0.18);
+    }
+    .opt1:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.65);
+      box-shadow: 0 2px 8px rgba(7,29,63,0.26);
+    }
+
+    /* ───── OPÇÃO 2 — equilíbrio (a que está no zip atualmente) ───── */
+    .opt2 {
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(7,29,63,0.22), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .opt2:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.85);
+      box-shadow: 0 4px 12px rgba(7,29,63,0.32), inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+
+    /* ───── OPÇÃO 3 — mais destacada ───── */
+    .opt3 {
+      border: 1.5px solid rgba(255,255,255,0.85);
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(7,29,63,0.35), inset 0 1px 0 rgba(255,255,255,0.20);
+    }
+    .opt3:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: #ffffff;
+      box-shadow: 0 6px 18px rgba(7,29,63,0.42), inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+  </style>
+</head>
+<body>
+  <h1>SEIrtão — prévia das 3 opções do botão no header do SEI</h1>
+  <p class="lead">
+    O header azul abaixo simula a barra superior do SEI. Passe o mouse sobre cada botão para ver o estado <em>hover</em>.
+    Me diga qual você prefere (1, 2 ou 3) ou um ajuste entre elas.
+  </p>
+
+  <!-- OPÇÃO 1 -->
+  <section class="opt-card">
+    <h2>Opção 1 — mais discreta</h2>
+    <div class="sei-header">
+      <span class="sei-logo">sei!</span>
+      <a href="#" class="seirtao-btn opt1">
+        <img src="../icons/icon32.png" alt="" />
+        <span>SEIrtão</span>
+      </a>
+      <span class="sei-nav"><span>Controle de Processos</span><span>Novidades</span><span>Unidade</span></span>
+    </div>
+    <div class="spec">
+      <code>border-radius: 4px</code> ·
+      <code>border: 1px solid rgba(255,255,255,0.40)</code> ·
+      <code>box-shadow: 0 1px 4px rgba(7,29,63,0.18)</code><br />
+      Contorno e presença mínimos, quase integrado à barra. Boa se você quer o botão bem sóbrio.
+    </div>
+  </section>
+
+  <!-- OPÇÃO 2 -->
+  <section class="opt-card">
+    <h2>Opção 2 — equilíbrio (no zip atual)</h2>
+    <div class="sei-header">
+      <span class="sei-logo">sei!</span>
+      <a href="#" class="seirtao-btn opt2">
+        <img src="../icons/icon32.png" alt="" />
+        <span>SEIrtão</span>
+      </a>
+      <span class="sei-nav"><span>Controle de Processos</span><span>Novidades</span><span>Unidade</span></span>
+    </div>
+    <div class="spec">
+      <code>border-radius: 6px</code> ·
+      <code>border: 1px solid rgba(255,255,255,0.55)</code> ·
+      <code>box-shadow: 0 2px 8px rgba(7,29,63,0.22)</code> + highlight interno<br />
+      Levemente arredondado, borda discreta porém visível, sombra que sugere elevação sem exagerar.
+    </div>
+  </section>
+
+  <!-- OPÇÃO 3 -->
+  <section class="opt-card">
+    <h2>Opção 3 — mais destacada</h2>
+    <div class="sei-header">
+      <span class="sei-logo">sei!</span>
+      <a href="#" class="seirtao-btn opt3">
+        <img src="../icons/icon32.png" alt="" />
+        <span>SEIrtão</span>
+      </a>
+      <span class="sei-nav"><span>Controle de Processos</span><span>Novidades</span><span>Unidade</span></span>
+    </div>
+    <div class="spec">
+      <code>border-radius: 8px</code> ·
+      <code>border: 1.5px solid rgba(255,255,255,0.85)</code> ·
+      <code>box-shadow: 0 4px 14px rgba(7,29,63,0.35)</code> + inset highlight<br />
+      Borda bem visível, sombra difusa — o botão "flutua" sobre o header. Boa se você quer chamar atenção.
+    </div>
+  </section>
+</body>
+</html>

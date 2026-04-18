@@ -659,6 +659,15 @@ function isEditableEl(el: HTMLElement): boolean {
  * Mesma técnica usada no Badon (ckeditor-bridge.ts). `plain` é útil quando o
  * editor cai no handler de texto simples. O caret é posicionado no FINAL do
  * conteúdo antes do paste, para apendar em vez de substituir a seleção.
+ *
+ * Sobre o valor de retorno: o resultado de `dispatchEvent` **não** é sinal
+ * confiável de sucesso. Ele devolve `false` sempre que algum handler chama
+ * `preventDefault()` — e o pipeline de clipboard do CK5 **sempre** chama
+ * (é exatamente como o editor intercepta o paste para processar via schema
+ * interno em vez do paste default do browser). Ou seja: `delivered === false`
+ * aqui é o caminho feliz do CK5, não uma falha. Por isso consideramos sucesso
+ * qualquer dispatch que não lance exceção — a verificação real de inserção é
+ * feita pelo consumidor (stepper checa se o editor reportou conteúdo novo).
  */
 function pasteSyntheticAtEnd(el: HTMLElement, html: string, plain?: string): boolean {
   try {
@@ -691,11 +700,11 @@ function pasteSyntheticAtEnd(el: HTMLElement, html: string, plain?: string): boo
       } catch { /* ignore */ }
     }
 
-    const delivered = el.dispatchEvent(pasteEvent);
+    el.dispatchEvent(pasteEvent);
     // `input` garante re-render em integrações que ouvem o evento em vez do
     // ciclo de transaction interno.
     try { el.dispatchEvent(new Event('input', { bubbles: true })); } catch { /* ignore */ }
-    return delivered;
+    return true;
   } catch {
     return false;
   }

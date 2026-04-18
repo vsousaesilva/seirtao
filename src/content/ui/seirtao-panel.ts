@@ -816,6 +816,7 @@ function wireMinutaTriage(
   const picker = root.querySelector<HTMLDivElement>('.minuta-refine-picker')!;
   const pickerInput = root.querySelector<HTMLInputElement>('#minuta-refine-ato')!;
   const pickerList = root.querySelector<HTMLDivElement>('#minuta-refine-suggestions')!;
+  const pickerHint = root.querySelector<HTMLDivElement>('#minuta-refine-picker-hint')!;
   const btnPickerCancel = root.querySelector<HTMLButtonElement>('[data-act="picker-cancel"]')!;
   const btnPickerGo = root.querySelector<HTMLButtonElement>('[data-act="picker-go"]')!;
 
@@ -1003,22 +1004,35 @@ function wireMinutaTriage(
 
   const escapeRe = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-  const getAllCandidates = (): string[] => {
-    const catalog = ATOS_ADMINISTRATIVOS.map((a) => a.label);
+  /**
+   * Candidatos exibidos no picker. Preferimos a lista **real de tipos do
+   * SEI** (o que o "Incluir Documento" mostra na unidade atual do usuário).
+   * Se a descoberta ainda não concluiu (cache vazio), voltamos ao catálogo
+   * canônico de 8 atos como fallback — o picker re-renderiza assim que a
+   * descoberta termina.
+   */
+  const getAllCandidates = (): { list: string[]; source: 'sei' | 'catalog' } => {
     const discovered = peekDocumentTypes() ?? [];
-    const seen = new Set<string>();
-    const out: string[] = [];
-    for (const n of [...catalog, ...discovered]) {
-      const key = n.toLowerCase();
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push(n);
+    if (discovered.length > 0) {
+      const seen = new Set<string>();
+      const out: string[] = [];
+      for (const n of discovered) {
+        const key = n.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push(n);
+      }
+      return { list: out, source: 'sei' };
     }
-    return out;
+    return { list: ATOS_ADMINISTRATIVOS.map((a) => a.label), source: 'catalog' };
   };
 
   const renderSuggestions = (query: string): void => {
-    const candidates = getAllCandidates();
+    const { list: candidates, source } = getAllCandidates();
+    pickerHint.textContent =
+      source === 'sei'
+        ? `${candidates.length} tipos de documento disponíveis na sua unidade no SEI.`
+        : 'Carregando tipos do SEI… exibindo atos do catálogo por enquanto.';
     const normalized = query.trim().toLowerCase();
     let filtered = candidates;
     if (normalized) {
@@ -1027,13 +1041,13 @@ function wireMinutaTriage(
     }
     if (filtered.length === 0) {
       pickerList.innerHTML =
-        `<div class="minuta-refine-empty">Nenhum ato/tipo encontrado. Você pode digitar um nome livre e clicar "Continuar".</div>`;
+        `<div class="minuta-refine-empty">Nenhum tipo encontrado. Você pode digitar um nome livre e clicar "Continuar com este nome".</div>`;
       pickerChoice = normalized ? query.trim() : null;
       btnPickerGo.disabled = !pickerChoice;
       return;
     }
     pickerList.innerHTML = filtered
-      .slice(0, 80)
+      .slice(0, 200)
       .map(
         (name) =>
           `<button type="button" class="minuta-refine-suggestion" data-name="${escapeHtml(name)}" role="option">${escapeHtml(name)}</button>`,
@@ -1071,9 +1085,12 @@ function wireMinutaTriage(
     if (!btn) return;
     const name = btn.dataset['name'];
     if (!name) return;
+    // Click numa sugestão compromete a escolha — recolhe o picker e vai
+    // direto para o painel de orientações (1 clique = avançar).
     pickerInput.value = name;
     pickerChoice = name;
     btnPickerGo.disabled = false;
+    openOrient(name);
   });
 
   btnPickerCancel.addEventListener('click', () => { hide(picker); });
@@ -2299,8 +2316,13 @@ function renderShell(): string {
         outline: none; border-color: #1351B4; box-shadow: 0 0 0 2px rgba(19,81,180,0.14);
       }
       .minuta-refine-textarea { resize: vertical; min-height: 64px; line-height: 1.4; }
+      .minuta-refine-picker-hint {
+        font-size: 11px; color: #5B6B82;
+        padding: 0 2px 2px;
+      }
+      .minuta-refine-picker-hint:empty { display: none; }
       .minuta-refine-suggestions {
-        max-height: 180px; overflow-y: auto;
+        max-height: 260px; overflow-y: auto;
         display: flex; flex-direction: column; gap: 2px;
         background: #ffffff; border: 1px solid rgba(19,81,180,0.12); border-radius: 8px;
         padding: 4px;
@@ -2765,13 +2787,14 @@ function renderMinutaTriage(): string {
         </div>
       </div>
       <div class="minuta-refine-panel minuta-refine-picker" data-visible="false">
-        <label class="minuta-refine-label" for="minuta-refine-ato">Escolha um ato (digite para filtrar):</label>
+        <label class="minuta-refine-label" for="minuta-refine-ato">Escolha um tipo de documento do SEI (digite para filtrar):</label>
         <input id="minuta-refine-ato" type="search" class="minuta-refine-input"
           placeholder="ex.: Despacho, Ofício, Parecer…" autocomplete="off" />
+        <div class="minuta-refine-picker-hint" id="minuta-refine-picker-hint"></div>
         <div class="minuta-refine-suggestions" id="minuta-refine-suggestions" role="listbox"></div>
         <div class="minuta-refine-footer">
           <button type="button" class="minuta-refine-btn" data-act="picker-cancel">Cancelar</button>
-          <button type="button" class="minuta-refine-btn-primary" data-act="picker-go" disabled>Continuar</button>
+          <button type="button" class="minuta-refine-btn-primary" data-act="picker-go" disabled>Continuar com este nome</button>
         </div>
       </div>
       <div class="minuta-refine-panel minuta-refine-orient" data-visible="false">
