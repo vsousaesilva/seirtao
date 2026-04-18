@@ -21,6 +21,7 @@ import { resumirProcesso } from './sei-resumir';
 import { discoverDocumentTypes } from './sei-document-types';
 import { insertMinutaNoSEI } from './sei-minutar-insert';
 import { otimizarModelo } from './sei-otimizar';
+import { saveModeloFavorito } from './sei-modelo-saver';
 import { mountPanel, type PanelController } from './ui/seirtao-panel';
 import { mountToolbarButton } from './ui/seirtao-toolbar';
 
@@ -211,6 +212,37 @@ function wireOtimizarAction(panel: PanelController): void {
       onDone: () => panel.otimizar.done(),
       onError: (msg) => panel.otimizar.error(msg),
     });
+  });
+}
+
+function wireSaveModeloAction(panel: PanelController): void {
+  panel.onSaveModeloRequest((params) => {
+    console.log(
+      `${LOG} [save-modelo] recebido — nome="${params.nome}", tipo="${params.tipoDocumento}", ` +
+      `tamanho=${params.conteudoTexto.length} chars.`,
+    );
+    void saveModeloFavorito(
+      {
+        nome: params.nome,
+        descricao: params.descricao,
+        tipoDocumento: params.tipoDocumento,
+        conteudoTexto: params.conteudoTexto,
+      },
+      {
+        onState: (s) => {
+          console.log(`${LOG} [save-modelo] ${s.phase} — ${s.message}`);
+          panel.saveModelo.setStatus(s.message);
+        },
+        onDone: (s) => {
+          console.log(`${LOG} [save-modelo] done — ${s.message}`);
+          panel.saveModelo.setDone(s.message);
+        },
+        onError: (e) => {
+          console.warn(`${LOG} [save-modelo] ERRO em ${e.phase}:`, e.message);
+          panel.saveModelo.setError(e.message, e.userHint);
+        },
+      },
+    );
   });
 }
 
@@ -660,6 +692,7 @@ export function bootSeirtao(): boolean {
     wireResumirAction(panel);
     wireMinutarAction(panel);
     wireOtimizarAction(panel);
+    wireSaveModeloAction(panel);
     wireChatAction(panel);
 
     // No SEI a árvore pode estar no próprio top (acao=procedimento_visualizar)

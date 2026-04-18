@@ -176,6 +176,13 @@ export interface PanelController {
    * dentro da caixa de otimização, recebendo o texto colado.
    */
   onOtimizarRequest(handler: (modeloText: string) => void): void;
+  /**
+   * Registra handler acionado quando o usuário confirma o cartão "Salvar
+   * como modelo da unidade" (no toolbar do modelo otimizado). O handler
+   * recebe os campos coletados e deve rodar o orquestrador, reportando
+   * progresso via `saveModelo.*`.
+   */
+  onSaveModeloRequest(handler: (params: SaveModeloParams) => void): void;
   /** API de stream da análise do processo. */
   resumo: StreamController;
   /** API de triagem (1ª rodada do "Minutar próximo ato"). */
@@ -184,8 +191,25 @@ export interface PanelController {
   minuta: StreamController;
   /** API de stream da otimização de modelo. */
   otimizar: StreamController;
+  /** API do cartão "Salvar como modelo" (visível só após otimização). */
+  saveModelo: SaveModeloController;
   /** API do chat livre. */
   chat: ChatController;
+}
+
+/** Campos coletados pelo cartão "Salvar como modelo". */
+export interface SaveModeloParams {
+  nome: string;
+  descricao: string;
+  tipoDocumento: string;
+  conteudoTexto: string;
+}
+
+/** API para o orquestrador reportar progresso ao cartão "Salvar como modelo". */
+export interface SaveModeloController {
+  setStatus(message: string): void;
+  setError(message: string, userHint: string): void;
+  setDone(message: string): void;
 }
 
 export function mountPanel(): PanelController {
@@ -320,6 +344,10 @@ export function mountPanel(): PanelController {
   // principal `#act-otimizar` (topo) rola e foca o textarea, e reseta o
   // stream-box se ele estiver em um estado final (done/error).
   const otimizarHandlers: Array<() => void> = [];
+  const saveModeloRequestHandlers: Array<(params: SaveModeloParams) => void> = [];
+  const saveModeloDialog = wireSaveModeloDialog(shadow, {
+    handlers: saveModeloRequestHandlers,
+  });
   const otimizarCtl = wireStreamBox(shadow, {
     boxId: 'otimizar-box',
     triggerId: 'otimizar-analyze',
@@ -329,6 +357,7 @@ export function mountPanel(): PanelController {
     subject: 'SEIrtão — modelo otimizado',
     handlers: otimizarHandlers,
     getProcessoNumber: () => currentNumeroProcesso,
+    onSaveModeloClick: (text) => saveModeloDialog.open(text),
   });
 
   const otimizarInput = shadow.getElementById('otimizar-input') as HTMLDivElement;
@@ -420,11 +449,13 @@ export function mountPanel(): PanelController {
     onMinutarAtoClick(handler) { minutarAtoHandlers.push(handler); },
     onInserirMinutaConfirmed(handler) { inserirConfirmedHandlers.push(handler); },
     onOtimizarRequest(handler) { otimizarRequestHandlers.push(handler); },
+    onSaveModeloRequest(handler) { saveModeloRequestHandlers.push(handler); },
     getSelectedDocIds: () => new Set(selectedDocIds),
     resumo: resumoCtl,
     triage: triageCtl,
     minuta: minutaCtl,
     otimizar: otimizarCtl,
+    saveModelo: saveModeloDialog.controller,
     chat: chatCtl,
     setArvore(arvore) {
       if (currentNumeroProcesso && currentNumeroProcesso !== arvore.numeroProcesso) {
@@ -536,6 +567,13 @@ interface StreamBoxWiring {
    * (Fase D.1); a Fase C só roda **depois** que o usuário confirma.
    */
   onInserirClick?: (text: string) => void;
+  /**
+   * Se fornecido, injeta um botão "Salvar como modelo" na toolbar, antes
+   * do "E-mail". Acionado apenas quando há texto acumulado; chama o
+   * callback passando o texto atual (conteúdo bruto do stream-box). Usado
+   * hoje somente pelo otimizar-box.
+   */
+  onSaveModeloClick?: (text: string) => void;
 }
 
 /**
@@ -603,6 +641,23 @@ function wireStreamBox(shadow: ShadowRoot, w: StreamBoxWiring): StreamController
       if (!accumulated) return;
       try { onInserirClick(accumulated); }
       catch (err) { console.error('[SEIrtão] erro em onInserirClick:', err); }
+    });
+  }
+
+  if (w.onSaveModeloClick) {
+    const onSaveClick = w.onSaveModeloClick;
+    const btnSave = document.createElement('button');
+    btnSave.type = 'button';
+    btnSave.dataset['act'] = 'save-modelo';
+    btnSave.title = 'Salvar este modelo no banco "Modelos Favoritos" da sua unidade no SEI';
+    btnSave.textContent = 'Salvar como modelo';
+    const toolbar = box.querySelector<HTMLDivElement>('.stream-toolbar')!;
+    const btnMailRef = toolbar.querySelector<HTMLButtonElement>('[data-act="mail"]');
+    toolbar.insertBefore(btnSave, btnMailRef);
+    btnSave.addEventListener('click', () => {
+      if (!accumulated) return;
+      try { onSaveClick(accumulated); }
+      catch (err) { console.error('[SEIrtão] erro em onSaveModeloClick:', err); }
     });
   }
 
@@ -1335,6 +1390,185 @@ function wireInsertConfirmDialog(
       window.setTimeout(() => { descricaoEl.focus(); descricaoEl.select(); }, 60);
     },
   };
+}
+
+/**
+ * Cartão "Salvar como modelo da unidade". Alterna entre dois modos no
+ * mesmo corpo (via `data-mode`):
+ *  - `form`: coleta Nome / Descrição / Tipo de Documento; submit dispara
+ *    `handlers` passando os campos + conteúdo do modelo.
+ *  - `progress`: mostra a mensagem atual do orquestrador, ou o bloco de
+ *    sucesso/erro final. O botão "Salvar no SEI" vira "OK/Fechar" quando
+ *    o fluxo termina.
+ *
+ * O orquestrador atualiza o status via `controller.setStatus/setError/setDone`.
+ */
+function wireSaveModeloDialog(
+  shadow: ShadowRoot,
+  w: { handlers: Array<(params: SaveModeloParams) => void> },
+): { open(text: string): void; controller: SaveModeloController } {
+  const overlay = shadow.getElementById('save-modelo-overlay') as HTMLDivElement;
+  const dialog = shadow.getElementById('save-modelo-dialog') as HTMLDivElement;
+  const body = dialog.querySelector<HTMLDivElement>('.insert-dialog-body')!;
+  const nomeEl = dialog.querySelector<HTMLInputElement>('[data-field="nome"]')!;
+  const descricaoEl = dialog.querySelector<HTMLInputElement>('[data-field="descricao"]')!;
+  const tipoEl = dialog.querySelector<HTMLInputElement>('[data-field="tipo"]')!;
+  const tipoList = dialog.querySelector<HTMLDataListElement>('#save-modelo-tipos')!;
+  const tipoHint = dialog.querySelector<HTMLSpanElement>('[data-field="tipo-hint"]')!;
+  const formWrap = dialog.querySelector<HTMLDivElement>('.save-modelo-form')!;
+  const progWrap = dialog.querySelector<HTMLDivElement>('.save-modelo-progress')!;
+  const phaseEl = dialog.querySelector<HTMLDivElement>('.save-modelo-phase')!;
+  const statusEl = dialog.querySelector<HTMLDivElement>('.save-modelo-status')!;
+  const doneWrap = dialog.querySelector<HTMLDivElement>('.save-modelo-done')!;
+  const doneBody = doneWrap.querySelector<HTMLDivElement>('.save-modelo-result-body')!;
+  const failWrap = dialog.querySelector<HTMLDivElement>('.save-modelo-fail')!;
+  const failMsg = failWrap.querySelector<HTMLDivElement>('.save-modelo-fail-msg')!;
+  const failHint = failWrap.querySelector<HTMLDivElement>('.save-modelo-fail-hint')!;
+  const btnClose = dialog.querySelector<HTMLButtonElement>('[data-act="close"]')!;
+  const btnCancel = dialog.querySelector<HTMLButtonElement>('[data-act="cancel"]')!;
+  const btnGo = dialog.querySelector<HTMLButtonElement>('[data-act="go"]')!;
+
+  /** Conteúdo bruto recebido via `open(text)`; extraímos o bloco MODELO OTIMIZADO. */
+  let currentConteudo = '';
+
+  const populateTipoList = (): void => {
+    const discovered = peekDocumentTypes() ?? [];
+    tipoList.innerHTML = '';
+    for (const t of discovered) {
+      const opt = document.createElement('option');
+      opt.value = t;
+      tipoList.appendChild(opt);
+    }
+    tipoHint.textContent = discovered.length > 0
+      ? `${discovered.length} tipos reconhecidos pela unidade — escolha um ou digite livre.`
+      : 'Tipos da unidade ainda não carregados — digite o nome exato do tipo (ex.: "Despacho").';
+  };
+
+  const resetToForm = (): void => {
+    body.setAttribute('data-mode', 'form');
+    formWrap.style.display = '';
+    progWrap.setAttribute('data-visible', 'false');
+    doneWrap.setAttribute('data-visible', 'false');
+    failWrap.setAttribute('data-visible', 'false');
+    phaseEl.textContent = '—';
+    phaseEl.setAttribute('data-phase', 'idle');
+    statusEl.textContent = 'Aguardando…';
+    btnGo.disabled = false;
+    btnGo.textContent = 'Salvar no SEI';
+    btnCancel.textContent = 'Cancelar';
+    btnCancel.style.display = '';
+  };
+
+  const showProgress = (): void => {
+    body.setAttribute('data-mode', 'progress');
+    formWrap.style.display = 'none';
+    progWrap.setAttribute('data-visible', 'true');
+    doneWrap.setAttribute('data-visible', 'false');
+    failWrap.setAttribute('data-visible', 'false');
+    btnGo.disabled = true;
+    btnGo.textContent = 'Salvando…';
+    btnCancel.textContent = 'Cancelar';
+  };
+
+  const close = (): void => {
+    overlay.setAttribute('data-visible', 'false');
+    resetToForm();
+  };
+
+  btnClose.addEventListener('click', close);
+  btnCancel.addEventListener('click', close);
+
+  btnGo.addEventListener('click', () => {
+    // Se está em estado de sucesso/erro final, o botão age como "fechar".
+    if (body.getAttribute('data-mode') === 'progress'
+        && (doneWrap.getAttribute('data-visible') === 'true'
+            || failWrap.getAttribute('data-visible') === 'true')) {
+      close();
+      return;
+    }
+
+    const nome = nomeEl.value.trim();
+    const descricao = descricaoEl.value.trim();
+    const tipo = tipoEl.value.trim();
+
+    if (!nome) {
+      nomeEl.focus();
+      nomeEl.style.borderColor = '#B42618';
+      window.setTimeout(() => { nomeEl.style.borderColor = ''; }, 1500);
+      return;
+    }
+
+    showProgress();
+    phaseEl.textContent = 'Iniciando';
+    statusEl.textContent = 'Preparando envio ao SEI…';
+
+    const params: SaveModeloParams = {
+      nome, descricao, tipoDocumento: tipo, conteudoTexto: currentConteudo,
+    };
+    w.handlers.forEach((h) => {
+      try { h(params); }
+      catch (err) { console.error('[SEIrtão] erro em onSaveModeloRequest:', err); }
+    });
+  });
+
+  const controller: SaveModeloController = {
+    setStatus(message) {
+      phaseEl.textContent = message.length > 48 ? 'Em andamento' : message;
+      statusEl.textContent = message;
+      doneWrap.setAttribute('data-visible', 'false');
+      failWrap.setAttribute('data-visible', 'false');
+    },
+    setError(message, userHint) {
+      phaseEl.textContent = 'Erro';
+      phaseEl.setAttribute('data-phase', 'error');
+      statusEl.textContent = '';
+      failMsg.textContent = message;
+      failHint.textContent = userHint;
+      failWrap.setAttribute('data-visible', 'true');
+      doneWrap.setAttribute('data-visible', 'false');
+      btnGo.disabled = false;
+      btnGo.textContent = 'Fechar';
+      btnCancel.style.display = 'none';
+    },
+    setDone(message) {
+      phaseEl.textContent = 'Concluído';
+      phaseEl.setAttribute('data-phase', 'done');
+      statusEl.textContent = '';
+      doneBody.textContent = message;
+      doneWrap.setAttribute('data-visible', 'true');
+      failWrap.setAttribute('data-visible', 'false');
+      btnGo.disabled = false;
+      btnGo.textContent = 'Fechar';
+      btnCancel.style.display = 'none';
+    },
+  };
+
+  return {
+    controller,
+    open(text) {
+      // Extrai somente o bloco MODELO OTIMIZADO (descarta VARIÁVEIS IDENTIFICADAS).
+      currentConteudo = extractModeloBlock(text);
+      populateTipoList();
+      resetToForm();
+      nomeEl.value = '';
+      descricaoEl.value = '';
+      tipoEl.value = '';
+      overlay.setAttribute('data-visible', 'true');
+      window.setTimeout(() => { nomeEl.focus(); }, 60);
+    },
+  };
+}
+
+/**
+ * Retira da saída bruta do Otimizador o cabeçalho "MODELO OTIMIZADO" e a
+ * seção "VARIÁVEIS IDENTIFICADAS" — o que sobra é o corpo do modelo, que
+ * vai para o CKEditor. Se o LLM não respeitou o formato esperado, devolve
+ * o texto bruto (o usuário pode ajustar manualmente depois).
+ */
+function extractModeloBlock(raw: string): string {
+  const varMatch = raw.match(/\n\s*VARI[ÁA]VEIS IDENTIFICADAS\s*\n/i);
+  const body = varMatch ? raw.slice(0, varMatch.index ?? raw.length) : raw;
+  return body.replace(/^\s*MODELO OTIMIZADO\s*\n/i, '').trim();
 }
 
 /** Monta nome de arquivo `{stem}-{numeroProcesso}.{ext}` com fallback. */
@@ -2188,6 +2422,58 @@ function renderShell(): string {
         font-size: 11px; color: #4B5563; font-style: italic; margin-top: 4px;
       }
 
+      /* ─────── Salvar como modelo — cartão (form + progresso) ─────── */
+      .save-modelo-form { display: flex; flex-direction: column; gap: 12px; }
+      .save-modelo-hint {
+        font-size: 11px; color: #5B6B82; font-style: italic; margin-top: 4px; display: block;
+      }
+      .save-modelo-note {
+        font-size: 12px; color: #334155; line-height: 1.5;
+        padding: 10px 12px; background: rgba(19,81,180,0.06);
+        border-left: 3px solid #1351B4; border-radius: 6px;
+      }
+      .save-modelo-note em { font-style: normal; font-weight: 600; color: #0C326F; }
+      .save-modelo-progress { display: none; flex-direction: column; gap: 10px; }
+      .save-modelo-progress[data-visible="true"] { display: flex; }
+      .save-modelo-phase {
+        font-size: 11px; font-weight: 700; color: #0C326F;
+        text-transform: uppercase; letter-spacing: 0.4px;
+      }
+      .save-modelo-phase[data-phase="error"] { color: #B91C1C; }
+      .save-modelo-phase[data-phase="done"]  { color: #15803D; }
+      .save-modelo-status {
+        font-size: 13px; color: #1F2937; line-height: 1.45;
+      }
+      .save-modelo-result { display: none; padding: 10px 12px; border-radius: 8px; }
+      .save-modelo-result[data-visible="true"] { display: block; }
+      .save-modelo-done {
+        background: rgba(21,128,61,0.08);
+        border: 1px solid rgba(21,128,61,0.35);
+      }
+      .save-modelo-done .save-modelo-result-title {
+        font-size: 12px; font-weight: 700; color: #15803D; margin-bottom: 4px;
+      }
+      .save-modelo-done .save-modelo-result-title::before { content: '✓ '; font-weight: 800; }
+      .save-modelo-done .save-modelo-result-body { font-size: 12px; color: #14532D; line-height: 1.45; }
+      .save-modelo-fail {
+        background: rgba(185,28,28,0.06);
+        border: 1px solid rgba(185,28,28,0.30);
+      }
+      .save-modelo-fail .save-modelo-result-title {
+        font-size: 12px; font-weight: 700; color: #B91C1C; margin-bottom: 4px;
+      }
+      .save-modelo-fail .save-modelo-result-title::before { content: '⚠ '; font-weight: 800; }
+      .save-modelo-fail-msg { font-size: 12px; color: #7F1D1D; }
+      .save-modelo-fail-hint {
+        font-size: 11px; color: #4B5563; font-style: italic; margin-top: 4px;
+      }
+      .stream-toolbar button[data-act="save-modelo"] {
+        background: #FFCD07; color: #1F2937; border-color: #C79A00;
+      }
+      .stream-toolbar button[data-act="save-modelo"]:hover {
+        filter: brightness(1.05); border-color: #A97F00;
+      }
+
       /* ─────── Otimizar modelo — caixa de entrada (textarea + botão) ─────── */
       .otimizar-input {
         background: #ffffff;
@@ -2571,6 +2857,7 @@ function renderShell(): string {
 
       <footer>v0.1.0 — MVP</footer>
       ${renderInsertConfirm()}
+      ${renderSaveModeloDialog()}
     </div>
   `;
 }
@@ -2636,6 +2923,75 @@ function renderInsertConfirm(): string {
         <div class="insert-dialog-footer">
           <button type="button" class="minuta-refine-btn" data-act="cancel">Cancelar</button>
           <button type="button" class="minuta-refine-btn-primary" data-act="go" disabled>Iniciar inserção no SEI</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Cartão "Salvar como modelo" — coleta Nome, Descrição e Tipo de
+ * Documento, e mostra o progresso do orquestrador em `sei-modelo-saver.ts`.
+ * A visibilidade é governada por `data-visible` no overlay; o conteúdo
+ * alterna entre dois modos via `data-mode` no corpo do diálogo: `form`
+ * (coleta de dados) e `progress` (status/erro/sucesso).
+ */
+function renderSaveModeloDialog(): string {
+  return `
+    <div id="save-modelo-overlay" class="insert-overlay" data-visible="false" role="presentation">
+      <div id="save-modelo-dialog" class="insert-dialog" role="dialog" aria-modal="true" aria-labelledby="save-modelo-title">
+        <div class="insert-dialog-header">
+          <h3 id="save-modelo-title">Salvar como modelo da unidade</h3>
+          <button type="button" class="insert-close" data-act="close" aria-label="Fechar">×</button>
+        </div>
+        <div class="insert-dialog-body" data-mode="form">
+          <div class="save-modelo-form">
+            <label class="insert-field">
+              <span class="insert-field-label">Nome do modelo</span>
+              <input type="text" class="insert-input" data-field="nome" maxlength="120"
+                placeholder="Ex.: Despacho padrão — diligência prévia" />
+            </label>
+
+            <label class="insert-field">
+              <span class="insert-field-label">Descrição (opcional)</span>
+              <input type="text" class="insert-input" data-field="descricao" maxlength="240"
+                placeholder="Descrição curta para a lista de modelos favoritos" />
+            </label>
+
+            <label class="insert-field">
+              <span class="insert-field-label">Tipo de documento</span>
+              <input type="text" class="insert-input" data-field="tipo" list="save-modelo-tipos"
+                placeholder="Ex.: Despacho, Ofício, Informação…" />
+              <datalist id="save-modelo-tipos"></datalist>
+              <span class="save-modelo-hint" data-field="tipo-hint"></span>
+            </label>
+
+            <div class="save-modelo-note">
+              O conteúdo do modelo otimizado será injetado automaticamente no editor do SEI
+              na tela <em>Modelos Favoritos → Novo</em>. Você ainda precisará clicar <em>Salvar</em>
+              no SEI caso alguma etapa precise de confirmação manual.
+            </div>
+          </div>
+
+          <div class="save-modelo-progress" data-visible="false">
+            <div class="save-modelo-phase" data-phase="idle">—</div>
+            <div class="save-modelo-status">Aguardando…</div>
+            <div class="save-modelo-result save-modelo-done" data-visible="false">
+              <div class="save-modelo-result-title">Modelo salvo na unidade</div>
+              <div class="save-modelo-result-body"></div>
+            </div>
+            <div class="save-modelo-result save-modelo-fail" data-visible="false">
+              <div class="save-modelo-result-title">Não foi possível salvar</div>
+              <div class="save-modelo-result-body">
+                <div class="save-modelo-fail-msg"></div>
+                <div class="save-modelo-fail-hint"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="insert-dialog-footer">
+          <button type="button" class="minuta-refine-btn" data-act="cancel">Cancelar</button>
+          <button type="button" class="minuta-refine-btn-primary" data-act="go">Salvar no SEI</button>
         </div>
       </div>
     </div>

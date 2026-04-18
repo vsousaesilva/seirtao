@@ -567,53 +567,93 @@ export function buildMinutaWithTemplatePrompt(
  * Prompt do botão "Otimizar modelo do SEI".
  *
  * Recebe um texto de minuta-modelo existente (colado pelo usuário) e
- * devolve: (1) a mesma peça reescrita, com todo dado pessoal/variável
- * substituído por `@TAGS@` em SNAKE_CASE em caixa alta, e (2) uma
- * listagem das variáveis identificadas, com breve explicação.
+ * devolve: (1) a mesma peça reescrita, com variáveis tratadas em DOIS
+ * níveis distintos e (2) a listagem do que foi identificado.
  *
- * Convencões das tags:
- *  - sempre entre `@…@`;
- *  - em caixa alta, snake_case (ex.: `@NOME_PARTE@`, `@NUMERO_PROCESSO@`,
- *    `@DATA@`, `@VALOR@`, `@UNIDADE_DESTINO@`);
- *  - usar a MESMA tag para a mesma entidade repetida no texto;
- *  - tags canônicas preferidas quando aplicáveis: `@NUMERO_PROCESSO@`,
- *    `@NOME_INTERESSADO@`, `@CPF@`, `@CNPJ@`, `@MATRICULA@`, `@DATA@`,
- *    `@VALOR@`, `@UNIDADE_DESTINO@`, `@CARGO_INTERESSADO@`, `@ORGAO@`.
+ * Nível A — tags SEI automáticas (`@variavel@` em caixa baixa): SÓ as
+ * constantes na whitelist abaixo são aceitas. São as únicas que o SEI
+ * substitui sozinho ao gerar um documento a partir do modelo.
+ *
+ * Nível B — campos de preenchimento manual (`[PREENCHER: descrição]`):
+ * tudo o que é variável mas NÃO tem correspondente na whitelist do SEI
+ * vira um marcador visível, que o usuário substitui à mão ao criar o
+ * documento. Isso evita a armadilha de inventar `@NOME_PARTE@`,
+ * `@CPF@` etc. — tags que o SEI nunca reconhece e que apareceriam
+ * literalmente no texto final.
  */
 export const OTIMIZAR_MODELO_PROMPT = `Sua tarefa é OTIMIZAR um modelo de minuta administrativa para uso reutilizável no SEI (Sistema Eletrônico de Informações) do TRF5/JFCE.
 
 ESPECIALIDADE
-Você é especialista em Direito Administrativo, Lei 9.784/99, Lei 14.133/21, Lei 8.112/90, LGPD e na praxe administrativa do TRF5/JFCE, com forte senso de desenho de templates: o que é constante (fica no texto) e o que é variável (vira tag) em um modelo.
+Você é especialista em Direito Administrativo, Lei 9.784/99, Lei 14.133/21, Lei 8.112/90, LGPD e na praxe administrativa do TRF5/JFCE, com forte senso de desenho de templates: o que é constante (fica no texto), o que é variável automática do SEI e o que depende de preenchimento manual.
+
+PONTO CRÍTICO — COMO O SEI LIDA COM VARIÁVEIS
+O SEI SÓ substitui automaticamente um conjunto FECHADO de variáveis no formato \`@nome_variavel@\` (caixa baixa, snake_case). Qualquer outra tag que você invente (ex.: \`@NOME_PARTE@\`, \`@CPF@\`, \`@VALOR@\`) aparece LITERAL no documento gerado — é um defeito grave do modelo. Por isso a regra é dura:
+
+VARIÁVEIS AUTOMÁTICAS DO SEI — WHITELIST (use APENAS estas, em caixa baixa, entre arrobas)
+- @nome_orgao@ — nome do órgão (ex.: "Justiça Federal de Primeiro Grau no Ceará").
+- @sigla_orgao@ — sigla do órgão (ex.: "JFCE").
+- @nome_unidade@ — nome da unidade emissora do documento (ex.: "Seção de Recursos Humanos").
+- @sigla_unidade@ — sigla da unidade emissora.
+- @nome_usuario@ — nome completo do usuário logado que assina o documento.
+- @sigla_usuario@ — login/sigla do usuário.
+- @cargo_usuario@ — cargo/função do usuário.
+- @data_atual@ — data atual no formato numérico (ex.: "15/04/2026").
+- @data_atual_extenso@ — data atual por extenso (ex.: "15 de abril de 2026").
+
+Nada fora desta whitelist é tag SEI. Em dúvida, use preenchimento manual (ver abaixo).
+
+CAMPOS DE PREENCHIMENTO MANUAL
+Todo dado variável que NÃO couber em uma das tags acima deve virar um marcador no formato:
+\`[PREENCHER: descrição curta do que vai aqui]\`
+Exemplos:
+- nome do interessado → \`[PREENCHER: nome do interessado]\`
+- CPF → \`[PREENCHER: CPF do interessado]\`
+- número de processo → \`[PREENCHER: número do processo SEI]\`
+- número de documento específico → \`[PREENCHER: número do documento referenciado]\`
+- valor monetário → \`[PREENCHER: valor em R$]\`
+- cargo de terceiro → \`[PREENCHER: cargo do interessado]\`
+- unidade destinatária diferente da emissora → \`[PREENCHER: unidade destinatária]\`
+- prazo específico → \`[PREENCHER: prazo em dias]\`
+- matrícula, SIAPE, CNPJ, endereço, data específica do caso → sempre \`[PREENCHER: ...]\`.
+
+Se o mesmo campo manual aparecer mais de uma vez, use a MESMA descrição (ex.: \`[PREENCHER: nome do interessado]\` em todas as ocorrências).
 
 O QUE FAZER
-1. Identifique no modelo TODOS os dados que mudariam a cada uso: nomes próprios (partes, servidores, magistrados, empresas), CPF/CNPJ/matrículas, datas específicas, números de processo, valores monetários, unidades/órgãos destinatários, cargos específicos, números de documentos internos, prazos em dias/meses, endereços.
-2. Substitua cada dado variável por uma TAG no formato \`@NOME_EM_CAIXA_ALTA@\` (snake_case). Use a MESMA tag para a MESMA entidade quando ela aparecer em múltiplos pontos do texto.
-3. Prefira, quando cabível, as tags canônicas: \`@NUMERO_PROCESSO@\`, \`@NOME_INTERESSADO@\`, \`@CPF@\`, \`@CNPJ@\`, \`@MATRICULA@\`, \`@DATA@\`, \`@VALOR@\`, \`@UNIDADE_DESTINO@\`, \`@CARGO_INTERESSADO@\`, \`@ORGAO@\`, \`@PRAZO@\`.
-4. Se o mesmo tipo de entidade aparecer em papéis diferentes (ex.: interessado × requerido), diferencie as tags (\`@NOME_INTERESSADO@\` vs \`@NOME_REQUERIDO@\`).
-5. Mantenha o restante do texto — o esqueleto reutilizável — o mais fiel possível ao original. Apenas:
-   - remova redundâncias óbvias (repetições desnecessárias da mesma informação);
+1. Identifique no modelo TODOS os dados que mudariam a cada uso.
+2. Para cada um, decida: cabe numa tag da whitelist acima? Se sim, use a tag SEI em caixa baixa. Se não, use \`[PREENCHER: ...]\`.
+3. Em particular: unidade/órgão/cargo/nome/data ligados ao EMISSOR do documento costumam casar com as tags do SEI. Dados ligados ao INTERESSADO, ao PROCESSO, a VALORES, PRAZOS e DOCUMENTOS específicos são quase sempre \`[PREENCHER: ...]\`.
+4. Mantenha o restante do texto — o esqueleto reutilizável — o mais fiel possível ao original. Apenas:
+   - remova redundâncias óbvias;
    - corrija erros gramaticais/ortográficos evidentes;
    - ajuste clareza mínima quando uma frase estiver ambígua;
    - NÃO reestruture seções inteiras; NÃO invente conteúdo novo.
-6. Preserve a fundamentação jurídica original (artigos, leis, súmulas) tal como citada.
-7. NÃO retire cabeçalho/rodapé institucional do SEI — se esses elementos estiverem ausentes no texto de entrada, também não os invente.
+5. Preserve a fundamentação jurídica original (artigos, leis, súmulas) tal como citada.
+6. NÃO retire cabeçalho/rodapé institucional do SEI — se esses elementos estiverem ausentes no texto de entrada, também não os invente.
 
 FORMATO DE SAÍDA (obrigatório — 2 blocos)
 
 MODELO OTIMIZADO
-Em seguida, o texto completo do modelo reescrito com as tags aplicadas. Prosa corrida, parágrafos separados por linha em branco, SEM marcadores markdown (nada de asteriscos, sustenidos, crases, negrito, itálico). Citações de norma em parágrafo próprio iniciado por "> ".
+Em seguida, o texto completo do modelo reescrito com tags SEI e marcadores de preenchimento aplicados. Prosa corrida, parágrafos separados por linha em branco, SEM marcadores markdown (nada de asteriscos, sustenidos, crases, negrito, itálico). Citações de norma em parágrafo próprio iniciado por "> ".
 
 VARIÁVEIS IDENTIFICADAS
-Em seguida, UMA linha por tag, no formato:
-- @NOME_DA_TAG@ — breve explicação do que preencher (tipo de dado, exemplo quando útil).
+Liste em DUAS subseções, nesta ordem e com estes cabeçalhos exatos:
 
-Agrupe por ocorrência única (cada tag aparece UMA vez nesta lista, mesmo que tenha sido usada várias vezes no texto). Ordene pela ordem de primeira aparição no texto.
+Automáticas do SEI:
+- @nome_da_tag@ — o que o SEI preenche.
+(Se não usou nenhuma, escreva "nenhuma" nesta subseção.)
+
+Preenchimento manual:
+- [PREENCHER: descrição] — o que o usuário deve substituir, com exemplo quando útil.
+(Se não houver nenhum, escreva "nenhum" nesta subseção.)
+
+Agrupe por ocorrência única (cada item aparece UMA vez, mesmo que usado várias vezes no texto). Ordene pela ordem de primeira aparição.
 
 REGRAS ESTRITAS
 - Responda APENAS com os dois blocos acima, nesta ordem, precedidos pelos cabeçalhos em CAIXA ALTA exatamente como escritos (MODELO OTIMIZADO e VARIÁVEIS IDENTIFICADAS).
 - NÃO inclua preâmbulo, saudação, explicação do que você fez, nem resumo final.
 - NÃO use markdown em nenhum dos blocos.
-- NÃO invente variáveis que não apareçam no texto original.
+- NÃO invente tags \`@...@\` fora da whitelist. Em dúvida, use \`[PREENCHER: ...]\`.
+- NÃO use MAIÚSCULAS em tags SEI (elas são caixa baixa).
 - NÃO remova trechos substantivos do modelo — só o que for redundância óbvia.`;
 
 /** Prompt do botão "Resumo em áudio" — versão narrável. */
